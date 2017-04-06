@@ -23,7 +23,21 @@ require "chef/win32/api"
 module Win32
   module API
     module ReservedNames
-      # Your code goes here...
+      extend Chef::ReservedNames::Win32::API
+      extend FFI::Library
+
+      ffi_lib 'Crypt32'
+
+      HCERTSTORE = FFI::TypeDefs[:pointer]
+      HCRYPTPROV_LEGACY = FFI::TypeDefs[:pointer]
+
+      # Ref: https://msdn.microsoft.com/en-us/library/windows/desktop/aa376560(v=vs.85).aspx
+      safe_attach_function :CertOpenSystemStoreW, [HCRYPTPROV_LEGACY, :LPCTSTR], HCERTSTORE
+
+      # Ref: https://msdn.microsoft.com/en-us/library/windows/desktop/aa376026(v=vs.85).aspx
+      CERT_CLOSE_STORE_CHECK_FLAG = 0
+      CERT_CLOSE_STORE_FORCE_FLAG = 1
+      safe_attach_function :CertCloseStore, [HCERTSTORE, :DWORD], :BOOL
     end
   end
 end

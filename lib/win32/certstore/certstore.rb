@@ -21,8 +21,24 @@ require 'win32/api/reserved_names'
 module Win32
   module Certstore
     include Win32::API::ReservedNames
+    include Chef::Mixin::WideString
 
-    def open
+    def open store_name
+      certstore_handle = CertOpenSystemStoreW(nil, wstring(store_name))
+      unless certstore_handle
+        last_error = FFI::LastError.error
+        raise Chef::Exceptions::Win32APIError, "Unable to open the Certificate Store `#{store_name}` with error: #{last_error}."
+      end
+      certstore_handle
+    end
+
+    def close certstore_handle
+      closed = CertCloseStore(certstore_handle, CERT_CLOSE_STORE_FORCE_FLAG)
+      unless closed
+        last_error = FFI::LastError.error
+        raise Chef::Exceptions::Win32APIError, "Unable to close the Certificate Store `#{store_name}` with error: #{last_error}."
+      end
+      closed
     end
   end
 end
