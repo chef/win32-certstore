@@ -36,7 +36,7 @@ module Win32
       closed = CertCloseStore(certstore_handle, CERT_CLOSE_STORE_FORCE_FLAG)
       unless closed
         last_error = FFI::LastError.error
-        raise Chef::Exceptions::Win32APIError, "Unable to close the Certificate Store `#{store_name}` with error: #{last_error}."
+        raise Chef::Exceptions::Win32APIError, "Unable to close the Certificate Store with error: #{last_error}."
       end
       closed
     end
