@@ -18,24 +18,20 @@
 require 'spec_helper'
 
 describe Win32::Certstore do
-  class Certstore
-    include Win32::Certstore
-  end
 
   before do
-    @certstore = Certstore.new
+    @certstore = Win32::Certstore.new
   end
 
   it 'has a version number' do
-    expect(Win32::Certstore::VERSION).not_to be nil
+    expect(Win32::Win32Certstore::VERSION).not_to be nil
   end
 
-  describe "#open" do
-    it "returns the certificate store handle if it exists" do
-      allow(@certstore).to receive(:CertOpenSystemStoreW).and_return("cert_handle")
-      expect(@certstore.open("My")).to eq("cert_handle")
-    end
+  # describe "#add_cert" do
+  #   Win32::Certstore.new.add_cert('C:\chef-repo\.chef\test.crt', "TrustedPublisher")
+  # end
 
+  describe "#open" do
     it "raises error if CertOpenSystemStoreW method fails" do
       allow(@certstore).to receive(:CertOpenSystemStoreW)
       allow(FFI::LastError).to receive(:error).and_return("err")
