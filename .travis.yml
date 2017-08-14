@@ -6,5 +6,8 @@ rvm:
 branches:
   only:
   - master
-before_install: gem install bundler -v 1.12.5
+before_install:
+  - ./kill-travis.sh
+  - gem install bundler
+
 script: bundle exec rake spec

@@ -15,30 +15,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "win32/certstore/version"
-require 'win32/api/reserved_names'
-
 module Win32
-  module Certstore
-    include Win32::API::ReservedNames
-    include Chef::Mixin::WideString
+  class Certstore
+    # CA -> Certification authority certificates.
+    # MY -> A certificate store that holds certificates with associated private keys.
+    # ROOT -> Root certificates.
+    # SPC -> Software Publisher Certificate.
 
-    def open store_name
-      certstore_handle = CertOpenSystemStoreW(nil, wstring(store_name))
-      unless certstore_handle
-        last_error = FFI::LastError.error
-        raise Chef::Exceptions::Win32APIError, "Unable to open the Certificate Store `#{store_name}` with error: #{last_error}."
-      end
-      certstore_handle
+    def self.add_cert(*args)
+      Win32::Certstore::Certificate::Add.new(args)
     end
 
-    def close certstore_handle
-      closed = CertCloseStore(certstore_handle, CERT_CLOSE_STORE_FORCE_FLAG)
-      unless closed
-        last_error = FFI::LastError.error
-        raise Chef::Exceptions::Win32APIError, "Unable to close the Certificate Store with error: #{last_error}."
-      end
-      closed
+    def self.list_cert(certstore_name)
+      Win32::Certstore::Certificate::List.new(certstore_name).show
     end
+
   end
 end
