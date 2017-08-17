@@ -18,41 +18,32 @@
 require 'spec_helper'
 
 describe Win32::Certstore do
-  class Certstore
-    include Win32::Certstore
-  end
 
-  before do
-    @certstore = Certstore.new
-  end
-
-  it 'has a version number' do
-    expect(Win32::Certstore::VERSION).not_to be nil
-  end
+  let (:certstore) { Win32::Certstore }
 
   describe "#open" do
     it "returns the certificate store handle if it exists" do
-      allow(@certstore).to receive(:CertOpenSystemStoreW).and_return("cert_handle")
-      expect(@certstore.open("My")).to eq("cert_handle")
+      allow(certstore).to receive(:CertOpenSystemStoreW).and_return("cert_handle")
+      expect(certstore.open("My")).to eq("cert_handle")
     end
 
     it "raises error if CertOpenSystemStoreW method fails" do
-      allow(@certstore).to receive(:CertOpenSystemStoreW)
+      allow(certstore).to receive(:CertOpenSystemStoreW)
       allow(FFI::LastError).to receive(:error).and_return("err")
-      expect{ @certstore.open("My") }.to raise_error("Unable to open the Certificate Store `My` with error: err.")
+      expect{ certstore.open("My") }.to raise_error("Unable to open the Certificate Store `My` with error: err.")
     end
   end
 
   describe "#close" do
     it "returns true if the certificate is closed properly" do
-      allow(@certstore).to receive(:CertCloseStore).and_return(true)
-      expect(@certstore.close("My")).to be(true)
+      allow(certstore).to receive(:CertCloseStore).and_return(true)
+      expect(certstore.close("My")).to be(true)
     end
 
     it "raises error if the certificate can't be closed" do
-      allow(@certstore).to receive(:CertCloseStore).and_return(false)
+      allow(certstore).to receive(:CertCloseStore).and_return(false)
       allow(FFI::LastError).to receive(:error).and_return("err")
-      expect{ @certstore.close("My") }.to raise_error("Unable to close the Certificate Store with error: err.")
+      expect{ certstore.close("My") }.to raise_error("Unable to close the Certificate Store with error: err.")
     end
   end
 end
