@@ -69,11 +69,15 @@ module Win32
       BYTE                                                = FFI::TypeDefs[:pointer]
 
       class CERT_CONTEXT < FFI::Struct
-        layout :hCertStore,  :HANDLE,
-        :dwCertEncodingType, :DWORD,
-        :pbCertEncoded,      :PWSTR,
-        :cbCertEncoded,      :DWORD,
-        :pCertInfo,          :pointer
+        layout :cbElement,   :DWORD,
+        :pbElement,          :pointer
+        def initialize(str = nil)
+          super(nil)
+          if str
+            self[:pbElement] = FFI::MemoryPointer.from_string(str)
+            self[:cbElement] = str.bytesize
+          end
+        end
       end
 
       ###############################################################################
@@ -94,6 +98,12 @@ module Win32
       safe_attach_function :CertEnumCertificateContextProperties, [PCCERT_CONTEXT, :DWORD], :DWORD
       # Clean up
       safe_attach_function :CertFreeCertificateContext, [PCCERT_CONTEXT], :BOOL
+      # Add certificate file in certificate store.
+      safe_attach_function :CertAddSerializedElementToStore, [HCERTSTORE, :pointer, :DWORD, :DWORD, :DWORD, :DWORD, :LMSTR, :LPVOID], :BOOL
+      # Add certification to certification store - Ref: https://msdn.microsoft.com/en-us/library/windows/desktop/aa376015(v=vs.85).aspx
+      safe_attach_function :CertAddEncodedCertificateToStore, [HCERTSTORE, :DWORD, :PWSTR, :DWORD, :INT_PTR, PCCERT_CONTEXT], :BOOL
+
+      safe_attach_function :CertSerializeCertificateStoreElement, [PCCERT_CONTEXT, :DWORD, :pointer, :DWORD], :BOOL
     end
   end
 end

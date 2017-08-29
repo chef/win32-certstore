@@ -16,6 +16,7 @@
 # limitations under the License.
 
 require 'win32/store/crypto'
+require 'pry'
 
 module Win32
   class Certstore
@@ -42,6 +43,49 @@ module Win32
           cert_list.to_json
         end
 
+        def add_certificate(store_handle, cert_path)
+          file_content = read_certificate_content(cert_path)
+          pointer_cert = FFI::MemoryPointer.from_string(file_content)
+          cert_length = file_content.bytesize
+          begin
+            if (CertAddEncodedCertificateToStore(store_handler, X509_ASN_ENCODING, pointer_cert, cert_length, 2, nil))
+              return "Added certificate #{File.basename(cert_path)} successfully"
+            else
+              lookup_error
+            end
+          rescue Exception => e
+            lookup_error
+          end
+        end
+
+        private
+
+          def lookup_error
+            last_error = FFI::LastError.error
+            case last_error
+            when 1223
+              raise Chef::Exceptions::Win32APIError, "The operation was canceled by the user. "
+            when -2146885628
+              raise Chef::Exceptions::Win32APIError, "Cannot find object or property."
+            when -2146885629
+              raise Chef::Exceptions::Win32APIError, "An error occurred while reading or writing to a file. "
+            when -2146881269
+              raise Chef::Exceptions::Win32APIError, "ASN1 bad tag value met. -- Is the certificate in DER format?"
+            when -2146881278
+              raise Chef::Exceptions::Win32APIError, "ASN1 unexpected end of data.  "
+            else
+              raise Chef::Exceptions::Win32APIError, "Unable to add certificate with error: #{last_error}."
+            end
+          end
+
+          def read_certificate_content(cert_path)
+            unless (File.extname(cert_path) == ".der")
+              temp_file = shell_out("powershell.exe -Command $env:temp").stdout.strip.concat("\\TempCert.der")
+              shell_out("powershell.exe -Command openssl x509 -in #{cert_path} -out #{temp_file} -outform DER")
+              cert_path = temp_file
+            end
+            File.read("#{cert_path}")
+          end
       end
     end
   end

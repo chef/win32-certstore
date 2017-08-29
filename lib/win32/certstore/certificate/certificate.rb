@@ -16,19 +16,36 @@
 # limitations under the License.
 
 require 'win32/certstore/certificate/cert_base'
+require 'pry'
 
 module Win32
   class Certstore
     class Certificate
       include Certificate::CertBase
+      extend Certificate::CertBase
+
+      attr_accessor :store_handler, :content
+      # To Display Certificate List
+      # Take input certificate store name
+      # Return List in JSON format
+      def initialize(store_handler, cert_path)
+        @store_handler = store_handler
+        @cert_path = cert_path
+        create
+      end
+
+      def create
+        add_certificate(@store_handler, @cert_path)
+      end
 
       # To Display Certificate List
       # Take input certificate store name
       # Return List in JSON format
-      def list(store_handler)
+      def self.list(store_handler)
         # Get Certificate list of open certificate store
         return list_cert(store_handler)
       end
+      
     end
   end
 end

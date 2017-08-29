@@ -17,6 +17,7 @@
 
 require 'win32/store/assertions'
 require 'win32/store/crypto'
+require 'pry'
 
 module Win32
   class Certstore
@@ -54,10 +55,22 @@ module Win32
       validate_store(certstore_name)
       # Open Valid certificate store
       store_handle = open(certstore_name)
-      list = Win32::Certstore::Certificate.new.list(store_handle)
+      list = Win32::Certstore::Certificate.list(store_handle)
       # Close Open store
       close(store_handle)
       return list
     end
+
+    def self.add_cert(*args)
+      certstore_name = args.first
+      # TO verify Valid ceritificate store name
+      validate_store(certstore_name)
+      # Open Valid certificate store
+      store_handle = open(certstore_name)
+      add = Win32::Certstore::Certificate.new(store_handle, args.last)
+      close(store_handle)
+      return add
+    end
+
   end
 end

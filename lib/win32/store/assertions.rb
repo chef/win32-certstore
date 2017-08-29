@@ -24,6 +24,13 @@ module Win32::Store::Assertions
     end
   end
 
+  # Validate certificate type
+  def validate_certificate(certificate)
+    unless certificate.each_index.select{|i| certificate[i] =~ /.cer|.crt|.pfx|.der/}
+      raise ArgumentError, "Invalid Certificate format."
+    end
+  end
+
   private
 
   # These Are Valid certificate store name
