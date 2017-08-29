@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'win32/certstore/version'
+require 'win32/win32-certstore/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "win32-certstore"
-  spec.version       = Win32::Certstore::VERSION
+  spec.version       = Win32::Win32Certstore::VERSION
   spec.authors       = ["nimisha"]
   spec.email         = ["nimisha.sharad@msystechnologies.com"]
 

@@ -15,15 +15,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "win32/certstore/version"
-require 'win32/api/reserved_names'
+require 'win32/store/assertions'
+require 'win32/store/crypto'
+require 'pry'
 
 module Win32
-  module Certstore
-    include Win32::API::ReservedNames
-    include Chef::Mixin::WideString
+  class Certstore
+    extend Win32::Store::Assertions
+    extend Win32::Store::Crypto
+    extend Chef::Mixin::ShellOut
+    extend Chef::Mixin::WideString
 
-    def open store_name
+    def self.open(store_name)
       certstore_handle = CertOpenSystemStoreW(nil, wstring(store_name))
       unless certstore_handle
         last_error = FFI::LastError.error
@@ -32,7 +35,8 @@ module Win32
       certstore_handle
     end
 
-    def close certstore_handle
+    def self.close(certstore_handle)
+      include Win32::Store::Crypto
       closed = CertCloseStore(certstore_handle, CERT_CLOSE_STORE_FORCE_FLAG)
       unless closed
         last_error = FFI::LastError.error
@@ -40,5 +44,33 @@ module Win32
       end
       closed
     end
+
+    # CA -> Certification authority certificates.
+    # MY -> A certificate store that holds certificates with associated private keys.
+    # ROOT -> Root certificates.
+    # SPC -> Software Publisher Certificate.
+
+    def self.list_cert(certstore_name)
+      # TO verify Valid ceritificate store name
+      validate_store(certstore_name)
+      # Open Valid certificate store
+      store_handle = open(certstore_name)
+      list = Win32::Certstore::Certificate.list(store_handle)
+      # Close Open store
+      close(store_handle)
+      return list
+    end
+
+    def self.add_cert(*args)
+      certstore_name = args.first
+      # TO verify Valid ceritificate store name
+      validate_store(certstore_name)
+      # Open Valid certificate store
+      store_handle = open(certstore_name)
+      add = Win32::Certstore::Certificate.new(store_handle, args.last)
+      close(store_handle)
+      return add
+    end
+
   end
 end
