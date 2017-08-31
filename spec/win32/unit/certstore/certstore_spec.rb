@@ -1,5 +1,5 @@
 #
-# Author:: Nimisha Sharad (<nimisha.sharad@msystechnologies.com>)
+# Author:: Piyush Awasthi (<piyush.awasthi@msystechnologies.com>)
 # Copyright:: Copyright (c) 2017 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
@@ -14,36 +14,60 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
 require 'spec_helper'
 
 describe Win32::Certstore do
 
   let (:certstore) { Win32::Certstore }
-
-  describe "#open" do
-    it "returns the certificate store handle if it exists" do
-      allow(certstore).to receive(:CertOpenSystemStoreW).and_return("cert_handle")
-      expect(certstore.open("My")).to eq("cert_handle")
+  
+  describe "#list" do
+    context "When passing empty certificate store name" do
+      let (:store_name) { "" }
+      it "Raise ArgumentError" do
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError)
+      end
     end
 
-    it "raises error if CertOpenSystemStoreW method fails" do
-      allow(certstore).to receive(:CertOpenSystemStoreW)
-      allow(FFI::LastError).to receive(:error).and_return("err")
-      expect{ certstore.open("My") }.to raise_error("Unable to open the Certificate Store `My` with error: err.")
-    end
-  end
-
-  describe "#close" do
-    it "returns true if the certificate is closed properly" do
-      allow(certstore).to receive(:CertCloseStore).and_return(true)
-      expect(certstore.close("My")).to be(true)
+    context "When passing invalid certificate store name" do
+      let (:store_name) { "Chef" }
+      it "Raise ArgumentError" do
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError)
+      end
     end
 
-    it "raises error if the certificate can't be closed" do
-      allow(certstore).to receive(:CertCloseStore).and_return(false)
-      allow(FFI::LastError).to receive(:error).and_return("err")
-      expect{ certstore.close("My") }.to raise_error("Unable to close the Certificate Store with error: err.")
+    context "When passing empty certificate store name" do
+      let (:store_name) { nil }
+      it "Raise ArgumentError" do
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError)
+      end
+    end
+
+    context "When passing valid certificate store name" do
+      let (:store_name) { "root" }
+      let (:root_certificate_name) { "Microsoft Root Certificate Authority"}
+      before(:each) do
+        allow_any_instance_of(Win32::Certstore::StoreBase).to receive(:cert_list).and_return([root_certificate_name])
+      end
+      it "return certificate list" do
+        store = certstore.open(store_name)
+        certificate_list = store.list
+        expect(certificate_list.size).to eql(1)
+        expect(certificate_list.first).to eql root_certificate_name
+      end
+    end
+
+    context "When passing valid certificate store name" do
+      let (:store_name) { "root" }
+      before(:each) do
+        allow_any_instance_of(Win32::Certstore::StoreBase).to receive(:cert_list).and_return([])
+      end
+      it "return no certificate list" do
+        store = certstore.open(store_name)
+        certificate_list = store.list
+        expect(certificate_list.size).to eql(0)
+      end
     end
   end
 end

@@ -18,38 +18,41 @@
 
 require 'spec_helper'
 
-describe Win32::Certstore do
+describe Win32::Store::Assertions do
 
-  let (:certstore) { Win32::Certstore }
+  class Store
+    include Win32::Store::Assertions
+  end
+
+  let (:certstore) { Store.new }
   
-  describe "#list_cert" do
+  describe "#validate_store" do
     context "When passing empty certificate store name" do
       let (:store_name) { "" }
       it "Raise ArgumentError" do
-        expect { certstore.list_cert(store_name) }.to raise_error(ArgumentError)
+        expect { certstore.validate_store(store_name) }.to raise_error(ArgumentError)
       end
     end
 
     context "When passing invalid certificate store name" do
       let (:store_name) { "Chef" }
       it "Raise ArgumentError" do
-        expect { certstore.list_cert(store_name) }.to raise_error(ArgumentError)
+        expect { certstore.validate_store(store_name) }.to raise_error(ArgumentError)
       end
     end
 
     context "When passing empty certificate store name" do
       let (:store_name) { nil }
       it "Raise ArgumentError" do
-        expect { certstore.list_cert(store_name) }.to raise_error(ArgumentError)
+        expect { certstore.validate_store(store_name) }.to raise_error(ArgumentError)
       end
     end
 
     context "When passing valid certificate store name" do
       let (:store_name) { "root" }
       it "Not Raise ArgumentError" do
-        expect { certstore.list_cert(store_name) }.not_to raise_error(ArgumentError)
+        expect { certstore.validate_store(store_name) }.not_to raise_error(ArgumentError)
       end
     end
-
   end
 end

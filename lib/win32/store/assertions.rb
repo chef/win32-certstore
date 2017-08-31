@@ -20,7 +20,7 @@ module Win32::Store::Assertions
   # Validate certificate store name
   def validate_store(store_name)
     unless valid_store_name.include?(store_name&.upcase)
-      raise ArgumentError, "Invalid Certificate Store."
+      raise ArgumentError, "Invalid Certificate Store. Valid certificate store name are: #{valid_store_name}"
     end
   end
 
