@@ -15,12 +15,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module Win32::Store::Assertions
+module Win32::Mixin::Assertions
 
   # Validate certificate store name
   def validate_store(store_name)
     unless valid_store_name.include?(store_name&.upcase)
-      raise ArgumentError, "Invalid Certificate Store. Valid certificate store name are: #{valid_store_name}"
+      raise ArgumentError, "Invalid Certificate Store."
+    end
+  end
+
+  # Validate certificate type
+  def validate_certificate(cert_file_path)
+    unless (!cert_file_path.nil? && File.extname(cert_file_path) =~ /.cer|.crt|.pfx|.der/ )
+      raise ArgumentError, "Invalid Certificate format."
     end
   end
 

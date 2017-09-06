@@ -15,48 +15,59 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'store/crypto'
-require 'store/assertions'
+require 'mixin/crypto'
+require 'mixin/assertions'
 require_relative 'store_base'
 
 module Win32
   class Certstore
-    include Win32::Store::Crypto
-    extend Win32::Store::Assertions
+    include Win32::Mixin::Crypto
+    extend Win32::Mixin::Assertions
     include Chef::Mixin::WideString
-    extend Win32::Certstore::StoreBase
+    include Win32::Certstore::StoreBase
 
-    attr_accessor :store_name
+    attr_reader :store_name
+
+    def initialize(store_name)
+      @certstore_handler = open(store_name)
+    end
 
     def self.open(store_name)
       validate_store(store_name)
-      @certstore_handle = self.new.send(:open, store_name)
       if block_given?
-        yield self
+        yield self.new(store_name)
       else
-        self
+        self.new(store_name)
       end
     end
 
-    def self.list
-      list = cert_list(@certstore_handle)
-      self.new.send(:close)
+    def list
+      list = cert_list(@certstore_handler)
+      close
       return list
     end
 
+    def add(cert_file_path)
+      add = cert_add(@certstore_handler, cert_file_path)
+      close
+      return add
+    end
+
     private
+    
+    attr_reader :certstore_handler
 
     def open(store_name)
-      certstore_handle = CertOpenSystemStoreW(nil, wstring(store_name))
-      unless certstore_handle
+      certstore_handler = CertOpenSystemStoreW(nil, wstring(store_name))
+      unless certstore_handler
         last_error = FFI::LastError.error
         raise Chef::Exceptions::Win32APIError, "Unable to open the Certificate Store `#{store_name}` with error: #{last_error}."
       end
-      certstore_handle
+      certstore_handler
     end
 
     def close
-      closed = CertCloseStore(@certstore_handle, CERT_CLOSE_STORE_FORCE_FLAG)
+      closed = CertCloseStore(@certstore_handler, CERT_CLOSE_STORE_FORCE_FLAG)
       unless closed
         last_error = FFI::LastError.error
         raise Chef::Exceptions::Win32APIError, "Unable to close the Certificate Store with error: #{last_error}."

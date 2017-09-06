@@ -18,10 +18,10 @@
 
 require 'spec_helper'
 
-describe Win32::Store::Assertions do
+describe Win32::Mixin::Assertions do
 
   class Store
-    include Win32::Store::Assertions
+    include Win32::Mixin::Assertions
   end
 
   let (:certstore) { Store.new }
@@ -29,29 +29,59 @@ describe Win32::Store::Assertions do
   describe "#validate_store" do
     context "When passing empty certificate store name" do
       let (:store_name) { "" }
-      it "Raise ArgumentError" do
-        expect { certstore.validate_store(store_name) }.to raise_error(ArgumentError)
+      it "raises ArgumentError" do
+        expect { certstore.validate_store(store_name) }.to raise_error("Invalid Certificate Store.")
       end
     end
 
     context "When passing invalid certificate store name" do
       let (:store_name) { "Chef" }
-      it "Raise ArgumentError" do
-        expect { certstore.validate_store(store_name) }.to raise_error(ArgumentError)
+      it "raises ArgumentError" do
+        expect { certstore.validate_store(store_name) }.to raise_error("Invalid Certificate Store.")
       end
     end
 
     context "When passing empty certificate store name" do
       let (:store_name) { nil }
-      it "Raise ArgumentError" do
-        expect { certstore.validate_store(store_name) }.to raise_error(ArgumentError)
+      it "raises ArgumentError" do
+        expect { certstore.validate_store(store_name) }.to raise_error("Invalid Certificate Store.")
       end
     end
 
     context "When passing valid certificate store name" do
       let (:store_name) { "root" }
-      it "Not Raise ArgumentError" do
+      it "does not raise ArgumentError" do
         expect { certstore.validate_store(store_name) }.not_to raise_error(ArgumentError)
+      end
+    end
+  end
+
+  describe "#validate_certificate" do
+    context "When not passing certificate file" do
+      let (:cert_file_path) { "" }
+      it "raises ArgumentError" do
+        expect { certstore.validate_certificate(cert_file_path) }.to raise_error("Invalid Certificate format.")
+      end
+    end
+
+    context "When passing invalid certificate" do
+      let (:cert_file_path) { "Chef" }
+      it "raises ArgumentError" do
+        expect { certstore.validate_certificate(cert_file_path) }.to raise_error("Invalid Certificate format.")
+      end
+    end
+
+    context "When passing nil" do
+      let (:cert_file_path) { nil }
+      it "raises ArgumentError" do
+        expect { certstore.validate_certificate(cert_file_path) }.to raise_error("Invalid Certificate format.")
+      end
+    end
+
+    context "When passing valid certificate file" do
+      let (:cert_file_path) { '.\win32\unit\assets\test.der' }
+      it "does not raise ArgumentError" do
+        expect { certstore.validate_certificate(cert_file_path) }.not_to raise_error(ArgumentError)
       end
     end
   end
