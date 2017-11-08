@@ -63,7 +63,16 @@ module Win32
         last_error = FFI::LastError.error
         raise Chef::Exceptions::Win32APIError, "Unable to open the Certificate Store `#{store_name}` with error: #{last_error}."
       end
+      add_finalizer(certstore_handler)
       certstore_handler
+    end
+
+    def add_finalizer(certstore_handler)
+      ObjectSpace.define_finalizer(self, self.class.finalize(certstore_handler))
+    end
+
+    def self.finalize(certstore_handler)
+      proc { puts "DESTROY OBJECT #{certstore_handler}" }
     end
 
     def close
@@ -72,6 +81,11 @@ module Win32
         last_error = FFI::LastError.error
         raise Chef::Exceptions::Win32APIError, "Unable to close the Certificate Store with error: #{last_error}."
       end
+      remove_finalizer
+    end
+
+    def remove_finalizer
+      ObjectSpace.undefine_finalizer(self)
     end
   end
 end
