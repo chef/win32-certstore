@@ -15,14 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'mixin/crypto'
+require 'certstore/mixin/crypto'
 require 'openssl'
 
 module Win32
   class Certstore
     module StoreBase
-      include Win32::Mixin::Crypto
-      include Win32::Mixin::Assertions
+      include Win32::Certstore::Mixin::Crypto
+      include Win32::Certstore::Mixin::Assertions
       include Chef::Mixin::WideString
       include Chef::Mixin::ShellOut
 

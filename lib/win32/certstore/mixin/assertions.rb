@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module Win32::Mixin::Assertions
+module Win32::Certstore::Mixin::Assertions
 
   # Validate certificate store name
   def validate_store(store_name)

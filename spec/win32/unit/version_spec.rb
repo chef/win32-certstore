@@ -17,10 +17,10 @@
 
 require 'spec_helper'
 
-describe Win32::Win32Certstore do
+describe Win32::Certstore do
 
   it 'has a version number' do
-    expect(Win32::Win32Certstore::VERSION).not_to be nil
+    expect(Win32::Certstore::VERSION).not_to be nil
   end
 
 end

@@ -22,6 +22,7 @@ require 'chef/win32/api'
 require 'mixlib/shellout'
 
 module Win32
+  class Certstore
   module Mixin
     module Crypto
       extend Chef::ReservedNames::Win32::API
@@ -106,4 +107,5 @@ module Win32
       safe_attach_function :CertSerializeCertificateStoreElement, [PCCERT_CONTEXT, :DWORD, :pointer, :DWORD], :BOOL
     end
   end
+end
 end

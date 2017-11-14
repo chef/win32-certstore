@@ -1,4 +1,3 @@
-$LOAD_PATH.unshift File.expand_path('../../lib/win32', __FILE__)
 #
 # Author:: Nimisha Sharad (<nimisha.sharad@msystechnologies.com>)
 # Copyright:: Copyright (c) 2017 Chef Software, Inc.
@@ -16,6 +15,4 @@ $LOAD_PATH.unshift File.expand_path('../../lib/win32', __FILE__)
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "mixin/crypto"
-require "certstore/certstore"
-require "win32-certstore/version"
+require_relative "win32/certstore"

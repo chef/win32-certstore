@@ -15,14 +15,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'mixin/crypto'
-require 'mixin/assertions'
-require_relative 'store_base'
+require 'certstore/mixin/crypto'
+require 'certstore/mixin/assertions'
+require 'certstore/store_base'
+require 'certstore/version'
 
 module Win32
   class Certstore
-    include Win32::Mixin::Crypto
-    extend Win32::Mixin::Assertions
+    include Win32::Certstore::Mixin::Crypto
+    extend Win32::Certstore::Mixin::Assertions
     include Chef::Mixin::WideString
     include Win32::Certstore::StoreBase
 

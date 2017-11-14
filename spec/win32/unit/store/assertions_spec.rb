@@ -18,10 +18,10 @@
 
 require 'spec_helper'
 
-describe Win32::Mixin::Assertions do
+describe Win32::Certstore::Mixin::Assertions do
 
   class Store
-    include Win32::Mixin::Assertions
+    include Win32::Certstore::Mixin::Assertions
   end
 
   let (:certstore) { Store.new }
