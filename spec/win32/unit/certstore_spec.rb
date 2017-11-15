@@ -1,5 +1,5 @@
 #
-# Author:: Nimisha Sharad (<nimisha.sharad@msystechnologies.com>)
+# Author:: Piyush Awasthi (<piyush.awasthi@msystechnologies.com>)
 # Copyright:: Copyright (c) 2017 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
@@ -14,45 +14,99 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
 require 'spec_helper'
 
 describe Win32::Certstore do
-  class Certstore
-    include Win32::Certstore
-  end
 
-  before do
-    @certstore = Certstore.new
-  end
-
-  it 'has a version number' do
-    expect(Win32::Certstore::VERSION).not_to be nil
-  end
-
-  describe "#open" do
-    it "returns the certificate store handle if it exists" do
-      allow(@certstore).to receive(:CertOpenSystemStoreW).and_return("cert_handle")
-      expect(@certstore.open("My")).to eq("cert_handle")
+  let (:certstore) { Win32::Certstore }
+  let (:certbase) { Win32::Certstore::StoreBase }
+  
+  describe "#list" do
+    context "When passing empty certificate store name" do
+      let (:store_name) { "" }
+      it "raises ArgumentError" do
+        expect { certstore.open(store_name) }.to raise_error("Invalid Certificate Store.")
+      end
     end
 
-    it "raises error if CertOpenSystemStoreW method fails" do
-      allow(@certstore).to receive(:CertOpenSystemStoreW)
-      allow(FFI::LastError).to receive(:error).and_return("err")
-      expect{ @certstore.open("My") }.to raise_error("Unable to open the Certificate Store `My` with error: err.")
-    end
-  end
-
-  describe "#close" do
-    it "returns true if the certificate is closed properly" do
-      allow(@certstore).to receive(:CertCloseStore).and_return(true)
-      expect(@certstore.close("My")).to be(true)
+    context "When passing invalid certificate store name" do
+      let (:store_name) { "Chef" }
+      it "raises ArgumentError" do
+        expect { certstore.open(store_name) }.to raise_error("Invalid Certificate Store.")
+      end
     end
 
-    it "raises error if the certificate can't be closed" do
-      allow(@certstore).to receive(:CertCloseStore).and_return(false)
-      allow(FFI::LastError).to receive(:error).and_return("err")
-      expect{ @certstore.close("My") }.to raise_error("Unable to close the Certificate Store with error: err.")
+    context "When passing empty certificate store name" do
+      let (:store_name) { nil }
+      it "raises ArgumentError" do
+        expect { certstore.open(store_name) }.to raise_error("Invalid Certificate Store.")
+      end
+    end
+
+    context "When passing valid certificate store name" do
+      let (:store_name) { "root" }
+      let (:root_certificate_name) { "Microsoft Root Certificate Authority"}
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:cert_list).and_return([root_certificate_name])
+      end
+      it "returns certificate list" do
+        store = certstore.open(store_name)
+        certificate_list = store.list
+        expect(certificate_list.size).to eql(1)
+        expect(certificate_list.first).to eql root_certificate_name
+      end
+    end
+
+    context "When adding invalid certificate" do
+      let (:store_name) { "root" }
+      let (:cert_file_path) { '.\win32\unit\assets\test.cer' }
+      it "returns no certificate list" do
+        allow(certbase).to receive(:CertAddEncodedCertificateToStore).and_return(false)
+        store = certstore.open(store_name)
+        expect { store.add(cert_file_path) }.to raise_error(Chef::Exceptions::Win32APIError)
+      end
+    end
+
+    context "When adding certificate failed with FFI::LastError" do
+      let (:store_name) { "root" }
+      let (:cert_file_path) { '.\win32\unit\assets\test.cer' }
+      
+      it "returns 'The operation was canceled by the user'" do
+        allow(certbase).to receive(:CertAddEncodedCertificateToStore).and_return(false)
+        allow(FFI::LastError).to receive(:error).and_return(1223)
+        store = certstore.open(store_name)
+        expect { store.add(cert_file_path) }.to raise_error("The operation was canceled by the user.")
+      end
+
+      it "returns 'Cannot find object or property'" do
+        allow(certbase).to receive(:CertAddEncodedCertificateToStore).and_return(false)
+        allow(FFI::LastError).to receive(:error).and_return(-2146885628)
+        store = certstore.open(store_name)
+        expect { store.add(cert_file_path) }.to raise_error("Cannot find object or property.")
+      end
+
+      it "returns 'An error occurred while reading or writing to a file'" do
+        allow(certbase).to receive(:CertAddEncodedCertificateToStore).and_return(false)
+        allow(FFI::LastError).to receive(:error).and_return(-2146885629)
+        store = certstore.open(store_name)
+        expect { store.add(cert_file_path) }.to raise_error("An error occurred while reading or writing to a file.")
+      end
+
+      it "returns 'ASN1 bad tag value met. -- Is the certificate in DER format?'" do
+        allow(certbase).to receive(:CertAddEncodedCertificateToStore).and_return(false)
+        allow(FFI::LastError).to receive(:error).and_return(-2146881269)
+        store = certstore.open(store_name)
+        expect { store.add(cert_file_path) }.to raise_error("ASN1 bad tag value met. -- Is the certificate in DER format?")
+      end
+
+      it "returns 'ASN1 unexpected end of data'" do
+        allow(certbase).to receive(:CertAddEncodedCertificateToStore).and_return(false)
+        allow(FFI::LastError).to receive(:error).and_return(-2146881278)
+        store = certstore.open(store_name)
+        expect { store.add(cert_file_path) }.to raise_error("ASN1 unexpected end of data.")
+      end
     end
   end
 end
