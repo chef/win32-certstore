@@ -17,8 +17,9 @@
 #
 
 require 'spec_helper'
+require 'win32-certstore' if windows?
 
-describe Win32::Certstore do
+describe Win32::Certstore, :windows_only do
 
   let (:certstore) { Win32::Certstore }
   let (:certstore_obj) { Win32::Certstore.new(store_name) }

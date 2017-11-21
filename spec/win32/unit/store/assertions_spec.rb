@@ -17,8 +17,9 @@
 #
 
 require 'spec_helper'
+require 'certstore/mixin/assertions'
 
-describe Win32::Certstore::Mixin::Assertions do
+describe Win32::Certstore::Mixin::Assertions, :windows_only do
 
   class Store
     include Win32::Certstore::Mixin::Assertions
