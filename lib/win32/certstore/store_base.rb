@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'certstore/mixin/crypto'
+require_relative 'mixin/crypto'
 require 'openssl'
 
 module Win32
