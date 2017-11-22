@@ -8,5 +8,4 @@ branches:
   - master
 before_install:
   - gem install bundler
-  - bundle install --path .bundle
 script: bundle exec rake spec

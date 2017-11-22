@@ -17,7 +17,6 @@
 
 require_relative 'mixin/crypto'
 require 'openssl'
-require 'open3'
 
 module Win32
   class Certstore
@@ -84,11 +83,8 @@ module Win32
       # A certificate can be converted with `openssl x509 -in example.crt -out example.der -outform DER`
       def read_certificate_content(cert_path)
         unless (File.extname(cert_path) == ".der")
-          output = Open3.capture3("powershell.exe -Command $env:temp")
-          raise RuntimeError,output[1] unless output[2].success?
-          temp_file = output[0].strip.concat("\\TempCert.der")
-          output = Open3.capture3("powershell.exe -Command openssl x509 -in #{cert_path} -outform DER -out #{temp_file}")
-          raise RuntimeError,output[1] unless output[2].success?
+          temp_file = shell_out("powershell.exe -Command $env:temp").stdout.strip.concat("\\TempCert.der")
+          shell_out("powershell.exe -Command openssl x509 -in #{cert_path} -outform DER -out #{temp_file}")
           cert_path = temp_file
         end
         File.read("#{cert_path}")

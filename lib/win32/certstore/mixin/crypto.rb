@@ -19,6 +19,7 @@
 require 'ffi'
 require 'chef'
 require 'chef/win32/api'
+require 'mixlib/shellout'
 
 module Win32
   class Certstore
