@@ -59,16 +59,12 @@ module Win32
       end
 
       def cert_delete(store_handler, certificate_name)
-        cert_name = FFI::MemoryPointer.new(2, 128)
         begin
-          while (pCertContext = CertEnumCertificatesInStore(store_handler, pCertContext) and not pCertContext.null? ) do
-            if (CertGetNameStringW(pCertContext, CERT_NAME_FRIENDLY_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, nil,cert_name, 1024) &&
-              cert_name.read_wstring.downcase == certificate_name.downcase)
-              if CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pCertContext))
-                return "Deleted certificate #{certificate_name} successfully"
-              else
-                lookup_error
-              end
+          if ( pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_NAME_FRIENDLY_DISPLAY_TYPE, certificate_name, nil) and not pCertContext.null? )
+            if CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pCertContext))
+              return "Deleted certificate #{certificate_name} successfully"
+            else
+              lookup_error
             end
           end
           return "Cannot find certificate with name as `#{certificate_name}`. Please re-verify certificate Issuer name or Friendly name"

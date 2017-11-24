@@ -76,6 +76,7 @@ describe Win32::Certstore, :windows_only do
       let (:store_name) { "ca" }
       let (:certificate_name) { 'GeoTrust Global CA' }
       before(:each) do
+        allow(certbase).to receive_message_chain(:CertFindCertificateInStore, :last).and_return(true)
         allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
       end
       it "return message of successful deletion" do
@@ -89,7 +90,7 @@ describe Win32::Certstore, :windows_only do
       let (:store_name) { "my" }
       let (:certificate_name) { "tmp_cert.mydomain.com" }
       it "return message of `Cannot find certificate`" do
-        allow(certbase).to receive(:CertDeleteCertificateFromStore).and_return(false)
+        allow(certbase).to receive(:CertFindCertificateInStore).and_return(false)
         store = certstore.open(store_name)
         delete_cert = store.delete(certificate_name)
         expect(delete_cert).to eq("Cannot find certificate with name as `tmp_cert.mydomain.com`. Please re-verify certificate Issuer name or Friendly name")
@@ -100,7 +101,7 @@ describe Win32::Certstore, :windows_only do
       let (:store_name) { "my" }
       let (:certificate_name) { "" }
       it "return message of `Cannot find certificate`" do
-        allow(certbase).to receive(:CertDeleteCertificateFromStore).and_return(false)
+        allow(certbase).to receive(:CertFindCertificateInStore).and_return(false)
         store = certstore.open(store_name)
         delete_cert = store.delete(certificate_name)
         expect(delete_cert).to eq("Cannot find certificate with name as ``. Please re-verify certificate Issuer name or Friendly name")
@@ -158,6 +159,7 @@ describe Win32::Certstore, :windows_only do
       end
 
        it "return 'System.UnauthorizedAccessException, Access denied..'" do
+        allow(certbase).to receive(:CertFindCertificateInStore).and_return(true)
         allow(certbase).to receive(:CertDeleteCertificateFromStore).and_return(false)
         allow(FFI::LastError).to receive(:error).and_return(-2147024891)
         store = certstore.open(store_name)

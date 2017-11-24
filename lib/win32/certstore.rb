@@ -55,9 +55,9 @@ module Win32
     end
 
     def delete(certificate_name)
-      delete_cert = cert_delete(@certstore_handler, certificate_name)
+      delete_cert = cert_delete(certstore_handler, certificate_name)
       close
-      return delete_cert
+      delete_cert
     end
 
     private
