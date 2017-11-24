@@ -17,7 +17,6 @@
 #
 
 require 'spec_helper'
-require 'win32-certstore' if windows?
 
 describe Win32::Certstore, :windows_only do
 
