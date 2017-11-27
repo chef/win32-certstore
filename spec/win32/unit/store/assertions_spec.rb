@@ -17,6 +17,7 @@
 #
 
 require 'spec_helper'
+require 'win32/certstore/mixin/assertions'
 
 describe Win32::Certstore::Mixin::Assertions do
 

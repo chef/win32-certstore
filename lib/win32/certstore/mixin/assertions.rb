@@ -15,30 +15,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module Win32::Certstore::Mixin::Assertions
+module Win32
+  class Certstore
+    module Mixin
+      module Assertions
+        # Validate certificate store name
+        def validate_store(store_name)
+          unless valid_store_name.include?(store_name&.upcase)
+            raise ArgumentError, "Invalid Certificate Store."
+          end
+        end
 
-  # Validate certificate store name
-  def validate_store(store_name)
-    unless valid_store_name.include?(store_name&.upcase)
-      raise ArgumentError, "Invalid Certificate Store."
+        # Validate certificate type
+        def validate_certificate(cert_file_path)
+          unless (!cert_file_path.nil? && File.extname(cert_file_path) =~ /.cer|.crt|.pfx|.der/ )
+            raise ArgumentError, "Invalid Certificate format."
+          end
+        end
+
+        private
+
+        # These Are Valid certificate store name
+        # CA -> Certification authority certificates.
+        # MY -> A certificate store that holds certificates with associated private keys.
+        # ROOT -> Root certificates.
+        # SPC -> Software Publisher Certificate.
+        def valid_store_name
+          ["MY", "CA", "ROOT", "SPC"]
+        end
+      end
     end
-  end
-
-  # Validate certificate type
-  def validate_certificate(cert_file_path)
-    unless (!cert_file_path.nil? && File.extname(cert_file_path) =~ /.cer|.crt|.pfx|.der/ )
-      raise ArgumentError, "Invalid Certificate format."
-    end
-  end
-
-  private
-
-  # These Are Valid certificate store name
-  # CA -> Certification authority certificates.
-  # MY -> A certificate store that holds certificates with associated private keys.
-  # ROOT -> Root certificates.
-  # SPC -> Software Publisher Certificate.
-  def valid_store_name
-    ["MY", "CA", "ROOT", "SPC"]
   end
 end
