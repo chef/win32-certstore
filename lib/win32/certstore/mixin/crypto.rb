@@ -105,6 +105,12 @@ module Win32
       safe_attach_function :CertAddEncodedCertificateToStore, [HCERTSTORE, :DWORD, :PWSTR, :DWORD, :INT_PTR, PCCERT_CONTEXT], :BOOL
 
       safe_attach_function :CertSerializeCertificateStoreElement, [PCCERT_CONTEXT, :DWORD, :pointer, :DWORD], :BOOL
+      # Duplicates a certificate context by incrementing its reference count
+      safe_attach_function :CertDuplicateCertificateContext, [PCCERT_CONTEXT], PCCERT_CONTEXT
+      # Delete certification from certification store
+      safe_attach_function :CertDeleteCertificateFromStore, [PCCERT_CONTEXT], :BOOL
+      # To retrieve specific certificates from certificate store
+      safe_attach_function :CertFindCertificateInStore, [HCERTSTORE, :DWORD, :DWORD, :DWORD, :LPVOID, PCCERT_CONTEXT], PCCERT_CONTEXT
     end
   end
 end

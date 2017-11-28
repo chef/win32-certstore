@@ -72,10 +72,47 @@ describe Win32::Certstore, :windows_only do
       end
     end
 
+    context "When deleting valid certificate" do
+      let (:store_name) { "ca" }
+      let (:certificate_name) { 'GeoTrust Global CA' }
+      before(:each) do
+        allow(certbase).to receive_message_chain(:CertFindCertificateInStore, :last).and_return(true)
+        allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
+      end
+      it "return message of successful deletion" do
+        store = certstore.open(store_name)
+        delete_cert = store.delete(certificate_name)
+        expect(delete_cert).to eq("Deleted certificate GeoTrust Global CA successfully")
+      end
+    end
+
+    context "When deleting invalid certificate" do
+      let (:store_name) { "my" }
+      let (:certificate_name) { "tmp_cert.mydomain.com" }
+      it "return message of `Cannot find certificate`" do
+        allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
+        store = certstore.open(store_name)
+        delete_cert = store.delete(certificate_name)
+        expect(delete_cert).to eq("Cannot find certificate with name as `tmp_cert.mydomain.com`. Please re-verify certificate Issuer name or Friendly name")
+      end
+    end
+
+    context "When passing empty certificate_name to delete it" do
+      let (:store_name) { "my" }
+      let (:certificate_name) { "" }
+      it "return message of `Cannot find certificate`" do
+        allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
+        store = certstore.open(store_name)
+        delete_cert = store.delete(certificate_name)
+        expect(delete_cert).to eq("Cannot find certificate with name as ``. Please re-verify certificate Issuer name or Friendly name")
+      end
+    end
+
     context "When adding certificate failed with FFI::LastError" do
       let (:store_name) { "root" }
       let (:cert_file_path) { '.\win32\unit\assets\test.cer' }
-      
+      let (:certificate_name) { 'GlobalSign' }
+
       it "returns 'The operation was canceled by the user'" do
         allow(certstore_obj).to receive(:CertAddEncodedCertificateToStore).and_return(false)
         allow(FFI::LastError).to receive(:error).and_return(1223)
@@ -119,6 +156,14 @@ describe Win32::Certstore, :windows_only do
         allow(FFI::LastError).to receive(:error).and_return(-2146881278)
         store = certstore.open(store_name)
         expect { store.add(cert_file_path) }.to raise_error("ASN1 unexpected end of data.")
+      end
+
+       it "return 'System.UnauthorizedAccessException, Access denied..'" do
+        allow(certbase).to receive(:CertFindCertificateInStore).and_return(true)
+        allow(certbase).to receive(:CertDeleteCertificateFromStore).and_return(false)
+        allow(FFI::LastError).to receive(:error).and_return(-2147024891)
+        store = certstore.open(store_name)
+        expect { store.delete(certificate_name) }.to raise_error(Chef::Exceptions::Win32APIError)
       end
     end
   end

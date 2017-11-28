@@ -58,6 +58,22 @@ module Win32
         end
       end
 
+      def cert_delete(store_handler, certificate_name)
+        begin
+          if ( pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_NAME_FRIENDLY_DISPLAY_TYPE, certificate_name, nil) and not pCertContext.null? )
+            if CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pCertContext))
+              return "Deleted certificate #{certificate_name} successfully"
+            else
+              lookup_error
+            end
+          end
+          return "Cannot find certificate with name as `#{certificate_name}`. Please re-verify certificate Issuer name or Friendly name"
+        rescue Exception => e
+          @error = "delete: "
+          lookup_error
+        end
+      end
+
       private
 
       def lookup_error(failed_operation = nil)
@@ -73,6 +89,8 @@ module Win32
           raise Chef::Exceptions::Win32APIError, "ASN1 bad tag value met. -- Is the certificate in DER format?"
         when -2146881278
           raise Chef::Exceptions::Win32APIError, "ASN1 unexpected end of data."
+        when -2147024891
+          raise Chef::Exceptions::Win32APIError, "System.UnauthorizedAccessException, Access denied.."
         else
           raise Chef::Exceptions::Win32APIError, "Unable to #{failed_operation} certificate with error: #{last_error}."
         end
