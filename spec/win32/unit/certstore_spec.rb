@@ -90,7 +90,7 @@ describe Win32::Certstore, :windows_only do
       let (:store_name) { "my" }
       let (:certificate_name) { "tmp_cert.mydomain.com" }
       it "return message of `Cannot find certificate`" do
-        allow(certbase).to receive(:CertFindCertificateInStore).and_return(false)
+        allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
         store = certstore.open(store_name)
         delete_cert = store.delete(certificate_name)
         expect(delete_cert).to eq("Cannot find certificate with name as `tmp_cert.mydomain.com`. Please re-verify certificate Issuer name or Friendly name")
@@ -101,7 +101,7 @@ describe Win32::Certstore, :windows_only do
       let (:store_name) { "my" }
       let (:certificate_name) { "" }
       it "return message of `Cannot find certificate`" do
-        allow(certbase).to receive(:CertFindCertificateInStore).and_return(false)
+        allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
         store = certstore.open(store_name)
         delete_cert = store.delete(certificate_name)
         expect(delete_cert).to eq("Cannot find certificate with name as ``. Please re-verify certificate Issuer name or Friendly name")
