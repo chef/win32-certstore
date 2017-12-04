@@ -17,6 +17,7 @@
 
 require_relative 'certstore/mixin/crypto'
 require_relative 'certstore/mixin/assertions'
+require_relative 'certstore/mixin/string'
 require_relative 'certstore/store_base'
 require_relative 'certstore/version'
 
@@ -24,7 +25,7 @@ module Win32
   class Certstore
     include Win32::Certstore::Mixin::Crypto
     extend Win32::Certstore::Mixin::Assertions
-    include Chef::Mixin::WideString
+    include Win32::Certstore::Mixin::String
     include Win32::Certstore::StoreBase
 
     attr_reader :store_name
@@ -45,13 +46,13 @@ module Win32
     def list
       list = cert_list(@certstore_handler)
       close
-      return list
+      list
     end
 
     def add(cert_file_path)
       add = cert_add(@certstore_handler, cert_file_path)
       close
-      return add
+      add
     end
 
     def delete(certificate_name)
@@ -68,7 +69,7 @@ module Win32
       certstore_handler = CertOpenSystemStoreW(nil, wstring(store_name))
       unless certstore_handler
         last_error = FFI::LastError.error
-        raise Chef::Exceptions::Win32APIError, "Unable to open the Certificate Store `#{store_name}` with error: #{last_error}."
+        raise SystemCallError.new("Unable to open the Certificate Store `#{store_name}`.", last_error)
       end
       add_finalizer(certstore_handler)
       certstore_handler
@@ -86,7 +87,7 @@ module Win32
       closed = CertCloseStore(@certstore_handler, CERT_CLOSE_STORE_FORCE_FLAG)
       unless closed
         last_error = FFI::LastError.error
-        raise Chef::Exceptions::Win32APIError, "Unable to close the Certificate Store with error: #{last_error}."
+        raise SystemCallError.new("Unable to close the Certificate Store.", last_error)
       end
       remove_finalizer
     end

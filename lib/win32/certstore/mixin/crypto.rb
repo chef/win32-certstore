@@ -17,19 +17,28 @@
 #
 
 require 'ffi'
-require 'chef'
-require 'chef/win32/api'
-require 'mixlib/shellout'
 
 module Win32
   class Certstore
   module Mixin
     module Crypto
-      extend Chef::ReservedNames::Win32::API
       extend FFI::Library
 
       ffi_lib 'Crypt32'
       ffi_convention :stdcall
+
+      # Attempts to use FFI's attach_function method to link a native Win32
+      # function into the calling module.  If this fails a dummy method is
+      # defined which when called, raises a helpful exception to the end-user.
+      module FFI::Library
+        def safe_attach_function(win32_func, *args)
+          attach_function(win32_func.to_sym, *args)
+        rescue FFI::NotFoundError
+          define_method(win32_func.to_sym) do |*margs|
+            raise NotImplementedError, "This version of Windows does not implement the Win32 function [#{win32_func}]."
+          end
+        end
+      end
 
       ###############################################
       # Win32 API Constants
@@ -69,8 +78,18 @@ module Win32
       PCCERT_CONTEXT                                      = FFI::TypeDefs[:pointer]
       BYTE                                                = FFI::TypeDefs[:pointer]
 
+      DWORD                                               = FFI::TypeDefs[:uint32]
+      LPCTSTR                                             = FFI::TypeDefs[:pointer]
+
+      BOOL                                                = FFI::TypeDefs[:bool]
+      LPVOID                                              = FFI::TypeDefs[:pointer]
+      LPTSTR                                              = FFI::TypeDefs[:pointer]
+      LMSTR                                               = FFI::TypeDefs[:pointer]
+      PWSTR                                               = FFI::TypeDefs[:pointer]
+      INT_PTR                                             = FFI::TypeDefs[:int]
+
       class CERT_CONTEXT < FFI::Struct
-        layout :cbElement,   :DWORD,
+        layout :cbElement,   DWORD,
         :pbElement,          :pointer
         def initialize(str = nil)
           super(nil)
@@ -88,29 +107,28 @@ module Win32
       ###############################################################################
 
       # To opens the most common system certificate store
-      safe_attach_function :CertOpenSystemStoreW, [HCRYPTPROV_LEGACY, :LPCTSTR], HCERTSTORE
+      safe_attach_function :CertOpenSystemStoreW, [HCRYPTPROV_LEGACY, LPCTSTR], HCERTSTORE
       # To close the already open certificate store
-      safe_attach_function :CertCloseStore, [HCERTSTORE, :DWORD], :BOOL
+      safe_attach_function :CertCloseStore, [HCERTSTORE, DWORD], BOOL
       # To retrieves certificates in a certificate store
       safe_attach_function :CertEnumCertificatesInStore, [HCERTSTORE, PCCERT_CONTEXT], PCCERT_CONTEXT
       # To get certificate name
-      safe_attach_function :CertGetNameStringW, [PCCERT_CONTEXT, :DWORD, :DWORD, :LPVOID, :LPTSTR, :DWORD], :DWORD
+      safe_attach_function :CertGetNameStringW, [PCCERT_CONTEXT, DWORD, DWORD, LPVOID, LPTSTR, DWORD], DWORD
       # To find all of the property identifiers for the specified certificate.
-      safe_attach_function :CertEnumCertificateContextProperties, [PCCERT_CONTEXT, :DWORD], :DWORD
+      safe_attach_function :CertEnumCertificateContextProperties, [PCCERT_CONTEXT, DWORD], DWORD
       # Clean up
-      safe_attach_function :CertFreeCertificateContext, [PCCERT_CONTEXT], :BOOL
+      safe_attach_function :CertFreeCertificateContext, [PCCERT_CONTEXT], BOOL
       # Add certificate file in certificate store.
-      safe_attach_function :CertAddSerializedElementToStore, [HCERTSTORE, :pointer, :DWORD, :DWORD, :DWORD, :DWORD, :LMSTR, :LPVOID], :BOOL
+      safe_attach_function :CertAddSerializedElementToStore, [HCERTSTORE, :pointer, DWORD, DWORD, DWORD, DWORD, LMSTR, LPVOID], BOOL
       # Add certification to certification store - Ref: https://msdn.microsoft.com/en-us/library/windows/desktop/aa376015(v=vs.85).aspx
-      safe_attach_function :CertAddEncodedCertificateToStore, [HCERTSTORE, :DWORD, :PWSTR, :DWORD, :INT_PTR, PCCERT_CONTEXT], :BOOL
-
-      safe_attach_function :CertSerializeCertificateStoreElement, [PCCERT_CONTEXT, :DWORD, :pointer, :DWORD], :BOOL
+      safe_attach_function :CertAddEncodedCertificateToStore, [HCERTSTORE, DWORD, PWSTR, DWORD, INT_PTR, PCCERT_CONTEXT], BOOL
+      safe_attach_function :CertSerializeCertificateStoreElement, [PCCERT_CONTEXT, DWORD, :pointer, DWORD], BOOL
       # Duplicates a certificate context by incrementing its reference count
       safe_attach_function :CertDuplicateCertificateContext, [PCCERT_CONTEXT], PCCERT_CONTEXT
       # Delete certification from certification store
-      safe_attach_function :CertDeleteCertificateFromStore, [PCCERT_CONTEXT], :BOOL
+      safe_attach_function :CertDeleteCertificateFromStore, [PCCERT_CONTEXT], BOOL
       # To retrieve specific certificates from certificate store
-      safe_attach_function :CertFindCertificateInStore, [HCERTSTORE, :DWORD, :DWORD, :DWORD, :LPVOID, PCCERT_CONTEXT], PCCERT_CONTEXT
+      safe_attach_function :CertFindCertificateInStore, [HCERTSTORE, DWORD, DWORD, DWORD, LPVOID, PCCERT_CONTEXT], PCCERT_CONTEXT
     end
   end
 end

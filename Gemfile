@@ -4,3 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'rb-readline'
+
+group(:development) do
+  gem 'pry'
+end

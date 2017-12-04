@@ -16,25 +16,33 @@
 # limitations under the License.
 
 require_relative 'mixin/crypto'
+require_relative 'mixin/string'
+require_relative 'mixin/shell_out'
+require_relative 'mixin/unicode'
 require 'openssl'
+require 'json'
+require 'tempfile'
 
 module Win32
   class Certstore
     module StoreBase
       include Win32::Certstore::Mixin::Crypto
       include Win32::Certstore::Mixin::Assertions
-      include Chef::Mixin::WideString
-      include Chef::Mixin::ShellOut
+      include Win32::Certstore::Mixin::String
+      include Win32::Certstore::Mixin::ShellOut
+      include Win32::Certstore::Mixin::Unicode
 
       def cert_list(store_handler)
         cert_name = FFI::MemoryPointer.new(2, 128)
         cert_list = []
+
         begin
           while (pCertContext = CertEnumCertificatesInStore(store_handler, pCertContext) and not pCertContext.null? ) do
             if (CertGetNameStringW(pCertContext, CERT_NAME_FRIENDLY_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, nil, cert_name, 1024))
               cert_list << cert_name.read_wstring
             end
           end
+
           CertFreeCertificateContext(pCertContext)
         rescue Exception => e
           lookup_error("list")
@@ -77,22 +85,22 @@ module Win32
       private
 
       def lookup_error(failed_operation = nil)
-        last_error = FFI::LastError.error
-        case last_error
+        error_no = FFI::LastError.error
+        case error_no
         when 1223
-          raise Chef::Exceptions::Win32APIError, "The operation was canceled by the user."
+          raise SystemCallError.new("The operation was canceled by the user", error_no)
         when -2146885628
-          raise Chef::Exceptions::Win32APIError, "Cannot find object or property."
+          raise SystemCallError.new("Cannot find ojject or property", error_no)
         when -2146885629
-          raise Chef::Exceptions::Win32APIError, "An error occurred while reading or writing to a file."
+          raise SystemCallError.new("An error occurred while reading or writing to a file.", error_no)
         when -2146881269
-          raise Chef::Exceptions::Win32APIError, "ASN1 bad tag value met. -- Is the certificate in DER format?"
+          raise SystemCallError.new("ASN1 bad tag value met. -- Is the certificate in DER format?", error_no)
         when -2146881278
-          raise Chef::Exceptions::Win32APIError, "ASN1 unexpected end of data."
+          raise SystemCallError.new("ASN1 unexpected end of data.", error_no)
         when -2147024891
-          raise Chef::Exceptions::Win32APIError, "System.UnauthorizedAccessException, Access denied.."
+          raise SystemCallError.new("System.UnauthorizedAccessException, Access denied..", error_no)
         else
-          raise Chef::Exceptions::Win32APIError, "Unable to #{failed_operation} certificate with error: #{last_error}."
+          raise SystemCallError.new("Unable to #{failed_operation} certificate.", error_no)
         end
       end
 
@@ -101,13 +109,12 @@ module Win32
       # A certificate can be converted with `openssl x509 -in example.crt -out example.der -outform DER`
       def read_certificate_content(cert_path)
         unless (File.extname(cert_path) == ".der")
-          temp_file = shell_out("powershell.exe -Command $env:temp").stdout.strip.concat("\\TempCert.der")
-          shell_out("powershell.exe -Command openssl x509 -in #{cert_path} -outform DER -out #{temp_file}")
-          cert_path = temp_file
+          temp_file_path = Tempfile.new(['TempCert', '.der']).path
+          shell_out_command("powershell.exe -Command openssl x509 -in #{cert_path} -outform DER -out #{temp_file_path}")
+          cert_path = temp_file_path
         end
         File.read("#{cert_path}")
       end
-
     end
   end
 end

@@ -21,5 +21,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
 
-  spec.add_dependency "chef"
+  spec.add_dependency "mixlib-shellout"
+  spec.add_dependency "ffi"
 end

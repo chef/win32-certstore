@@ -68,7 +68,7 @@ describe Win32::Certstore, :windows_only do
         allow(certstore).to receive(:open).with(store_name).and_return(certstore_obj)
         allow(certstore_obj).to receive(:read_certificate_content).with(cert_file_path).and_return("")
         store = certstore.open(store_name)
-        expect { store.add(cert_file_path) }.to raise_error(Chef::Exceptions::Win32APIError)
+        expect { store.add(cert_file_path) }.to raise_error(SystemCallError)
       end
     end
 
@@ -119,7 +119,7 @@ describe Win32::Certstore, :windows_only do
         allow(certstore).to receive(:open).with(store_name).and_return(certstore_obj)
         allow(certstore_obj).to receive(:read_certificate_content).with(cert_file_path).and_return("")
         store = certstore.open(store_name)
-        expect { store.add(cert_file_path) }.to raise_error("The operation was canceled by the user.")
+        expect { store.add(cert_file_path) }.to raise_error(SystemCallError)
       end
 
       it "returns 'Cannot find object or property'" do
@@ -128,7 +128,7 @@ describe Win32::Certstore, :windows_only do
         allow(certstore).to receive(:open).with(store_name).and_return(certstore_obj)
         allow(certstore_obj).to receive(:read_certificate_content).with(cert_file_path).and_return("")
         store = certstore.open(store_name)
-        expect { store.add(cert_file_path) }.to raise_error("Cannot find object or property.")
+        expect { store.add(cert_file_path) }.to raise_error(SystemCallError)
       end
 
       it "returns 'An error occurred while reading or writing to a file'" do
@@ -137,7 +137,7 @@ describe Win32::Certstore, :windows_only do
         allow(certstore).to receive(:open).with(store_name).and_return(certstore_obj)
         allow(certstore_obj).to receive(:read_certificate_content).with(cert_file_path).and_return("")
         store = certstore.open(store_name)
-        expect { store.add(cert_file_path) }.to raise_error("An error occurred while reading or writing to a file.")
+        expect { store.add(cert_file_path) }.to raise_error(SystemCallError)
       end
 
       it "returns 'ASN1 bad tag value met. -- Is the certificate in DER format?'" do
@@ -146,7 +146,7 @@ describe Win32::Certstore, :windows_only do
         allow(certstore).to receive(:open).with(store_name).and_return(certstore_obj)
         allow(certstore_obj).to receive(:read_certificate_content).with(cert_file_path).and_return("")
         store = certstore.open(store_name)
-        expect { store.add(cert_file_path) }.to raise_error("ASN1 bad tag value met. -- Is the certificate in DER format?")
+        expect { store.add(cert_file_path) }.to raise_error(SystemCallError)
       end
 
       it "returns 'ASN1 unexpected end of data'" do
@@ -155,15 +155,26 @@ describe Win32::Certstore, :windows_only do
         allow(certstore_obj).to receive(:read_certificate_content).with(cert_file_path).and_return("")
         allow(FFI::LastError).to receive(:error).and_return(-2146881278)
         store = certstore.open(store_name)
-        expect { store.add(cert_file_path) }.to raise_error("ASN1 unexpected end of data.")
+        expect { store.add(cert_file_path) }.to raise_error("Cannot find object or property. - ASN1 unexpected end of data.")
       end
 
-       it "return 'System.UnauthorizedAccessException, Access denied..'" do
+      it "return 'System.UnauthorizedAccessException, Access denied..'" do
         allow(certbase).to receive(:CertFindCertificateInStore).and_return(true)
         allow(certbase).to receive(:CertDeleteCertificateFromStore).and_return(false)
         allow(FFI::LastError).to receive(:error).and_return(-2147024891)
         store = certstore.open(store_name)
-        expect { store.delete(certificate_name) }.to raise_error(Chef::Exceptions::Win32APIError)
+        expect { store.delete(certificate_name) }.to raise_error(SystemCallError)
+      end
+    end
+
+    context "When invalid certificate path is given" do
+      let (:store_name) { "my" }
+      let (:cert_file_path) { '.\win32\unit\test.cer' }
+
+      it "raises Mixlib::ShellOut::ShellCommandFailed" do
+        allow(certbase).to receive(:CertAddEncodedCertificateToStore).and_return(false)
+        store = certstore.open(store_name)
+        expect { store.add(cert_file_path) }.to raise_error(Mixlib::ShellOut::ShellCommandFailed)
       end
     end
   end
