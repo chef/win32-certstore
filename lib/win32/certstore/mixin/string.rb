@@ -69,4 +69,3 @@ module Win32
     end
   end
 end
-  
