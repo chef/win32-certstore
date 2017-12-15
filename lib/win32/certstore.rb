@@ -61,6 +61,12 @@ module Win32
       delete_cert
     end
 
+    def retrieve(certificate_name)
+      retrieve_cert = cert_retrieve(certstore_handler, certificate_name)
+      close
+      retrieve_cert
+    end
+
     private
     
     attr_reader :certstore_handler
