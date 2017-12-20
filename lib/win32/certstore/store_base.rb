@@ -82,21 +82,25 @@ module Win32
         end
       end
 
-    def cert_retrieve(store_handler, certificate_name)
+      def cert_retrieve(store_handler, certificate_name)
         property_value = FFI::MemoryPointer.new(2, 128)
-        retrieve = { CERT_NAME_EMAIL_TYPE: nil, CERT_NAME_RDN_TYPE: nil, CERT_NAME_ATTR_TYPE: nil, CERT_NAME_SIMPLE_DISPLAY_TYPE: nil, CERT_NAME_FRIENDLY_DISPLAY_TYPE: nil, CERT_NAME_DNS_TYPE: nil, CERT_NAME_URL_TYPE: nil, CERT_NAME_UPN_TYPE: nil }
+        retrieve = { CERT_NAME_EMAIL_TYPE: nil, CERT_NAME_RDN_TYPE: nil, CERT_NAME_ATTR_TYPE: nil,
+          CERT_NAME_SIMPLE_DISPLAY_TYPE: nil, CERT_NAME_FRIENDLY_DISPLAY_TYPE: nil, CERT_NAME_DNS_TYPE: nil,
+          CERT_NAME_URL_TYPE: nil, CERT_NAME_UPN_TYPE: nil }
         begin
-          if ( pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_NAME_FRIENDLY_DISPLAY_TYPE, certificate_name, nil) and not pCertContext.null? )
+          if ( ! certificate_name.empty? and pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
             retrieve.each do |property_type, value|
               CertGetNameStringW(pCertContext, eval(property_type.to_s), CERT_NAME_ISSUER_FLAG, nil, property_value, 1024)
               retrieve[property_type] = property_value.read_wstring
             end
+            return retrieve
           end
+          return "Cannot find certificate with name as `#{certificate_name}`. Please re-verify certificate Issuer name"
         rescue Exception => e
           @error = "retrieve: "
           lookup_error
         end
-    end
+      end
 
       private
 
