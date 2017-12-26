@@ -67,7 +67,6 @@ module Win32
       CERT_NAME_UPN_TYPE                                  = 8
 
       # Retrieve Certificates flag
-      # https://sourceforge.net/p/mingw/mingw-org-wsl/ci/987711554626e4710ad73ce7e44aece511672020/tree/w32api/include/wincrypt.h?format=raw.
       CERT_FIND_SUBJECT_STR                               = 0x00080007
       CERT_FIND_ISSUER_STR                                = 0x00080004
 
