@@ -68,7 +68,7 @@ module Win32
 
       def cert_delete(store_handler, certificate_name)
         begin
-          if ( pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_NAME_FRIENDLY_DISPLAY_TYPE, certificate_name, nil) and not pCertContext.null? )
+          if ( ! certificate_name.empty? and pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
             if CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pCertContext))
               return "Deleted certificate #{certificate_name} successfully"
             else

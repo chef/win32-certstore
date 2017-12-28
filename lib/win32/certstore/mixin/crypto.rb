@@ -66,6 +66,10 @@ module Win32
       CERT_NAME_URL_TYPE                                  = 7
       CERT_NAME_UPN_TYPE                                  = 8
 
+      # Retrieve Certificates flag
+      CERT_FIND_SUBJECT_STR                               = 0x00080007
+      CERT_FIND_ISSUER_STR                                = 0x00080004
+
       # List Certificates Flag
       CERT_NAME_ISSUER_FLAG                               = 0x1
       CERT_NAME_DISABLE_IE4_UTF8_FLAG                     = 0x00010000

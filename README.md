@@ -57,6 +57,40 @@ store = Win32::Certstore.open("Root")
 store.add(certificate_file_path)
 ```
 
+### Delete certificate
+
+Deletes a valid certificate from valid certificate store and returns output in string format.
+
+**Notes: The certificate_name should be valid `Issuer CN name` of the certificate**
+
+```
+Win32::Certstore.open("Root") do |store|
+    store.delete(certificate_name)
+end
+```
+    or
+```
+store = Win32::Certstore.open("Root")
+store.delete(certificate_name)
+```
+
+### Retrieve certificate
+
+Retrieve properties of a valid certificate from valid certificate store and returns output in hash format.
+
+**Notes: The certificate_name should be valid `Issuer CN name` of the certificate**
+
+```
+Win32::Certstore.open("Root") do |store|
+    store.retrieve(certificate_name)
+end
+```
+    or
+```
+store = Win32::Certstore.open("Root")
+store.retrieve(certificate_name)
+```
+
 ## Requirements / setup
 
 ### Ruby
