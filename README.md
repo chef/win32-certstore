@@ -59,11 +59,12 @@ store.add(certificate_file_path)
 
 ### Delete certificate
 
-Deletes a valid certificate from valid certificate store and returns output in string format.
+Deletes a certificate from certificate store and returns output in string format.
 
-**Notes: The certificate_name should be valid `Issuer CN name` of the certificate**
+**Notes: The certificate_name should be valid `CN or Common Name` of the certificate **
 
 ```
+certificate_name = 'Root Agency'
 Win32::Certstore.open("Root") do |store|
     store.delete(certificate_name)
 end
@@ -76,11 +77,12 @@ store.delete(certificate_name)
 
 ### Retrieve certificate
 
-Retrieve properties of a valid certificate from valid certificate store and returns output in hash format.
+Retrieve properties of a certificate from certificate store and returns output in hash format.
 
-**Notes: The certificate_name should be valid `Issuer CN name` of the certificate**
+**Notes: The certificate_name should be valid `CN or Common Name` of the certificate**
 
 ```
+certificate_name = 'GlobalSign Root CA'
 Win32::Certstore.open("Root") do |store|
     store.retrieve(certificate_name)
 end
