@@ -88,16 +88,17 @@ describe Win32::Certstore, :windows_only do
 
   describe "#cert_delete" do
     context "When passing valid certificate" do
-      let (:store_name) { "ca" }
+      let (:store_name) { "my" }
       let (:certificate_name) { 'GeoTrust Global CA' }
       before(:each) do
-        allow(certbase).to receive_message_chain(:CertFindCertificateInStore, :last).and_return(true)
+        allow_any_instance_of(certbase).to receive(:cert_delete).and_return(/Deleted/)
+        allow_any_instance_of(certbase).to receive_message_chain(:CertFindCertificateInStore, :null?).and_return(false)
         allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
       end
       it "return message of successful deletion" do
         store = certstore.open(store_name)
         delete_cert = store.delete(certificate_name)
-        expect(delete_cert).to eq("Deleted certificate GeoTrust Global CA successfully")
+        expect(delete_cert).to match("Deleted certificate #{certificate_name} successfully")
       end
     end
 

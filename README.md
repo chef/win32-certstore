@@ -57,6 +57,42 @@ store = Win32::Certstore.open("Root")
 store.add(certificate_file_path)
 ```
 
+### Delete certificate
+
+Deletes a certificate from certificate store and returns output in string format.
+
+**Notes: The certificate_name should be valid `CN or Common Name` of the certificate **
+
+```
+certificate_name = 'Root Agency'
+Win32::Certstore.open("Root") do |store|
+    store.delete(certificate_name)
+end
+```
+    or
+```
+store = Win32::Certstore.open("Root")
+store.delete(certificate_name)
+```
+
+### Retrieve certificate
+
+Retrieve properties of a certificate from certificate store and returns output in hash format.
+
+**Notes: The certificate_name should be valid `CN or Common Name` of the certificate**
+
+```
+certificate_name = 'GlobalSign Root CA'
+Win32::Certstore.open("Root") do |store|
+    store.retrieve(certificate_name)
+end
+```
+    or
+```
+store = Win32::Certstore.open("Root")
+store.retrieve(certificate_name)
+```
+
 ## Requirements / setup
 
 ### Ruby
