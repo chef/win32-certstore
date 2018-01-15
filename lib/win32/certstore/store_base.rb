@@ -32,6 +32,7 @@ module Win32
       include Win32::Certstore::Mixin::ShellOut
       include Win32::Certstore::Mixin::Unicode
 
+      # Listing certificate of open certstore and return list in json
       def cert_list(store_handler)
         cert_name = FFI::MemoryPointer.new(2, 128)
         cert_list = []
@@ -50,9 +51,10 @@ module Win32
         cert_list.to_json
       end
       
+      # Adding new certification in open certificate store return boolean
       def cert_add(store_handler, cert_file_path)
         validate_certificate(cert_file_path)
-        file_content = read_certificate_content(cert_file_path)
+        file_content = d(cert_file_path)
         pointer_cert = FFI::MemoryPointer.from_string(file_content)
         cert_length = file_content.bytesize
         begin
@@ -66,9 +68,10 @@ module Win32
         end
       end
 
+      # Deleting certificate from open certificate store and return boolean 
       def cert_delete(store_handler, certificate_name)
         begin
-          if ( ! certificate_name.empty? and pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
+          if ( !certificate_name.empty? and pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
             if CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pCertContext))
               return "Deleted certificate #{certificate_name} successfully"
             else
@@ -88,7 +91,7 @@ module Win32
           CERT_NAME_SIMPLE_DISPLAY_TYPE: nil, CERT_NAME_FRIENDLY_DISPLAY_TYPE: nil, CERT_NAME_DNS_TYPE: nil,
           CERT_NAME_URL_TYPE: nil, CERT_NAME_UPN_TYPE: nil }
         begin
-          if ( ! certificate_name.empty? and pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
+          if ( !certificate_name.empty? and pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
             retrieve.each do |property_type, value|
               CertGetNameStringW(pCertContext, eval(property_type.to_s), CERT_NAME_ISSUER_FLAG, nil, property_value, 1024)
               retrieve[property_type] = property_value.read_wstring
@@ -101,9 +104,44 @@ module Win32
           lookup_error
         end
       end
+      
+      # Verifying certificate from open certificate store and return certificate time validity
+      def cert_verification(store_handler, certificate_name)
+        begin
+          cert_name = FFI::MemoryPointer.new(2, 128)
+          cert_list = []
+          if ( pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
+            pTargetCertInfo = CERT_INFO.new(pCertContext)
+            encoded_cert = FFI::MemoryPointer.new(2, 128)
+            
+            out = FFI::MemoryPointer.new(2, 128)
+            cert_context = CERT_CONTEXT.new
+            cert_context[:dwCertEncodingType] = X509_ASN_ENCODING
+            cert_context[:pbCertEncoded] = encoded_cert
+            cert_context[:cbCertEncoded] = encoded_cert.size
+            cert_context[:pCertInfo] = pTargetCertInfo
+            cert_context[:hCertStore] = store_handler
+
+            ctl_usages = CTL_USAGE.new
+            ctl_usages[:cUsageIdentifier]=1
+            ctl_usages[:rgpszUsageIdentifier]=pTargetCertInfo
+
+            if CertVerifyCTLUsage(X509_ASN_ENCODING, 1, cert_context, ctl_usages, 1, nil, out)
+              return "Certificate's time is valid."
+            else
+              return "Certificate is not valid yet."
+            end
+          end
+          return "Cannot find certificate with name as `#{certificate_name}`. Please re-verify certificate Issuer name or Friendly name"
+        rescue Exception => e
+          @error = "Verify: "
+          lookup_error
+        end
+      end 
 
       private
 
+      # Lookup the generic error
       def lookup_error(failed_operation = nil)
         error_no = FFI::LastError.error
         case error_no

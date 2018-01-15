@@ -34,6 +34,7 @@ module Win32
       @certstore_handler = open(store_name)
     end
 
+    # To open given certificate store
     def self.open(store_name)
       validate_store(store_name)
       if block_given?
@@ -43,18 +44,21 @@ module Win32
       end
     end
 
+    # Listing all certificate of open certificate store
     def list
       list = cert_list(@certstore_handler)
       close
       list
     end
 
+    # Adding New certificate to open certificate store
     def add(cert_file_path)
       add = cert_add(@certstore_handler, cert_file_path)
       close
       add
     end
 
+    # Delete existing certificate from open certificate store
     def delete(certificate_name)
       delete_cert = cert_delete(certstore_handler, certificate_name)
       close
@@ -66,11 +70,19 @@ module Win32
       close
       retrieve_cert
     end
+    
+    # Verifing certificate in open certificate store
+    def verify(certificate_name)
+      verify_cert = cert_verification(certstore_handler, certificate_name)
+      close
+      verify_cert
+    end
 
     private
     
     attr_reader :certstore_handler
 
+    # To open certstore and return open certificate store pointer
     def open(store_name)
       certstore_handler = CertOpenSystemStoreW(nil, wstring(store_name))
       unless certstore_handler
@@ -81,6 +93,7 @@ module Win32
       certstore_handler
     end
 
+    # Get all open certificate store handler
     def add_finalizer(certstore_handler)
       ObjectSpace.define_finalizer(self, self.class.finalize(certstore_handler))
     end
@@ -89,6 +102,7 @@ module Win32
       proc { puts "DESTROY OBJECT #{certstore_handler}" }
     end
 
+    # To close and destroy pointer of open certificate store handler
     def close
       closed = CertCloseStore(@certstore_handler, CERT_CLOSE_STORE_FORCE_FLAG)
       unless closed
@@ -98,6 +112,7 @@ module Win32
       remove_finalizer
     end
 
+    # To close all open certificate store at the end
     def remove_finalizer
       ObjectSpace.undefine_finalizer(self)
     end
