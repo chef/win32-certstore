@@ -138,10 +138,6 @@ store.close
 
 Ruby 1.9.3+ is required.
 
-### Chef version
-
-This library requires >= Chef 11.0.0.
-
 ## CONTRIBUTING:
 
 Please file bugs against the WIN32-CERTSTORE project at https://github.com/chef/win32-certstore/issues.
@@ -151,7 +147,7 @@ More information on the contribution process for Chef projects can be found in t
 # LICENSE:
 
 Author:: Bryan McLellan (<btm@chef.io>)
-Copyright:: Copyright (c) 2017 Chef Software, Inc.
+Copyright:: 2017-2018 Chef Software, Inc.
 License:: Apache License, Version 2.0
 
 Licensed under the Apache License, Version 2.0 (the "License");
