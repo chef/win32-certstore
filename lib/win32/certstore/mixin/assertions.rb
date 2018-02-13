@@ -14,6 +14,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+require 'openssl'
 
 module Win32
   class Certstore
@@ -31,6 +32,11 @@ module Win32
           unless (!cert_file_path.nil? && File.extname(cert_file_path) =~ /.cer|.crt|.pfx|.der/ )
             raise ArgumentError, "Invalid Certificate format."
           end
+        end
+
+        # Validate certificate Object
+        def validate_cert_obj(cert_obj)
+          
         end
 
         private

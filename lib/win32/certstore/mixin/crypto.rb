@@ -114,6 +114,8 @@ module Win32
       safe_attach_function :CertOpenSystemStoreW, [HCRYPTPROV_LEGACY, LPCTSTR], HCERTSTORE
       # To close the already open certificate store
       safe_attach_function :CertCloseStore, [HCERTSTORE, DWORD], BOOL
+      # To create encoded certificate context
+      safe_attach_function :CertCreateCertificateContext, [DWORD, BYTE, DWORD], PCCERT_CONTEXT
       # To retrieves certificates in a certificate store
       safe_attach_function :CertEnumCertificatesInStore, [HCERTSTORE, PCCERT_CONTEXT], PCCERT_CONTEXT
       # To get certificate name

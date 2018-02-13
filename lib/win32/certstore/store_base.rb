@@ -32,32 +32,15 @@ module Win32
       include Win32::Certstore::Mixin::ShellOut
       include Win32::Certstore::Mixin::Unicode
 
-      def cert_list(store_handler)
-        cert_name = FFI::MemoryPointer.new(2, 128)
-        cert_list = []
-
-        begin
-          while (pCertContext = CertEnumCertificatesInStore(store_handler, pCertContext) and not pCertContext.null? ) do
-            if (CertGetNameStringW(pCertContext, CERT_NAME_FRIENDLY_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, nil, cert_name, 1024))
-              cert_list << cert_name.read_wstring
-            end
-          end
-
-          CertFreeCertificateContext(pCertContext)
-        rescue Exception => e
-          lookup_error("list")
-        end
-        cert_list.to_json
-      end
-      
-      def cert_add(store_handler, cert_file_path)
-        validate_certificate(cert_file_path)
-        file_content = read_certificate_content(cert_file_path)
-        pointer_cert = FFI::MemoryPointer.from_string(file_content)
-        cert_length = file_content.bytesize
+      # Adding new certification in open certificate and return boolean
+      # store_handler => Open certificate store handler
+      # certificate_obj => certificate object must be in OpenSSL::X509
+      def cert_add(store_handler, certificate_obj)
+        pointer_cert = FFI::MemoryPointer.from_string(certificate_obj)
+        cert_length = certificate_obj.bytesize
         begin
           if (CertAddEncodedCertificateToStore(store_handler, X509_ASN_ENCODING, pointer_cert, cert_length, 2, nil))
-            "Added certificate #{File.basename(cert_file_path)} successfully"
+            "Added certificate successfully"
           else
             lookup_error
           end
@@ -66,23 +49,19 @@ module Win32
         end
       end
 
-      def cert_delete(store_handler, certificate_name)
-        begin
-          if ( ! certificate_name.empty? and pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
-            if CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pCertContext))
-              return "Deleted certificate #{certificate_name} successfully"
-            else
-              lookup_error
-            end
-          end
-          return "Cannot find certificate with name as `#{certificate_name}`. Please re-verify certificate Issuer name or Friendly name"
-        rescue Exception => e
-          @error = "delete: "
-          lookup_error
+      def read_certificate_content(cert_path)
+        unless (File.extname(cert_path) == ".der")
+          temp_file_path = Tempfile.new(['TempCert', '.der']).path
+          shell_out_command("powershell.exe -Command openssl x509 -in #{cert_path} -outform DER -out #{temp_file_path}")
+          cert_path = temp_file_path
         end
+        File.read("#{cert_path}")
       end
 
-      def cert_retrieve(store_handler, certificate_name)
+      # Get certificate from open certificate store and return certificate object
+      # store_handler => Open certificate store handler
+      # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
+      def cert_get(store_handler, certificate_thumbprint)
         property_value = FFI::MemoryPointer.new(2, 128)
         retrieve = { CERT_NAME_EMAIL_TYPE: nil, CERT_NAME_RDN_TYPE: nil, CERT_NAME_ATTR_TYPE: nil,
           CERT_NAME_SIMPLE_DISPLAY_TYPE: nil, CERT_NAME_FRIENDLY_DISPLAY_TYPE: nil, CERT_NAME_DNS_TYPE: nil,
@@ -102,8 +81,45 @@ module Win32
         end
       end
 
+      # Listing certificate of open certstore and return list in json
+      def cert_list(store_handler)
+        cert_name = FFI::MemoryPointer.new(2, 128)
+        cert_list = []
+        begin
+          while (pCertContext = CertEnumCertificatesInStore(store_handler, pCertContext) and not pCertContext.null? ) do
+            if (CertGetNameStringW(pCertContext, CERT_NAME_FRIENDLY_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, nil, cert_name, 1024))
+              cert_list << cert_name.read_wstring
+            end
+          end
+          CertFreeCertificateContext(pCertContext)
+        rescue Exception => e
+          lookup_error("list")
+        end
+        cert_list.to_json
+      end
+      
+      # Deleting certificate from open certificate store and return boolean
+      # store_handler => Open certificate store handler
+      # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
+      def cert_delete(store_handler, certificate_thumbprint)
+        begin
+          if ( !certificate_name.empty? and pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
+            if CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pCertContext))
+              return "Deleted certificate #{certificate_name} successfully"
+            else
+              lookup_error
+            end
+          end
+          return "Cannot find certificate with name as `#{certificate_name}`. Please re-verify certificate Issuer name or Friendly name"
+        rescue Exception => e
+          @error = "delete: "
+          lookup_error
+        end
+      end
+
       private
 
+      # Common System call errors
       def lookup_error(failed_operation = nil)
         error_no = FFI::LastError.error
         case error_no
@@ -124,17 +140,6 @@ module Win32
         end
       end
 
-      # This is a single public certificate in X509 DER format.
-      # If your certificate has a header and footer line like "---- BEGIN CERTIFICATE ----" then it is in PEM format, not DER format.
-      # A certificate can be converted with `openssl x509 -in example.crt -out example.der -outform DER`
-      def read_certificate_content(cert_path)
-        unless (File.extname(cert_path) == ".der")
-          temp_file_path = Tempfile.new(['TempCert', '.der']).path
-          shell_out_command("powershell.exe -Command openssl x509 -in #{cert_path} -outform DER -out #{temp_file_path}")
-          cert_path = temp_file_path
-        end
-        File.read("#{cert_path}")
-      end
     end
   end
 end
