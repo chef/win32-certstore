@@ -66,30 +66,23 @@ module Win32
         end
       end
 
-      def cert_delete(store_handler, certificate_name)
-        issuer_rdn_name = FFI::MemoryPointer.new(2, 128)
-        delete_flag = 0
-        begin
-          while (pCertContext = CertEnumCertificatesInStore(store_handler, pCertContext) and not pCertContext.null? ) do
-            if (CertGetNameStringW(pCertContext, CERT_NAME_RDN_TYPE, CERT_NAME_ISSUER_FLAG, nil, issuer_rdn_name, 1024))
-              rdn_name_from_store = issuer_rdn_name.read_wstring.downcase.gsub(/, /, ',').split(',')
-              rdn_name_from_user = certificate_name.downcase.gsub(/, /, ',').split(',')
-              if( (rdn_name_from_store - rdn_name_from_user).empty? )
-                if(CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pCertContext)))
-                  delete_flag = 1
-                  return "Deleted certificate `#{certificate_name}` successfully"
-                else
-                  lookup_error
-                end
-              end
-            end
+    def cert_delete(store_handler, certificate_name)
+      delete_flag = 0
+      begin
+        if( pCertContext = find_certificate(store_handler, certificate_name) and not pCertContext.nil? )
+          if(CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pCertContext)))
+            delete_flag = 1
+            return "Deleted certificate `#{certificate_name}` successfully"
+          else
+            lookup_error
           end
-          return "Cannot find certificate with name as `#{certificate_name}`. Please re-verify certificate Issuer name in RDN format" if delete_flag == 0
-        rescue Exception => e
-          @error = "delete: "
-          lookup_error
         end
+        return "Cannot find certificate with name as `#{certificate_name}`. Please re-verify certificate Issuer name in RDN format" if delete_flag == 0
+      rescue Exception => e
+        @error = "delete: "
+        lookup_error
       end
+    end
 
       def cert_retrieve(store_handler, certificate_name)
         property_value = FFI::MemoryPointer.new(2, 128)
@@ -144,6 +137,21 @@ module Win32
         end
         File.read("#{cert_path}")
       end
+
+	  def find_certificate(store_handler, certificate_name)
+	    issuer_rdn_name = FFI::MemoryPointer.new(2, 128)
+        while (pCertContext = CertEnumCertificatesInStore(store_handler, pCertContext) and not pCertContext.null?)do
+          if (CertGetNameStringW(pCertContext, CERT_NAME_RDN_TYPE, CERT_NAME_ISSUER_FLAG, nil, issuer_rdn_name, 1024))
+            rdn_name_from_store = issuer_rdn_name.read_wstring.downcase.gsub(/, /, ',').split(',')
+            rdn_name_from_user = certificate_name.downcase.gsub(/, /, ',').split(',')
+			if( (rdn_name_from_store - rdn_name_from_user).empty? )
+              return pCertContext
+			end
+          end
+		end
+		return nil
+	  end
+
     end
   end
 end
