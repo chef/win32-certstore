@@ -46,26 +46,22 @@ module Win32
 
     # Adding New certificate to open certificate store
     def add(certificate_obj)
-      add = cert_add(certstore_handler, certificate_obj)
-      add
+      cert_add(certstore_handler, certificate_obj)
     end
 
     # Get certificate from certificate store and return certificate object
     def get(certificate_thumbprint)
-      retrieve_cert = cert_get(certstore_handler, certificate_thumbprint)
-      retrieve_cert
+      cert_get(certstore_handler, certificate_thumbprint)
     end
     
     # Listing all certificate of open certificate store and return in certificates list
     def list
-      list = cert_list(certstore_handler)
-      list
+      cert_list(certstore_handler)
     end
 
     # Delete existing certificate from open certificate store
     def delete(certificate_thumbprint)
-      delete_cert = cert_delete(certstore_handler, certificate_thumbprint)
-      delete_cert
+      cert_delete(certstore_handler, certificate_thumbprint)
     end
 
     # Search certificate from open certificate store and return certificates objects

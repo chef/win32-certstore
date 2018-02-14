@@ -37,11 +37,10 @@ module Win32
       # certificate_obj => certificate object must be in OpenSSL::X509
       def cert_add(store_handler, certificate_obj)
         validate_certificate_obj(certificate_obj)
-        pointer_cert = FFI::MemoryPointer.from_string(certificate_obj.to_der)
-        cert_length = certificate_obj.to_s.bytesize
         begin
-          if (CertAddEncodedCertificateToStore(store_handler, X509_ASN_ENCODING, pointer_cert, cert_length, 2, nil))
-            "Certificate added successfully"
+          cert_args = cert_add_args(store_handler, certificate_obj)
+          if CertAddEncodedCertificateToStore(*cert_args)
+            true
           else
             lookup_error
           end
@@ -50,18 +49,20 @@ module Win32
         end
       end
 
+
+
       # Get certificate from open certificate store and return certificate object
       # store_handler => Open certificate store handler
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_get(store_handler, certificate_thumbprint)
-        property_value = FFI::MemoryPointer.new(2, 128)
+        property_value = memory_ptr
         retrieve = { CERT_NAME_EMAIL_TYPE: nil, CERT_NAME_RDN_TYPE: nil, CERT_NAME_ATTR_TYPE: nil,
           CERT_NAME_SIMPLE_DISPLAY_TYPE: nil, CERT_NAME_FRIENDLY_DISPLAY_TYPE: nil, CERT_NAME_DNS_TYPE: nil,
           CERT_NAME_URL_TYPE: nil, CERT_NAME_UPN_TYPE: nil }
         begin
           if ( ! certificate_name.empty? and pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
             retrieve.each do |property_type, value|
-              CertGetNameStringW(pCertContext, eval(property_type.to_s), CERT_NAME_ISSUER_FLAG, nil, property_value, 1024)
+              CertGetNameStringW(pCertContext, property_type, CERT_NAME_ISSUER_FLAG, nil, property_value, 1024)
               retrieve[property_type] = property_value.read_wstring
             end
             return retrieve
@@ -75,11 +76,12 @@ module Win32
 
       # Listing certificate of open certstore and return list in json
       def cert_list(store_handler)
-        cert_name = FFI::MemoryPointer.new(2, 128)
+        cert_name = memory_ptr
         cert_list = []
         begin
           while (pCertContext = CertEnumCertificatesInStore(store_handler, pCertContext) and not pCertContext.null? ) do
-            if (CertGetNameStringW(pCertContext, CERT_NAME_FRIENDLY_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, nil, cert_name, 1024))
+            cert_args = cert_view_args(pCertContext, cert_name)
+            if CertGetNameStringW(*cert_args)
               cert_list << cert_name.read_wstring
             end
           end
@@ -111,6 +113,27 @@ module Win32
 
       private
 
+      # Build arguments for CertAddEncodedCertificateToStore
+      def cert_add_args(store_handler, certificate_obj)
+        [store_handler, X509_ASN_ENCODING, der_cert(certificate_obj), certificate_obj.to_s.bytesize, 2, nil]
+      end
+      
+      # Build argument for CertGetNameStringW
+      def cert_view_args(pCertContext, cert_name)
+        [pCertContext, CERT_NAME_FRIENDLY_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, nil, cert_name, 1024]
+      end
+
+      # Convert OpenSSL::X509::Certificate object in .der formate
+      def der_cert(cert_obj)
+        FFI::MemoryPointer.from_string(cert_obj.to_der)
+      end
+
+
+      # Create empty memory pointer
+      def memory_ptr
+        FFI::MemoryPointer.new(2, 128)
+      end
+
       # Common System call errors
       def lookup_error(failed_operation = nil)
         error_no = FFI::LastError.error
@@ -118,7 +141,7 @@ module Win32
         when 1223
           raise SystemCallError.new("The operation was canceled by the user", error_no)
         when -2146885628
-          raise SystemCallError.new("Cannot find ojject or property", error_no)
+          raise SystemCallError.new("Cannot find object or property", error_no)
         when -2146885629
           raise SystemCallError.new("An error occurred while reading or writing to a file.", error_no)
         when -2146881269

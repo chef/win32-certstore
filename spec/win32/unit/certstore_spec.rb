@@ -90,10 +90,10 @@ describe Win32::Certstore, :windows_only do
       let (:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
       let (:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path)}
       it "returns Certificate added successfully" do
-        allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return("Certificate added successfully")
+        allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(true)
         allow(certstore).to receive(:open).with(store_name).and_return(certstore_handler)
         store = certstore.open(store_name)
-        expect(store.add(certificate_object)).to eql "Certificate added successfully"
+        expect(store.add(certificate_object)).to eql true
       end
     end
   end
@@ -108,10 +108,10 @@ describe Win32::Certstore, :windows_only do
         allow_any_instance_of(certbase).to receive(:cert_list).and_return([root_certificate_name])
       end
       it "returns Certificate added successfully listing certificates for the same" do
-        allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return("Certificate added successfully")
+        allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(true)
         allow(certstore).to receive(:open).with(store_name).and_return(certstore_handler)
         store = certstore.open(store_name)
-        expect(store.add(certificate_object)).to eql "Certificate added successfully"
+        expect(store.add(certificate_object)).to eql true
         certificate_list = store.list
         expect(certificate_list.size).to eql(1)
         expect(certificate_list.first).to eql root_certificate_name
