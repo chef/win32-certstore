@@ -36,26 +36,18 @@ module Win32
       # store_handler => Open certificate store handler
       # certificate_obj => certificate object must be in OpenSSL::X509
       def cert_add(store_handler, certificate_obj)
-        pointer_cert = FFI::MemoryPointer.from_string(certificate_obj)
-        cert_length = certificate_obj.bytesize
+        validate_certificate_obj(certificate_obj)
+        pointer_cert = FFI::MemoryPointer.from_string(certificate_obj.to_der)
+        cert_length = certificate_obj.to_s.bytesize
         begin
           if (CertAddEncodedCertificateToStore(store_handler, X509_ASN_ENCODING, pointer_cert, cert_length, 2, nil))
-            "Added certificate successfully"
+            "Certificate added successfully"
           else
             lookup_error
           end
         rescue Exception => e
           lookup_error("add")
         end
-      end
-
-      def read_certificate_content(cert_path)
-        unless (File.extname(cert_path) == ".der")
-          temp_file_path = Tempfile.new(['TempCert', '.der']).path
-          shell_out_command("powershell.exe -Command openssl x509 -in #{cert_path} -outform DER -out #{temp_file_path}")
-          cert_path = temp_file_path
-        end
-        File.read("#{cert_path}")
       end
 
       # Get certificate from open certificate store and return certificate object

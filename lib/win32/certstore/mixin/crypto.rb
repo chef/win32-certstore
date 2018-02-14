@@ -81,27 +81,87 @@ module Win32
       HCRYPTPROV_LEGACY                                   = FFI::TypeDefs[:pointer]
       PCCERT_CONTEXT                                      = FFI::TypeDefs[:pointer]
       BYTE                                                = FFI::TypeDefs[:pointer]
-
       DWORD                                               = FFI::TypeDefs[:uint32]
+      BLOB                                                = FFI::TypeDefs[:ulong]
+      LPSTR                                               = FFI::TypeDefs[:pointer]
       LPCTSTR                                             = FFI::TypeDefs[:pointer]
-
       BOOL                                                = FFI::TypeDefs[:bool]
+      INT_PTR                                             = FFI::TypeDefs[:int]
+      LONG                                                = FFI::TypeDefs[:long]
       LPVOID                                              = FFI::TypeDefs[:pointer]
       LPTSTR                                              = FFI::TypeDefs[:pointer]
       LMSTR                                               = FFI::TypeDefs[:pointer]
       PWSTR                                               = FFI::TypeDefs[:pointer]
-      INT_PTR                                             = FFI::TypeDefs[:int]
+      LPFILETIME                                          = FFI::TypeDefs[:pointer]
+      PCERT_INFO                                          = FFI::TypeDefs[:pointer]
+      PCTL_USAGE                                          = FFI::TypeDefs[:pointer]
+      PCTL_VERIFY_USAGE_PARA                              = FFI::TypeDefs[:pointer]
+      PCTL_VERIFY_USAGE_STATUS                            = FFI::TypeDefs[:pointer]
 
-      class CERT_CONTEXT < FFI::Struct
-        layout :cbElement,   DWORD,
-        :pbElement,          :pointer
+      class FILETIME < FFI::Struct
+        layout :dwLowDateTime, DWORD,
+               :dwHighDateTime, DWORD
+      end
+
+      class CRYPT_INTEGER_BLOB < FFI::Struct
+        layout :cbData, DWORD,   # Count, in bytes, of data
+               :pbData, :pointer  # Pointer to data buffer
+      end
+
+      class CRYPT_NAME_BLOB < FFI::Struct
+        layout :cbData, DWORD,   # Count, in bytes, of data
+               :pbData, :pointer  # Pointer to data buffer
         def initialize(str = nil)
           super(nil)
           if str
-            self[:pbElement] = FFI::MemoryPointer.from_string(str)
-            self[:cbElement] = str.bytesize
+            self[:pbData] = FFI::MemoryPointer.new(2, 128)
           end
         end
+      end
+
+      class CERT_EXTENSION < FFI::Struct
+        layout :pszObjId, LPTSTR,
+               :fCritical, BOOL,
+               :Value, CRYPT_INTEGER_BLOB
+      end
+
+      class CRYPT_BIT_BLOB < FFI::Struct
+        layout :cbData, DWORD,
+               :pbData, BYTE,
+               :cUnusedBits, DWORD
+      end
+
+      class CRYPT_ALGORITHM_IDENTIFIER < FFI::Struct
+        layout :pszObjId, LPSTR,
+               :Parameters, CRYPT_INTEGER_BLOB
+      end
+
+      class CERT_PUBLIC_KEY_INFO < FFI::Struct
+        layout :Algorithm, CRYPT_ALGORITHM_IDENTIFIER,
+               :PublicKey, CRYPT_BIT_BLOB
+      end
+
+      class CERT_INFO < FFI::Struct
+        layout :dwVersion, DWORD,
+             :SerialNumber, CRYPT_INTEGER_BLOB,
+             :SignatureAlgorithm, CRYPT_ALGORITHM_IDENTIFIER,
+             :Issuer, CRYPT_NAME_BLOB,
+             :NotBefore, FILETIME,
+             :NotAfter, FILETIME,
+             :Subject, CRYPT_NAME_BLOB,
+             :SubjectPublicKeyInfo, CERT_PUBLIC_KEY_INFO,
+             :IssuerUniqueId, CRYPT_BIT_BLOB,
+             :SubjectUniqueId, CRYPT_BIT_BLOB,
+             :cExtension, DWORD,
+             :rgExtension, CERT_EXTENSION
+      end
+
+      class CERT_CONTEXT < FFI::Struct
+        layout :dwCertEncodingType, DWORD,
+               :pbCertEncoded, BYTE,
+               :cbCertEncoded, DWORD,
+               :pCertInfo, CERT_INFO,
+               :hCertStore, HCERTSTORE
       end
 
       ###############################################################################
@@ -137,5 +197,5 @@ module Win32
       safe_attach_function :CertFindCertificateInStore, [HCERTSTORE, DWORD, DWORD, DWORD, LPVOID, PCCERT_CONTEXT], PCCERT_CONTEXT
     end
   end
-end
+ end
 end

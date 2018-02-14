@@ -70,8 +70,8 @@ module Win32
 
     # Search certificate from open certificate store and return certificates objects
     def search(certificate_name)
-      delete_cert = cert_search(certstore_handler, certificate_name)
-      delete_cert
+      # search_cert = cert_search(certstore_handler, certificate_name)
+      # search_cert
     end
 
     private
