@@ -16,15 +16,15 @@
 # limitations under the License.
 #
 
-require 'spec_helper'
-require 'openssl'
+require "spec_helper"
+require "openssl"
 
 describe Win32::Certstore, :windows_only do
 
   let (:certstore) { Win32::Certstore }
   let (:certstore_handler) { Win32::Certstore.new(store_name) }
   let (:certbase) { Win32::Certstore::StoreBase }
-  
+
   describe "#cert_list" do
     context "When passing empty certificate store name" do
       let (:store_name) { "" }
@@ -49,7 +49,7 @@ describe Win32::Certstore, :windows_only do
 
     context "When passing valid certificate" do
       let (:store_name) { "root" }
-      let (:root_certificate_name) { "Microsoft Root Certificate Authority"}
+      let (:root_certificate_name) { "Microsoft Root Certificate Authority" }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:cert_list).and_return([root_certificate_name])
       end
@@ -88,7 +88,7 @@ describe Win32::Certstore, :windows_only do
     context "When passing valid certificate object" do
       let (:store_name) { "root" }
       let (:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
-      let (:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path)}
+      let (:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
       it "returns Certificate added successfully" do
         allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(true)
         allow(certstore).to receive(:open).with(store_name).and_return(certstore_handler)
@@ -102,8 +102,8 @@ describe Win32::Certstore, :windows_only do
     context "Perform add and list with single certstore object" do
       let (:store_name) { "root" }
       let (:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
-      let (:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path)}
-      let (:root_certificate_name) { "Microsoft Root Certificate Authority"}
+      let (:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
+      let (:root_certificate_name) { "Microsoft Root Certificate Authority" }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:cert_list).and_return([root_certificate_name])
       end
@@ -206,8 +206,8 @@ describe Win32::Certstore, :windows_only do
     context "While adding or deleting or retrieving certificate" do
       let (:store_name) { "root" }
       let (:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
-      let (:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path)}
-      let (:certificate_name) { 'GlobalSign' }
+      let (:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
+      let (:certificate_name) { "GlobalSign" }
 
       it "returns 'The operation was canceled by the user'" do
         allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(false)

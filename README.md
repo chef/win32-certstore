@@ -32,7 +32,7 @@ Add a valid certificate in a certificate store.
 **Notes: The new certificate should be converted in OpenSSL::X509 :**
 
 ```
-raw = File.read "C:\chef-repo\win32-certstore\spec\win32\unit\assets\GlobalSignRootCA.pem"
+raw = File.read "C:\GlobalSignRootCA.pem"
 certificate_object = OpenSSL::X509::Certificate.new raw
 
 Win32::Certstore.open('Root') do |store|
@@ -42,7 +42,7 @@ end
 ```
     or
 ```
-raw = File.read "C:\chef-repo\win32-certstore\spec\win32\unit\assets\GlobalSignRootCA.pem" 
+raw = File.read "C:\GlobalSignRootCA.pem" 
 certificate_object = OpenSSL::X509::Certificate.new raw
 
 store = Win32::Certstore.open('Root')
@@ -112,7 +112,7 @@ store.close
 You can perform more that one oprations with single certificate store object
 
 ```
-raw = File.read "C:\chef-repo\win32-certstore\spec\win32\unit\assets\GlobalSignRootCA.pem"
+raw = File.read "C:\GlobalSignRootCA.pem"
 certificate_object = OpenSSL::X509::Certificate.new raw
 
 Win32::Certstore.open('Root') do |store|
@@ -123,7 +123,7 @@ end
 ```
     or
 ```
-raw = File.read "C:\chef-repo\win32-certstore\spec\win32\unit\assets\GlobalSignRootCA.pem" 
+raw = File.read "C:\GlobalSignRootCA.pem" 
 certificate_object = OpenSSL::X509::Certificate.new raw
 
 store = Win32::Certstore.open('Root')

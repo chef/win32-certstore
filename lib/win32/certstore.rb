@@ -15,11 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative 'certstore/mixin/crypto'
-require_relative 'certstore/mixin/assertions'
-require_relative 'certstore/mixin/string'
-require_relative 'certstore/store_base'
-require_relative 'certstore/version'
+require_relative "certstore/mixin/crypto"
+require_relative "certstore/mixin/assertions"
+require_relative "certstore/mixin/string"
+require_relative "certstore/store_base"
+require_relative "certstore/version"
 
 module Win32
   class Certstore
@@ -38,9 +38,9 @@ module Win32
     def self.open(store_name)
       validate_store(store_name)
       if block_given?
-        yield self.new(store_name)
+        yield new(store_name)
       else
-        self.new(store_name)
+        new(store_name)
       end
     end
 
@@ -53,7 +53,7 @@ module Win32
     def get(certificate_thumbprint)
       cert_get(certstore_handler, certificate_thumbprint)
     end
-    
+
     # Listing all certificate of open certificate store and return in certificates list
     def list
       cert_list(certstore_handler)
@@ -66,12 +66,21 @@ module Win32
 
     # Search certificate from open certificate store and return certificates objects
     def search(certificate_name)
-      # search_cert = cert_search(certstore_handler, certificate_name)
-      # search_cert
+      cert_search(certstore_handler, certificate_name)
+    end
+
+    # To close and destroy pointer of open certificate store handler
+    def close
+      closed = CertCloseStore(@certstore_handler, CERT_CLOSE_STORE_FORCE_FLAG)
+      unless closed
+        last_error = FFI::LastError.error
+        raise SystemCallError.new("Unable to close the Certificate Store.", last_error)
+      end
+      remove_finalizer
     end
 
     private
-    
+
     attr_reader :certstore_handler
 
     # To open certstore and return open certificate store pointer
@@ -92,16 +101,6 @@ module Win32
 
     def self.finalize(certstore_handler)
       proc { puts "DESTROY OBJECT #{certstore_handler}" }
-    end
-
-    # To close and destroy pointer of open certificate store handler
-    def close
-      closed = CertCloseStore(@certstore_handler, CERT_CLOSE_STORE_FORCE_FLAG)
-      unless closed
-        last_error = FFI::LastError.error
-        raise SystemCallError.new("Unable to close the Certificate Store.", last_error)
-      end
-      remove_finalizer
     end
 
     # To close all open certificate store at the end

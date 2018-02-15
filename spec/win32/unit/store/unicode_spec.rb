@@ -1,5 +1,5 @@
-require 'spec_helper'
-require 'win32/certstore/mixin/unicode'
+require "spec_helper"
+require "win32/certstore/mixin/unicode"
 
 describe Win32::Certstore::Mixin::Unicode do
   context "when testing individual methods" do

@@ -15,13 +15,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative 'mixin/crypto'
-require_relative 'mixin/string'
-require_relative 'mixin/shell_out'
-require_relative 'mixin/unicode'
-require 'openssl'
-require 'json'
-require 'tempfile'
+require_relative "mixin/crypto"
+require_relative "mixin/string"
+require_relative "mixin/shell_out"
+require_relative "mixin/unicode"
+require "openssl"
+require "json"
+require "tempfile"
 
 module Win32
   class Certstore
@@ -49,20 +49,18 @@ module Win32
         end
       end
 
-
-
       # Get certificate from open certificate store and return certificate object
       # store_handler => Open certificate store handler
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_get(store_handler, certificate_thumbprint)
         property_value = memory_ptr
         retrieve = { CERT_NAME_EMAIL_TYPE: nil, CERT_NAME_RDN_TYPE: nil, CERT_NAME_ATTR_TYPE: nil,
-          CERT_NAME_SIMPLE_DISPLAY_TYPE: nil, CERT_NAME_FRIENDLY_DISPLAY_TYPE: nil, CERT_NAME_DNS_TYPE: nil,
-          CERT_NAME_URL_TYPE: nil, CERT_NAME_UPN_TYPE: nil }
+                     CERT_NAME_SIMPLE_DISPLAY_TYPE: nil, CERT_NAME_FRIENDLY_DISPLAY_TYPE: nil, CERT_NAME_DNS_TYPE: nil,
+                     CERT_NAME_URL_TYPE: nil, CERT_NAME_UPN_TYPE: nil }
         begin
-          if ( ! certificate_name.empty? and pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
+          if !certificate_name.empty? && (pcert_context = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil)) && (not pcert_context.null?)
             retrieve.each do |property_type, value|
-              CertGetNameStringW(pCertContext, property_type, CERT_NAME_ISSUER_FLAG, nil, property_value, 1024)
+              CertGetNameStringW(pcert_context, property_type, CERT_NAME_ISSUER_FLAG, nil, property_value, 1024)
               retrieve[property_type] = property_value.read_wstring
             end
             return retrieve
@@ -79,26 +77,26 @@ module Win32
         cert_name = memory_ptr
         cert_list = []
         begin
-          while (pCertContext = CertEnumCertificatesInStore(store_handler, pCertContext) and not pCertContext.null? ) do
-            cert_args = cert_view_args(pCertContext, cert_name)
+          while (pcert_context = CertEnumCertificatesInStore(store_handler, pcert_context)) && (not pcert_context.null?)
+            cert_args = cert_get_name_args(pcert_context, cert_name)
             if CertGetNameStringW(*cert_args)
               cert_list << cert_name.read_wstring
             end
           end
-          CertFreeCertificateContext(pCertContext)
+          CertFreeCertificateContext(pcert_context)
         rescue Exception => e
           lookup_error("list")
         end
         cert_list.to_json
       end
-      
+
       # Deleting certificate from open certificate store and return boolean
       # store_handler => Open certificate store handler
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_delete(store_handler, certificate_thumbprint)
         begin
-          if ( !certificate_name.empty? and pCertContext = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil) and not pCertContext.null? )
-            if CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pCertContext))
+          if !certificate_name.empty? && (pcert_context = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil)) && (not pcert_context.null?)
+            if CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pcert_context))
               return "Deleted certificate #{certificate_name} successfully"
             else
               lookup_error
@@ -111,16 +109,20 @@ module Win32
         end
       end
 
+      def cert_search(store_handler, certificate_name)
+        
+      end
+
       private
 
       # Build arguments for CertAddEncodedCertificateToStore
       def cert_add_args(store_handler, certificate_obj)
         [store_handler, X509_ASN_ENCODING, der_cert(certificate_obj), certificate_obj.to_s.bytesize, 2, nil]
       end
-      
+
       # Build argument for CertGetNameStringW
-      def cert_view_args(pCertContext, cert_name)
-        [pCertContext, CERT_NAME_FRIENDLY_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, nil, cert_name, 1024]
+      def cert_get_name_args(pcert_context, cert_name)
+        [pcert_context, CERT_NAME_FRIENDLY_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, nil, cert_name, 1024]
       end
 
       # Convert OpenSSL::X509::Certificate object in .der formate
@@ -128,33 +130,10 @@ module Win32
         FFI::MemoryPointer.from_string(cert_obj.to_der)
       end
 
-
       # Create empty memory pointer
       def memory_ptr
         FFI::MemoryPointer.new(2, 128)
       end
-
-      # Common System call errors
-      def lookup_error(failed_operation = nil)
-        error_no = FFI::LastError.error
-        case error_no
-        when 1223
-          raise SystemCallError.new("The operation was canceled by the user", error_no)
-        when -2146885628
-          raise SystemCallError.new("Cannot find object or property", error_no)
-        when -2146885629
-          raise SystemCallError.new("An error occurred while reading or writing to a file.", error_no)
-        when -2146881269
-          raise SystemCallError.new("ASN1 bad tag value met. -- Is the certificate in DER format?", error_no)
-        when -2146881278
-          raise SystemCallError.new("ASN1 unexpected end of data.", error_no)
-        when -2147024891
-          raise SystemCallError.new("System.UnauthorizedAccessException, Access denied..", error_no)
-        else
-          raise SystemCallError.new("Unable to #{failed_operation} certificate.", error_no)
-        end
-      end
-
     end
   end
 end
