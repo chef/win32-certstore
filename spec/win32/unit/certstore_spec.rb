@@ -91,14 +91,14 @@ describe Win32::Certstore, :windows_only do
       let (:store_name) { "my" }
       let (:certificate_name) { 'GeoTrust Global CA' }
       before(:each) do
-        allow_any_instance_of(certbase).to receive(:cert_delete).and_return(/Deleted/)
-        allow_any_instance_of(certbase).to receive_message_chain(:CertFindCertificateInStore, :null?).and_return(false)
+        allow_any_instance_of(certbase).to receive(:cert_delete).and_return(true)
+        allow_any_instance_of(certbase).to receive_message_chain(:find_certificate, :null?).and_return(false)
         allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
       end
       it "return message of successful deletion" do
         store = certstore.open(store_name)
         delete_cert = store.delete(certificate_name)
-        expect(delete_cert).to match("Deleted certificate #{certificate_name} successfully")
+        expect(delete_cert).to equal(true)
       end
     end
 
@@ -106,10 +106,10 @@ describe Win32::Certstore, :windows_only do
       let (:store_name) { "my" }
       let (:certificate_name) { "tmp_cert.mydomain.com" }
       it "returns a message: `Cannot find Certificate`" do
-        allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
+        allow_any_instance_of(certbase).to receive(:find_certificate).and_return(false)
         store = certstore.open(store_name)
         delete_cert = store.delete(certificate_name)
-        expect(delete_cert).to eq("Cannot find certificate with name as `tmp_cert.mydomain.com`. Please re-verify certificate Issuer name or Friendly name")
+        expect(delete_cert).to eq(false)
       end
     end
 
@@ -117,10 +117,10 @@ describe Win32::Certstore, :windows_only do
       let (:store_name) { "my" }
       let (:certificate_name) { "" }
       it "returns a message: `Cannot find Certificate`" do
-        allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
+        allow_any_instance_of(certbase).to receive(:find_certificate).and_return(false)
         store = certstore.open(store_name)
         delete_cert = store.delete(certificate_name)
-        expect(delete_cert).to eq("Cannot find certificate with name as ``. Please re-verify certificate Issuer name or Friendly name")
+        expect(delete_cert).to eq(false)
       end
     end
   end
@@ -221,8 +221,8 @@ describe Win32::Certstore, :windows_only do
       end
 
       it "return 'System.UnauthorizedAccessException, Access denied..'" do
-        allow(certbase).to receive(:CertFindCertificateInStore).and_return(true)
-        allow(certbase).to receive(:CertDeleteCertificateFromStore).and_return(false)
+        allow(certstore_obj).to receive(:find_certificate).and_return(true)
+        allow(certstore_obj).to receive(:CertDeleteCertificateFromStore).and_raise(SystemCallError.new(@error))
         allow(FFI::LastError).to receive(:error).and_return(-2147024891)
         store = certstore.open(store_name)
         expect { store.delete(certificate_name) }.to raise_error(SystemCallError)
