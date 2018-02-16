@@ -46,6 +46,10 @@ module Win32
           if cert_thumbprint.nil? || cert_thumbprint.strip.empty?
             raise ArgumentError, "Invalid certificate thumbprint."
           end
+
+        # Validate certificate name not nil/empty
+        def validate_certificate_name(cert_name)
+          raise ArgumentError, "Invalid Certificate name" if cert_name.strip.empty?
         end
 
         # Common System call errors
