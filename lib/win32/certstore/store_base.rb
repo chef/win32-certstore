@@ -68,7 +68,7 @@ module Win32
         cert_list = []
         begin
           while (pcert_context = CertEnumCertificatesInStore(store_handler, pcert_context)) && (not pcert_context.null?)
-            cert_args = cert_get_name_args(pcert_context, cert_name)
+            cert_args = cert_get_name_args(pcert_context, cert_name, CERT_NAME_FRIENDLY_DISPLAY_TYPE)
             if CertGetNameStringW(*cert_args)
               cert_list << cert_name.read_wstring
             end
@@ -113,6 +113,28 @@ module Win32
         verify_certificate(cert_pem)
       end
 
+      # Search certificate from open certificate store and return list
+      # store_handler => Open certificate store handler
+      # search_token => CN, RDN or any certificate attribute
+      def cert_search(store_handler, search_token)
+        raise ArgumentError, "Invalid search token" if !search_token || search_token.strip.empty?
+        cert_rdn = memory_ptr
+        certificate_list =[]
+        counter = 0
+        begin
+          while (pcert_context = CertEnumCertificatesInStore(store_handler, pcert_context) and !pcert_context.null?)
+            cert_property = get_cert_property(pcert_context)
+            if cert_property.include?(search_token)
+              certificate_list << [cert_property[CERT_NAME_FRIENDLY_DISPLAY_TYPE], cert_property[CERT_NAME_RDN_TYPE]]
+            end
+          end
+          CertFreeCertificateContext(pcert_context)
+        rescue Exception => e
+          lookup_error
+        end
+        certificate_list
+      end
+
       private
 
       # Build arguments for CertAddEncodedCertificateToStore
@@ -126,8 +148,8 @@ module Win32
       end
 
       # Build argument for CertGetNameStringW
-      def cert_get_name_args(pcert_context, cert_name)
-        [pcert_context, CERT_NAME_FRIENDLY_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, nil, cert_name, 1024]
+      def cert_get_name_args(pcert_context, cert_name, search_type)
+        [pcert_context, search_type, CERT_NAME_ISSUER_FLAG, nil, cert_name, 1024]
       end
 
       # Remove extra space and : from thumbprint
