@@ -67,7 +67,7 @@ module Win32
         cert_name = memory_ptr
         cert_list = []
         begin
-          while (pcert_context = CertEnumCertificatesInStore(store_handler, pcert_context)) && (not pcert_context.null?)
+          while (pcert_context = CertEnumCertificatesInStore(store_handler, pcert_context)) && (not pcert_context.null?) do
             cert_args = cert_get_name_args(pcert_context, cert_name, CERT_NAME_FRIENDLY_DISPLAY_TYPE)
             if CertGetNameStringW(*cert_args)
               cert_list << cert_name.read_wstring
@@ -147,6 +147,23 @@ module Win32
         [store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, cert_rdn.to_wstring, nil]
       end
 
+      # Match certificate CN exist in cert_rdn 
+      def is_cn_match?(cert_rdn, certificate_name)
+        cert_rdn.read_wstring.match(/(^|\W)#{certificate_name}($|\W)/i)
+      end
+
+      # Get Certificate all properties
+      def get_cert_property(pcert_context)
+        property_value = memory_ptr
+        property_list = []
+        property_list[0] = ""
+        (1..8).to_a.each do |property_type|
+          CertGetNameStringW(pcert_context, property_type, CERT_NAME_ISSUER_FLAG, nil, property_value, 1024)
+          property_list << property_value.read_wstring
+        end
+        property_list
+      end
+
       # Build argument for CertGetNameStringW
       def cert_get_name_args(pcert_context, cert_name, search_type)
         [pcert_context, search_type, CERT_NAME_ISSUER_FLAG, nil, cert_name, 1024]
@@ -190,7 +207,7 @@ module Win32
       end
       # Create empty memory pointer
       def memory_ptr
-        FFI::MemoryPointer.new(2, 128)
+        FFI::MemoryPointer.new(2, 256)
       end
     end
   end

@@ -195,6 +195,8 @@ module Win32
         safe_attach_function :CertDeleteCertificateFromStore, [PCCERT_CONTEXT], BOOL
         # To retrieve specific certificates from certificate store
         safe_attach_function :CertFindCertificateInStore, [HCERTSTORE, DWORD, DWORD, DWORD, LPVOID, PCCERT_CONTEXT], PCCERT_CONTEXT
+        
+        safe_attach_function :PFXExportCertStoreEx, [HCERTSTORE, CRYPT_INTEGER_BLOB, LPCTSTR, LPVOID, DWORD], BOOL
       end
     end
   end
