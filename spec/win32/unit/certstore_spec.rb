@@ -346,6 +346,53 @@ describe Win32::Certstore, :windows_only do
     end
   end
 
+  describe "#cert_search" do
+    context "When passing empty token" do
+      let (:store_name) { "root" }
+      let (:token) { " " }
+      it "raises ArgumentError" do
+        store = certstore.open(store_name)
+        expect { store.search(token) }.to raise_error(ArgumentError, "Invalid search token")
+      end
+    end
+    context "When search token is nil" do
+      let (:store_name) { "root" }
+      let (:token) { nil }
+      it "raises ArgumentError" do
+        store = certstore.open(store_name)
+        expect { store.search(token) }.to raise_error(ArgumentError, "Invalid search token")
+      end
+    end
+    context "When passing invalid search token" do
+      let (:store_name) { "root" }
+      let (:token) { "invalid search" }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_property).and_return("")
+      end
+      it "returns empty Array list" do
+        store = certstore.open(store_name)
+        cert_list = store.search(token)
+        expect(cert_list).to be_an_instance_of(Array)
+        expect(cert_list).to be_empty
+      end
+    end
+    context "When passing valid search token CN" do
+      let (:store_name) { "root" }
+      let (:token) { "GlobalSign Root CA" }
+      before(:each) do
+        allow(certbase).to receive(:get_cert_property).and_return(["", "", "BE, GlobalSign nv-sa, Root CA, GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "", ""])
+      end
+      it "returns valid " do
+        store = certstore.open(store_name)
+        cert_list = store.search(token)
+        expect(cert_list).to be_an_instance_of(Array)
+        cert_list.flatten!
+        expect(cert_list.first).to eql("GlobalSign Root CA - R1")
+        expect(cert_list.last).to eql("BE, GlobalSign nv-sa, Root CA, GlobalSign Root CA")
+      end
+    end
+  end
+
   describe "Perform more than one operations with single certstore object" do
     context "Perform add and list with single certstore object" do
       let (:store_name) { "root" }

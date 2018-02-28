@@ -66,8 +66,8 @@ module Win32
     end
 
     # Search certificate from open certificate store and return certificates objects
-    def search(certificate_name)
-      cert_search(certstore_handler, certificate_name)
+    def search(search_token)
+      cert_search(certstore_handler, search_token)
     end
 
     # Validate certificate from open certificate store and return boolean
