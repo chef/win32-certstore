@@ -1,6 +1,6 @@
 #
 # Author:: Piyush Awasthi (<piyush.awasthi@msystechnologies.com>)
-# Copyright:: Copyright (c) 2017 Chef Software, Inc.
+# Copyright:: Copyright (c) 2018 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,18 +22,19 @@ module Win32
 
         # PSCommand to search certificate from thumbprint and convert in pem
         def cert_ps_cmd(thumbprint)
-          "$CertThumbprint = '#{thumbprint}'
-          $content = $null
-          $cert = Get-ChildItem Cert:\ -Recurse | Where-Object { $_.Thumbprint -eq $CertThumbprint } | Select-Object -First 1
-          if($cert -ne $null)
-          {
-          $content = @(
-            '-----BEGIN CERTIFICATE-----'
-            [System.Convert]::ToBase64String($cert.RawData, 'InsertLineBreaks')
-            '-----END CERTIFICATE-----'
-          )
-          }
-          $content"
+          <<-EOH
+            $content = $null
+            $cert = Get-ChildItem Cert:\ -Recurse | Where { $_.Thumbprint -eq '#{thumbprint}' }
+            if($cert -ne $null)
+            {
+            $content = @(
+              '-----BEGIN CERTIFICATE-----'
+              [System.Convert]::ToBase64String($cert.RawData, 'InsertLineBreaks')
+              '-----END CERTIFICATE-----'
+            )
+            }
+            $content
+          EOH
         end
       end
     end

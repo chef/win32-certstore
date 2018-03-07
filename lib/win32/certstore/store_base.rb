@@ -52,12 +52,12 @@ module Win32
       # Get certificate from open certificate store and return certificate object
       # store_handler => Open certificate store handler
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
-      def cert_get(store_handler, certificate_thumbprint)
+      def cert_get(certificate_thumbprint)
         validate_thumbprint(certificate_thumbprint)
         thumbprint = update_thumbprint(certificate_thumbprint)
         cert_pem = get_cert_pem(thumbprint)
+        cert_pem = format_pem(cert_pem)
         unless cert_pem.empty?
-          cert_pem = format_pem(cert_pem)
           build_openssl_obj(cert_pem)
         end
       end
@@ -123,17 +123,18 @@ module Win32
 
       # Get certificate pem
       def get_cert_pem(thumbprint)
-        IO::popen(["powershell.exe", cert_ps_cmd(thumbprint)]) {|io| io.readlines}
+        get_data =  powershell_out!(cert_ps_cmd(thumbprint))
+        get_data.stdout
       end
 
       # Format pem
       def format_pem(cert_pem)
-        cert_pem.join
+        cert_pem.delete("\r")
       end
 
       # Build pem to OpenSSL::X509::Certificate object
       def build_openssl_obj(cert_pem)
-        OpenSSL::X509::Certificate.new cert_pem
+        OpenSSL::X509::Certificate.new(cert_pem)
       end
       # Create empty memory pointer
       def memory_ptr

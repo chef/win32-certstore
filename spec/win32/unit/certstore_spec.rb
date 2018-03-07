@@ -29,21 +29,21 @@ describe Win32::Certstore, :windows_only do
     context "When passing empty certificate store name" do
       let (:store_name) { "" }
       it "raises ArgumentError" do
-        expect { certstore.open(store_name) }.to raise_error("Invalid Certificate Store.")
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
       end
     end
 
     context "When passing invalid certificate store name" do
       let (:store_name) { "Chef" }
       it "raises ArgumentError" do
-        expect { certstore.open(store_name) }.to raise_error("Invalid Certificate Store.")
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
       end
     end
 
     context "When passing nil certificate store name" do
       let (:store_name) { nil }
       it "raises ArgumentError" do
-        expect { certstore.open(store_name) }.to raise_error("Invalid Certificate Store.")
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
       end
     end
 
@@ -98,6 +98,95 @@ describe Win32::Certstore, :windows_only do
     end
   end
 
+  describe "#cert_get" do
+    context "When passing empty certificate store name" do
+      let (:store_name) { "" }
+      it "raises ArgumentError" do
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
+      end
+    end
+
+    context "When passing empty thumbprint" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { " " }
+      it "raises ArgumentError" do
+        store = certstore.open(store_name)
+        expect { store.get(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+      end
+    end
+
+    context "When passing thumbprint is nil" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { nil }
+      it "raises ArgumentError" do
+        store = certstore.open(store_name)
+        expect { store.get(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+      end
+    end
+
+    context "When passing invalid thumbprint" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return([])
+      end
+      it "returns nil" do
+        store = certstore.open(store_name)
+        cert_obj = store.get(thumbprint)
+        expect(cert_obj).to eql(nil)
+      end
+    end
+
+    context "When passing valid thumbprint" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
+      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return([cert_pem])
+      end
+      it "returns OpenSSL::X509::Certificate Object" do
+        store = certstore.open(store_name)
+        cert_obj = store.get(thumbprint)
+        expect(cert_obj).to be_an_instance_of(OpenSSL::X509::Certificate)
+        expect(cert_obj.not_before.to_s).to eql("1998-09-01 12:00:00 UTC")
+        expect(cert_obj.not_after.to_s).to eql("2028-01-28 12:00:00 UTC")
+      end
+    end
+
+    context "When passing valid thumbprint with spaces" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
+      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return([cert_pem])
+      end
+      it "returns OpenSSL::X509::Certificate Object" do
+        store = certstore.open(store_name)
+        cert_obj = store.get(thumbprint)
+        expect(cert_obj).to be_an_instance_of(OpenSSL::X509::Certificate)
+        expect(cert_obj.not_before.to_s).to eql("1998-09-01 12:00:00 UTC")
+        expect(cert_obj.not_after.to_s).to eql("2028-01-28 12:00:00 UTC")
+      end
+    end
+
+    context "When passing valid thumbprint with :" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
+      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return([cert_pem])
+      end
+      it "returns OpenSSL::X509::Certificate Object" do
+        store = certstore.open(store_name)
+        cert_obj = store.get(thumbprint)
+        expect(cert_obj).to be_an_instance_of(OpenSSL::X509::Certificate)
+        expect(cert_obj.not_before.to_s).to eql("1998-09-01 12:00:00 UTC")
+        expect(cert_obj.not_after.to_s).to eql("2028-01-28 12:00:00 UTC")
+      end
+    end
+
+  end
+
   describe "Perform more than one operations with single certstore object" do
     context "Perform add and list with single certstore object" do
       let (:store_name) { "root" }
@@ -118,89 +207,6 @@ describe Win32::Certstore, :windows_only do
       end
     end
   end
-
-  # describe "#cert_delete" do
-  #   context "When passing valid certificate" do
-  #     let (:store_name) { "my" }
-  #     let (:certificate_name) { 'GeoTrust Global CA' }
-  #     before(:each) do
-  #       allow_any_instance_of(certbase).to receive(:cert_delete).and_return(/Deleted/)
-  #       allow_any_instance_of(certbase).to receive_message_chain(:CertFindCertificateInStore, :null?).and_return(false)
-  #       allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
-  #     end
-  #     it "return message of successful deletion" do
-  #       store = certstore.open(store_name)
-  #       delete_cert = store.delete(certificate_name)
-  #       expect(delete_cert).to match("Deleted certificate #{certificate_name} successfully")
-  #     end
-  #   end
-
-  #   context "When passing invalid certificate" do
-  #     let (:store_name) { "my" }
-  #     let (:certificate_name) { "tmp_cert.mydomain.com" }
-  #     it "returns a message: `Cannot find Certificate`" do
-  #       allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
-  #       store = certstore.open(store_name)
-  #       delete_cert = store.delete(certificate_name)
-  #       expect(delete_cert).to eq("Cannot find certificate with name as `tmp_cert.mydomain.com`. Please re-verify certificate Issuer name or Friendly name")
-  #     end
-  #   end
-
-  #   context "When passing empty certificate_name" do
-  #     let (:store_name) { "my" }
-  #     let (:certificate_name) { "" }
-  #     it "returns a message: `Cannot find Certificate`" do
-  #       allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
-  #       store = certstore.open(store_name)
-  #       delete_cert = store.delete(certificate_name)
-  #       expect(delete_cert).to eq("Cannot find certificate with name as ``. Please re-verify certificate Issuer name or Friendly name")
-  #     end
-  #   end
-  # end
-
-  # describe "#cert_retrieve" do
-  #   context "When passing valid certificate" do
-  #     let (:store_name) { "my" }
-  #     let (:certificate_name) { 'GeoTrust Global CA' }
-  #     let (:retrieve) { { CERT_NAME_ATTR_TYPE: "GeoTrust Global CA", CERT_NAME_DNS_TYPE: "GeoTrust Global CA",
-  #       CERT_NAME_EMAIL_TYPE: "", CERT_NAME_FRIENDLY_DISPLAY_TYPE: "GeoTrust Global CA",
-  #       CERT_NAME_RDN_TYPE: "US, GeoTrust Inc., GeoTrust Global CA", CERT_NAME_SIMPLE_DISPLAY_TYPE: "GeoTrust Global CA",
-  #       CERT_NAME_UPN_TYPE: "", CERT_NAME_URL_TYPE: "" } }
-
-  #     before(:each) do
-  #       allow_any_instance_of(certbase).to receive(:cert_retrieve).and_return(retrieve)
-  #       allow_any_instance_of(certbase).to receive_message_chain(:CertFindCertificateInStore, :last).and_return(true)
-  #     end
-
-  #     it "returns certificate properties" do
-  #       store = certstore.open(store_name)
-  #       retrive_cert = store.retrieve(certificate_name)
-  #       expect(retrive_cert).to eq(retrieve)
-  #     end
-  #   end
-
-  #   context "When passing invalid certificate" do
-  #     let (:store_name) { "my" }
-  #     let (:certificate_name) { "tmp_cert.mydomain.com" }
-  #     it "returns a message: `Cannot find Certificate`" do
-  #       allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
-  #       store = certstore.open(store_name)
-  #       delete_cert = store.retrieve(certificate_name)
-  #       expect(delete_cert).to eq("Cannot find certificate with name as `tmp_cert.mydomain.com`. Please re-verify certificate Issuer name")
-  #     end
-  #   end
-
-  #   context "When passing empty certificate_name" do
-  #     let (:store_name) { "my" }
-  #     let (:certificate_name) { "" }
-  #     it "returns a message: `Cannot find Certificate`" do
-  #       allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
-  #       store = certstore.open(store_name)
-  #       delete_cert = store.retrieve(certificate_name)
-  #       expect(delete_cert).to eq("Cannot find certificate with name as ``. Please re-verify certificate Issuer name")
-  #     end
-  #   end
-  # end
 
   describe "#Failed with FFI::LastError" do
     context "While adding or deleting or retrieving certificate" do
