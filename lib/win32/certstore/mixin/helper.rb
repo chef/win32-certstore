@@ -36,6 +36,11 @@ module Win32
             $content
           EOH
         end
+
+        # validate certificate not_before and not_after date in UTC
+        def valid_duration(cert_obj)
+          cert_obj.not_before < Time.now.utc && cert_obj.not_after > Time.now.utc
+        end
       end
     end
   end

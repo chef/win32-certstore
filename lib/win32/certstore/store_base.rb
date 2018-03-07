@@ -102,6 +102,17 @@ module Win32
         cert_delete_flag
       end
 
+      # Verify certificate from open certificate store and return boolean or exceptions
+      # store_handler => Open certificate store handler
+      # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
+      def cert_verify(store_handler, certificate_thumbprint)
+        validate_thumbprint(certificate_thumbprint)
+        thumbprint = update_thumbprint(certificate_thumbprint)
+        cert_pem = get_cert_pem(thumbprint)
+        cert_pem = format_pem(cert_pem)
+        verify_certificate(cert_pem)
+      end
+
       private
 
       # Build arguments for CertAddEncodedCertificateToStore
@@ -138,6 +149,12 @@ module Win32
       # To get RDN from certificate object
       def get_rdn(cert_obj)
         cert_obj.issuer.to_s.concat("/").scan(/=(.*?)\//).join(", ")
+      end
+
+      # Verify OpenSSL::X509::Certificate object
+      def verify_certificate(cert_pem)
+        return "Certificate not found" if cert_pem.empty?
+        valid_duration(build_openssl_obj(cert_pem))
       end
 
       # Format pem
