@@ -70,6 +70,11 @@ module Win32
       cert_search(certstore_handler, certificate_name)
     end
 
+    # Validate certificate from open certificate store and return boolean
+    def verify(certificate_name)
+      cert_verify(certstore_handler, certificate_name)
+    end
+
     # To close and destroy pointer of open certificate store handler
     def close
       closed = CertCloseStore(@certstore_handler, CERT_CLOSE_STORE_FORCE_FLAG)
