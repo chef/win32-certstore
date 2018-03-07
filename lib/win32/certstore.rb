@@ -17,6 +17,7 @@
 
 require_relative "certstore/mixin/crypto"
 require_relative "certstore/mixin/assertions"
+require_relative "certstore/mixin/helper"
 require_relative "certstore/mixin/string"
 require_relative "certstore/store_base"
 require_relative "certstore/version"

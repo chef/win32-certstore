@@ -41,6 +41,13 @@ module Win32
           end
         end
 
+        # Validate thumbprint
+        def validate_thumbprint(cert_thumbprint)
+          if cert_thumbprint.nil? || cert_thumbprint.strip.empty?
+            raise ArgumentError, "Invalid certificate thumbprint."
+          end
+        end
+
         # Common System call errors
         def lookup_error(failed_operation = nil)
           error_no = FFI::LastError.error
