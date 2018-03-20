@@ -71,8 +71,8 @@ module Win32
     end
 
     # Validate certificate from open certificate store and return boolean
-    def verify(certificate_name)
-      cert_verify(certstore_handler, certificate_name)
+    def valid?(certificate_thumbprint)
+      cert_validate(certificate_thumbprint)
     end
 
     # To close and destroy pointer of open certificate store handler

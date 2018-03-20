@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require 'date'
+
 module Win32
   class Certstore
     module Mixin
@@ -38,11 +40,11 @@ module Win32
         end
 
         # validate certificate not_before and not_after date in UTC
-        def valid_duration(cert_obj)
+        def valid_duration?(cert_obj)
           cert_obj.not_before < Time.now.utc && cert_obj.not_after > Time.now.utc
         end
+
       end
     end
   end
 end
-

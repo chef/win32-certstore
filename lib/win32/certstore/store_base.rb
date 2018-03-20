@@ -105,7 +105,7 @@ module Win32
       # Verify certificate from open certificate store and return boolean or exceptions
       # store_handler => Open certificate store handler
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
-      def cert_verify(store_handler, certificate_thumbprint)
+      def cert_validate(certificate_thumbprint)
         validate_thumbprint(certificate_thumbprint)
         thumbprint = update_thumbprint(certificate_thumbprint)
         cert_pem = get_cert_pem(thumbprint)
@@ -135,6 +135,12 @@ module Win32
         certificate_thumbprint.gsub(/[^A-Za-z0-9]/, '')
       end
 
+      # Verify OpenSSL::X509::Certificate object
+      def verify_certificate(cert_pem)
+        return "Certificate not found" if cert_pem.empty?
+        valid_duration?(build_openssl_obj(cert_pem))
+      end
+
       # Convert OpenSSL::X509::Certificate object in .der formate
       def der_cert(cert_obj)
         FFI::MemoryPointer.from_string(cert_obj.to_der)
@@ -149,12 +155,6 @@ module Win32
       # To get RDN from certificate object
       def get_rdn(cert_obj)
         cert_obj.issuer.to_s.concat("/").scan(/=(.*?)\//).join(", ")
-      end
-
-      # Verify OpenSSL::X509::Certificate object
-      def verify_certificate(cert_pem)
-        return "Certificate not found" if cert_pem.empty?
-        valid_duration(build_openssl_obj(cert_pem))
       end
 
       # Format pem
