@@ -25,6 +25,31 @@ end
 store = Win32::Certstore.open("Root")
 ```
 
+### Add certificate
+
+Add a valid certificate in a certificate store. 
+
+**Notes: The new certificate should be converted in OpenSSL::X509 :**
+
+```
+raw = File.read "C:\GlobalSignRootCA.pem"
+certificate_object = OpenSSL::X509::Certificate.new raw
+
+Win32::Certstore.open('Root') do |store|
+  store.add(certificate_object)
+  store.close
+end
+```
+    or
+```
+raw = File.read "C:\GlobalSignRootCA.pem" 
+certificate_object = OpenSSL::X509::Certificate.new raw
+
+store = Win32::Certstore.open('Root')
+store.add(certificate_object)
+store.close
+```
+
 ### List certificates
 
 Lists certificates of a valid certificate store and returns output in JSON format:
@@ -32,47 +57,34 @@ Lists certificates of a valid certificate store and returns output in JSON forma
 ```
 Win32::Certstore.open("Root") do |store|
     store.list
+    store.close
 end
 ```
-	or 
+    or
 ```
 store = Win32::Certstore.open("Root")
 store.list
-```
-
-### Add certificate
-
-Add a valid certificate in a certificate store. 
-
-**Notes: The new certificate should be in the following formats `.cer|.crt|.pfx|.der`:**
-
-```
-Win32::Certstore.open("Root") do |store|
-    store.add(certificate_file_path)
-end
-```
-	or 
-```
-store = Win32::Certstore.open("Root")
-store.add(certificate_file_path)
+store.close
 ```
 
 ### Delete certificate
 
 Deletes a certificate from certificate store and returns output in string format.
 
-**Notes: The certificate_name should be valid `CN or Common Name` of the certificate **
+**Notes: The certificate_name should be valid `CN or Common Name` of the certificate :**
 
 ```
 certificate_name = 'Root Agency'
 Win32::Certstore.open("Root") do |store|
     store.delete(certificate_name)
+    store.close
 end
 ```
     or
 ```
 store = Win32::Certstore.open("Root")
 store.delete(certificate_name)
+store.close
 ```
 
 ### Retrieve certificate
@@ -85,12 +97,39 @@ Retrieve properties of a certificate from certificate store and returns output i
 certificate_name = 'GlobalSign Root CA'
 Win32::Certstore.open("Root") do |store|
     store.retrieve(certificate_name)
+    store.close
 end
 ```
     or
 ```
 store = Win32::Certstore.open("Root")
 store.retrieve(certificate_name)
+store.close
+```
+
+### Perform multiple operations
+
+You can perform more that one oprations with single certificate store object
+
+```
+raw = File.read "C:\GlobalSignRootCA.pem"
+certificate_object = OpenSSL::X509::Certificate.new raw
+
+Win32::Certstore.open('Root') do |store|
+  store.add(certificate_object)
+  store.list
+  store.close
+end
+```
+    or
+```
+raw = File.read "C:\GlobalSignRootCA.pem" 
+certificate_object = OpenSSL::X509::Certificate.new raw
+
+store = Win32::Certstore.open('Root')
+store.add(certificate_object)
+store.list
+store.close
 ```
 
 ## Requirements / setup

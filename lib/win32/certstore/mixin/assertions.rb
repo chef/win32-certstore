@@ -14,6 +14,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+require "openssl"
 
 module Win32
   class Certstore
@@ -28,8 +29,36 @@ module Win32
 
         # Validate certificate type
         def validate_certificate(cert_file_path)
-          unless (!cert_file_path.nil? && File.extname(cert_file_path) =~ /.cer|.crt|.pfx|.der/ )
+          unless !cert_file_path.nil? && File.extname(cert_file_path) =~ /.cer|.crt|.pfx|.der/
             raise ArgumentError, "Invalid Certificate format."
+          end
+        end
+
+        # Validate certificate Object
+        def validate_certificate_obj(cert_obj)
+          unless cert_obj.class == OpenSSL::X509::Certificate
+            raise ArgumentError, "Invalid Certificate object."
+          end
+        end
+
+        # Common System call errors
+        def lookup_error(failed_operation = nil)
+          error_no = FFI::LastError.error
+          case error_no
+          when 1223
+            raise SystemCallError.new("The operation was canceled by the user", error_no)
+          when -2146885628
+            raise SystemCallError.new("Cannot find object or property", error_no)
+          when -2146885629
+            raise SystemCallError.new("An error occurred while reading or writing to a file.", error_no)
+          when -2146881269
+            raise SystemCallError.new("ASN1 bad tag value met. -- Is the certificate in DER format?", error_no)
+          when -2146881278
+            raise SystemCallError.new("ASN1 unexpected end of data.", error_no)
+          when -2147024891
+            raise SystemCallError.new("System.UnauthorizedAccessException, Access denied..", error_no)
+          else
+            raise SystemCallError.new("Unable to #{failed_operation} certificate.", error_no)
           end
         end
 
@@ -41,7 +70,7 @@ module Win32
         # ROOT -> Root certificates.
         # SPC -> Software Publisher Certificate.
         def valid_store_name
-          ["MY", "CA", "ROOT", "SPC"]
+          %w{MY CA ROOT SPC}
         end
       end
     end

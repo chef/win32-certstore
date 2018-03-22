@@ -16,8 +16,8 @@
 # limitations under the License.
 #
 
-require 'spec_helper'
-require 'win32/certstore/mixin/assertions'
+require "spec_helper"
+require "win32/certstore/mixin/assertions"
 
 describe Win32::Certstore::Mixin::Assertions do
 
@@ -26,7 +26,7 @@ describe Win32::Certstore::Mixin::Assertions do
   end
 
   let (:certstore) { Store.new }
-  
+
   describe "#validate_store" do
     context "When passing empty certificate store name" do
       let (:store_name) { "" }

@@ -1,7 +1,7 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'win32/certstore/version'
+require "win32/certstore/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "win32-certstore"
@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/chef/win32-certstore"
 
   spec.files         = Dir["README.md", "LICENSE.txt", "lib/**/*"]
-  spec.bindir        = 'bin'
+  spec.bindir        = "bin"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 

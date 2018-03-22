@@ -15,11 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative 'certstore/mixin/crypto'
-require_relative 'certstore/mixin/assertions'
-require_relative 'certstore/mixin/string'
-require_relative 'certstore/store_base'
-require_relative 'certstore/version'
+require_relative "certstore/mixin/crypto"
+require_relative "certstore/mixin/assertions"
+require_relative "certstore/mixin/string"
+require_relative "certstore/store_base"
+require_relative "certstore/version"
 
 module Win32
   class Certstore
@@ -34,43 +34,56 @@ module Win32
       @certstore_handler = open(store_name)
     end
 
+    # To open given certificate store
     def self.open(store_name)
       validate_store(store_name)
       if block_given?
-        yield self.new(store_name)
+        yield new(store_name)
       else
-        self.new(store_name)
+        new(store_name)
       end
     end
 
+    # Adding New certificate to open certificate store
+    def add(certificate_obj)
+      cert_add(certstore_handler, certificate_obj)
+    end
+
+    # Get certificate from certificate store and return certificate object
+    def get(certificate_thumbprint)
+      cert_get(certstore_handler, certificate_thumbprint)
+    end
+
+    # Listing all certificate of open certificate store and return in certificates list
     def list
-      list = cert_list(@certstore_handler)
-      close
-      list
+      cert_list(certstore_handler)
     end
 
-    def add(cert_file_path)
-      add = cert_add(@certstore_handler, cert_file_path)
-      close
-      add
+    # Delete existing certificate from open certificate store
+    def delete(certificate_thumbprint)
+      cert_delete(certstore_handler, certificate_thumbprint)
     end
 
-    def delete(certificate_name)
-      delete_cert = cert_delete(certstore_handler, certificate_name)
-      close
-      delete_cert
+    # Search certificate from open certificate store and return certificates objects
+    def search(certificate_name)
+      cert_search(certstore_handler, certificate_name)
     end
 
-    def retrieve(certificate_name)
-      retrieve_cert = cert_retrieve(certstore_handler, certificate_name)
-      close
-      retrieve_cert
+    # To close and destroy pointer of open certificate store handler
+    def close
+      closed = CertCloseStore(@certstore_handler, CERT_CLOSE_STORE_FORCE_FLAG)
+      unless closed
+        last_error = FFI::LastError.error
+        raise SystemCallError.new("Unable to close the Certificate Store.", last_error)
+      end
+      remove_finalizer
     end
 
     private
-    
+
     attr_reader :certstore_handler
 
+    # To open certstore and return open certificate store pointer
     def open(store_name)
       certstore_handler = CertOpenSystemStoreW(nil, wstring(store_name))
       unless certstore_handler
@@ -81,6 +94,7 @@ module Win32
       certstore_handler
     end
 
+    # Get all open certificate store handler
     def add_finalizer(certstore_handler)
       ObjectSpace.define_finalizer(self, self.class.finalize(certstore_handler))
     end
@@ -89,15 +103,7 @@ module Win32
       proc { puts "DESTROY OBJECT #{certstore_handler}" }
     end
 
-    def close
-      closed = CertCloseStore(@certstore_handler, CERT_CLOSE_STORE_FORCE_FLAG)
-      unless closed
-        last_error = FFI::LastError.error
-        raise SystemCallError.new("Unable to close the Certificate Store.", last_error)
-      end
-      remove_finalizer
-    end
-
+    # To close all open certificate store at the end
     def remove_finalizer
       ObjectSpace.undefine_finalizer(self)
     end

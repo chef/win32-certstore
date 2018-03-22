@@ -1,5 +1,5 @@
-require 'spec_helper'
-require 'win32/certstore/mixin/shell_out'
+require "spec_helper"
+require "win32/certstore/mixin/shell_out"
 
 describe Win32::Certstore::Mixin::ShellOut do
   let(:string_class) { Class.new { include Win32::Certstore::Mixin::ShellOut } }
@@ -15,7 +15,7 @@ describe Win32::Certstore::Mixin::ShellOut do
 
       it "raises Mixlib::ShellOut::ShellCommandFailed error if invalid command is passed" do
         cmd = "powershell.exe -Command -in 'abc'"
-        expect{ string_obj.shell_out_command(cmd) }.to raise_error(Mixlib::ShellOut::ShellCommandFailed)
+        expect { string_obj.shell_out_command(cmd) }.to raise_error(Mixlib::ShellOut::ShellCommandFailed)
       end
     end
   end

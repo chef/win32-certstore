@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'mixlib/shellout'
+require "mixlib/shellout"
 
 module Win32
   class Certstore
@@ -27,7 +27,6 @@ module Win32
           cmd.run_command
           if cmd.error!
             raise Mixlib::ShellOut::ShellCommandFailed, cmd.error!
-            return
           end
           cmd
         end

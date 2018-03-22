@@ -15,12 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Win32::Certstore do
-
-  it 'has a version number' do
+  it "has a version number" do
     expect(Win32::Certstore::VERSION).not_to be nil
   end
-
 end
