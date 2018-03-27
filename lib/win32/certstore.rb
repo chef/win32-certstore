@@ -17,6 +17,7 @@
 
 require_relative "certstore/mixin/crypto"
 require_relative "certstore/mixin/assertions"
+require_relative "certstore/mixin/helper"
 require_relative "certstore/mixin/string"
 require_relative "certstore/store_base"
 require_relative "certstore/version"
@@ -51,7 +52,7 @@ module Win32
 
     # Get certificate from certificate store and return certificate object
     def get(certificate_thumbprint)
-      cert_get(certstore_handler, certificate_thumbprint)
+      cert_get(certificate_thumbprint)
     end
 
     # Listing all certificate of open certificate store and return in certificates list

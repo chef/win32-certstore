@@ -21,7 +21,6 @@ require_relative "mixin/shell_out"
 require_relative "mixin/unicode"
 require "openssl"
 require "json"
-require "tempfile"
 
 module Win32
   class Certstore
@@ -31,6 +30,7 @@ module Win32
       include Win32::Certstore::Mixin::String
       include Win32::Certstore::Mixin::ShellOut
       include Win32::Certstore::Mixin::Unicode
+      include Win32::Certstore::Mixin::Helper
 
       # Adding new certification in open certificate and return boolean
       # store_handler => Open certificate store handler
@@ -52,23 +52,13 @@ module Win32
       # Get certificate from open certificate store and return certificate object
       # store_handler => Open certificate store handler
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
-      def cert_get(store_handler, certificate_thumbprint)
-        property_value = memory_ptr
-        retrieve = { CERT_NAME_EMAIL_TYPE: nil, CERT_NAME_RDN_TYPE: nil, CERT_NAME_ATTR_TYPE: nil,
-                     CERT_NAME_SIMPLE_DISPLAY_TYPE: nil, CERT_NAME_FRIENDLY_DISPLAY_TYPE: nil, CERT_NAME_DNS_TYPE: nil,
-                     CERT_NAME_URL_TYPE: nil, CERT_NAME_UPN_TYPE: nil }
-        begin
-          if !certificate_name.empty? && (pcert_context = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil)) && (not pcert_context.null?)
-            retrieve.each do |property_type, value|
-              CertGetNameStringW(pcert_context, property_type, CERT_NAME_ISSUER_FLAG, nil, property_value, 1024)
-              retrieve[property_type] = property_value.read_wstring
-            end
-            return retrieve
-          end
-          return "Cannot find certificate with name as `#{certificate_name}`. Please re-verify certificate Issuer name"
-        rescue Exception => e
-          @error = "retrieve: "
-          lookup_error
+      def cert_get(certificate_thumbprint)
+        validate_thumbprint(certificate_thumbprint)
+        thumbprint = update_thumbprint(certificate_thumbprint)
+        cert_pem = get_cert_pem(thumbprint)
+        cert_pem = format_pem(cert_pem)
+        unless cert_pem.empty?
+          build_openssl_obj(cert_pem)
         end
       end
 
@@ -109,10 +99,6 @@ module Win32
         end
       end
 
-      def cert_search(store_handler, certificate_name)
-        
-      end
-
       private
 
       # Build arguments for CertAddEncodedCertificateToStore
@@ -125,11 +111,31 @@ module Win32
         [pcert_context, CERT_NAME_FRIENDLY_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, nil, cert_name, 1024]
       end
 
+      # Remove extra space and : from thumbprint
+      def update_thumbprint(certificate_thumbprint)
+        certificate_thumbprint.gsub(/[^A-Za-z0-9]/, '')
+      end
+
       # Convert OpenSSL::X509::Certificate object in .der formate
       def der_cert(cert_obj)
         FFI::MemoryPointer.from_string(cert_obj.to_der)
       end
 
+      # Get certificate pem
+      def get_cert_pem(thumbprint)
+        get_data =  powershell_out!(cert_ps_cmd(thumbprint))
+        get_data.stdout
+      end
+
+      # Format pem
+      def format_pem(cert_pem)
+        cert_pem.delete("\r")
+      end
+
+      # Build pem to OpenSSL::X509::Certificate object
+      def build_openssl_obj(cert_pem)
+        OpenSSL::X509::Certificate.new(cert_pem)
+      end
       # Create empty memory pointer
       def memory_ptr
         FFI::MemoryPointer.new(2, 128)
