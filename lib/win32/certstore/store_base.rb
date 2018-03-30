@@ -84,19 +84,22 @@ module Win32
       # store_handler => Open certificate store handler
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_delete(store_handler, certificate_thumbprint)
+        validate_thumbprint(certificate_thumbprint)
+        cert_name = memory_ptr
+        thumbprint = update_thumbprint(certificate_thumbprint)
+        cert_pem = format_pem(get_cert_pem(thumbprint))
+        cert_rdn = get_rdn(build_openssl_obj(cert_pem))
+        cert_delete_flag = false
         begin
-          if !certificate_name.empty? && (pcert_context = CertFindCertificateInStore(store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, certificate_name.to_wstring, nil)) && (not pcert_context.null?)
-            if CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pcert_context))
-              return "Deleted certificate #{certificate_name} successfully"
-            else
-              lookup_error
-            end
+          cert_args = cert_find_args(store_handler, cert_rdn)
+          if (pcert_context = CertFindCertificateInStore(*cert_args) and !pcert_context.null?)
+            cert_delete_flag = CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pcert_context)) || lookup_error
           end
-          return "Cannot find certificate with name as `#{certificate_name}`. Please re-verify certificate Issuer name or Friendly name"
+          CertFreeCertificateContext(pcert_context)
         rescue Exception => e
-          @error = "delete: "
-          lookup_error
+          lookup_error("delete")
         end
+        cert_delete_flag
       end
 
       private
@@ -104,6 +107,11 @@ module Win32
       # Build arguments for CertAddEncodedCertificateToStore
       def cert_add_args(store_handler, certificate_obj)
         [store_handler, X509_ASN_ENCODING, der_cert(certificate_obj), certificate_obj.to_s.bytesize, 2, nil]
+      end
+
+      # Build arguments for CertFindCertificateInStore
+      def cert_find_args(store_handler, cert_rdn)
+        [store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, cert_rdn.to_wstring, nil]
       end
 
       # Build argument for CertGetNameStringW
@@ -125,6 +133,11 @@ module Win32
       def get_cert_pem(thumbprint)
         get_data =  powershell_out!(cert_ps_cmd(thumbprint))
         get_data.stdout
+      end
+
+      # To get RDN from certificate object
+      def get_rdn(cert_obj)
+        cert_obj.issuer.to_s.concat("/").scan(/=(.*?)\//).join(", ")
       end
 
       # Format pem
