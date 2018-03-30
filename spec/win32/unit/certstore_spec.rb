@@ -128,7 +128,7 @@ describe Win32::Certstore, :windows_only do
       let (:store_name) { "root" }
       let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
       before(:each) do
-        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return([])
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
       end
       it "returns nil" do
         store = certstore.open(store_name)
@@ -142,7 +142,7 @@ describe Win32::Certstore, :windows_only do
       let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
       let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
-        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return([cert_pem])
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
       it "returns OpenSSL::X509::Certificate Object" do
         store = certstore.open(store_name)
@@ -158,7 +158,7 @@ describe Win32::Certstore, :windows_only do
       let (:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
       let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
-        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return([cert_pem])
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
       it "returns OpenSSL::X509::Certificate Object" do
         store = certstore.open(store_name)
@@ -174,7 +174,7 @@ describe Win32::Certstore, :windows_only do
       let (:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
       let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
-        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return([cert_pem])
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
       it "returns OpenSSL::X509::Certificate Object" do
         store = certstore.open(store_name)
@@ -184,7 +184,88 @@ describe Win32::Certstore, :windows_only do
         expect(cert_obj.not_after.to_s).to eql("2028-01-28 12:00:00 UTC")
       end
     end
+  end
 
+  describe "#cert_delete" do
+    context "When passing empty certificate store name" do
+      let (:store_name) { "" }
+      it "raises ArgumentError" do
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
+      end
+    end
+
+    context "When passing empty thumbprint" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { " " }
+      it "raises ArgumentError" do
+        store = certstore.open(store_name)
+        expect { store.delete(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+      end
+    end
+
+    context "When passing thumbprint is nil" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { nil }
+      it "raises ArgumentError" do
+        store = certstore.open(store_name)
+        expect { store.delete(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+      end
+    end
+
+    context "When passing invalid thumbprint" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
+        allow_any_instance_of(certbase).to receive(:lookup_error).and_return(false)
+      end
+      it "returns false" do
+        store = certstore.open(store_name)
+        expect(store.delete(thumbprint)).to eql(false)
+      end
+    end
+
+    context "When passing valid thumbprint" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
+      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
+        allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
+      end
+      it "returns true" do
+        store = certstore.open(store_name)
+        expect(store.delete(thumbprint)).to eql(true)
+      end
+    end
+
+    context "When passing valid thumbprint with spaces" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
+      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
+        allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
+      end
+      it "returns true" do
+        store = certstore.open(store_name)
+        expect(store.delete(thumbprint)).to eql(true)
+      end
+    end
+
+    context "When passing valid thumbprint with :" do
+      let (:store_name) { "root" }
+      let (:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
+      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
+        allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
+      end
+      it "returns true" do
+        store = certstore.open(store_name)
+        expect(store.delete(thumbprint)).to eql(true)
+      end
+    end
   end
 
   describe "Perform more than one operations with single certstore object" do
@@ -214,6 +295,7 @@ describe Win32::Certstore, :windows_only do
       let (:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
       let (:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
       let (:certificate_name) { "GlobalSign" }
+      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
 
       it "returns 'The operation was canceled by the user'" do
         allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(false)
@@ -260,7 +342,7 @@ describe Win32::Certstore, :windows_only do
         allow(certbase).to receive(:CertDeleteCertificateFromStore).and_return(false)
         allow(FFI::LastError).to receive(:error).and_return(-2147024891)
         store = certstore.open(store_name)
-        expect { store.delete(certificate_name) }.to raise_error(SystemCallError)
+        expect { store.delete(thumbprint) }.to raise_error(SystemCallError)
       end
     end
   end
