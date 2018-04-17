@@ -1,0 +1,560 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Win32::Certstore::StoreBase
+  
+    &mdash; Documentation by YARD 0.8.7.6
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../../';
+  framesUrl = "../../frames.html#!Win32/Certstore/StoreBase.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (S)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../Win32.html" title="Win32 (module)">Win32</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Certstore.html" title="Win32::Certstore (class)">Certstore</a></span></span>
+     &raquo; 
+    <span class="title">StoreBase</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="../../method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="../../file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Module: Win32::Certstore::StoreBase
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+      <dt class="r1">Includes:</dt>
+      <dd class="r1"><span class='object_link'><a href="Mixin/Assertions.html" title="Win32::Certstore::Mixin::Assertions (module)">Mixin::Assertions</a></span>, <span class='object_link'><a href="Mixin/Crypto.html" title="Win32::Certstore::Mixin::Crypto (module)">Mixin::Crypto</a></span>, <span class='object_link'><a href="Mixin/Helper.html" title="Win32::Certstore::Mixin::Helper (module)">Mixin::Helper</a></span>, <span class='object_link'><a href="Mixin/ShellOut.html" title="Win32::Certstore::Mixin::ShellOut (module)">Mixin::ShellOut</a></span>, <span class='object_link'><a href="Mixin/String.html" title="Win32::Certstore::Mixin::String (module)">Mixin::String</a></span>, <span class='object_link'><a href="Mixin/Unicode.html" title="Win32::Certstore::Mixin::Unicode (module)">Mixin::Unicode</a></span></dd>
+      
+    
+  
+  
+    <dt class="r2">Included in:</dt>
+    <dd class="r2"><span class='object_link'><a href="../Certstore.html" title="Win32::Certstore (class)">Win32::Certstore</a></span></dd>
+    
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">lib/win32/certstore/store_base.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+  <h2>Constant Summary</h2>
+  
+
+
+
+  <h2>Constant Summary</h2>
+  
+  <h3 class="inherited">Constants included
+     from <span class='object_link'><a href="Mixin/Crypto.html" title="Win32::Certstore::Mixin::Crypto (module)">Mixin::Crypto</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Mixin/Crypto.html#BLOB-constant" title="Win32::Certstore::Mixin::Crypto::BLOB (constant)">Mixin::Crypto::BLOB</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#BOOL-constant" title="Win32::Certstore::Mixin::Crypto::BOOL (constant)">Mixin::Crypto::BOOL</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#BYTE-constant" title="Win32::Certstore::Mixin::Crypto::BYTE (constant)">Mixin::Crypto::BYTE</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_CLOSE_STORE_CHECK_FLAG-constant" title="Win32::Certstore::Mixin::Crypto::CERT_CLOSE_STORE_CHECK_FLAG (constant)">Mixin::Crypto::CERT_CLOSE_STORE_CHECK_FLAG</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_CLOSE_STORE_FORCE_FLAG-constant" title="Win32::Certstore::Mixin::Crypto::CERT_CLOSE_STORE_FORCE_FLAG (constant)">Mixin::Crypto::CERT_CLOSE_STORE_FORCE_FLAG</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_FIND_ISSUER_STR-constant" title="Win32::Certstore::Mixin::Crypto::CERT_FIND_ISSUER_STR (constant)">Mixin::Crypto::CERT_FIND_ISSUER_STR</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_FIND_SUBJECT_STR-constant" title="Win32::Certstore::Mixin::Crypto::CERT_FIND_SUBJECT_STR (constant)">Mixin::Crypto::CERT_FIND_SUBJECT_STR</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_ATTR_TYPE-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_ATTR_TYPE (constant)">Mixin::Crypto::CERT_NAME_ATTR_TYPE</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_DISABLE_IE4_UTF8_FLAG-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_DISABLE_IE4_UTF8_FLAG (constant)">Mixin::Crypto::CERT_NAME_DISABLE_IE4_UTF8_FLAG</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_DNS_TYPE-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_DNS_TYPE (constant)">Mixin::Crypto::CERT_NAME_DNS_TYPE</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_EMAIL_TYPE-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_EMAIL_TYPE (constant)">Mixin::Crypto::CERT_NAME_EMAIL_TYPE</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_FRIENDLY_DISPLAY_TYPE-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_FRIENDLY_DISPLAY_TYPE (constant)">Mixin::Crypto::CERT_NAME_FRIENDLY_DISPLAY_TYPE</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_ISSUER_FLAG-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_ISSUER_FLAG (constant)">Mixin::Crypto::CERT_NAME_ISSUER_FLAG</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_RDN_TYPE-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_RDN_TYPE (constant)">Mixin::Crypto::CERT_NAME_RDN_TYPE</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_SEARCH_ALL_NAMES_FLAG-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_SEARCH_ALL_NAMES_FLAG (constant)">Mixin::Crypto::CERT_NAME_SEARCH_ALL_NAMES_FLAG</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_SIMPLE_DISPLAY_TYPE-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_SIMPLE_DISPLAY_TYPE (constant)">Mixin::Crypto::CERT_NAME_SIMPLE_DISPLAY_TYPE</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_STR_ENABLE_PUNYCODE_FLAG-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_STR_ENABLE_PUNYCODE_FLAG (constant)">Mixin::Crypto::CERT_NAME_STR_ENABLE_PUNYCODE_FLAG</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_UPN_TYPE-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_UPN_TYPE (constant)">Mixin::Crypto::CERT_NAME_UPN_TYPE</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CERT_NAME_URL_TYPE-constant" title="Win32::Certstore::Mixin::Crypto::CERT_NAME_URL_TYPE (constant)">Mixin::Crypto::CERT_NAME_URL_TYPE</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CRYPT_ASN_ENCODING-constant" title="Win32::Certstore::Mixin::Crypto::CRYPT_ASN_ENCODING (constant)">Mixin::Crypto::CRYPT_ASN_ENCODING</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#CRYPT_NDR_ENCODING-constant" title="Win32::Certstore::Mixin::Crypto::CRYPT_NDR_ENCODING (constant)">Mixin::Crypto::CRYPT_NDR_ENCODING</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#DWORD-constant" title="Win32::Certstore::Mixin::Crypto::DWORD (constant)">Mixin::Crypto::DWORD</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#HCERTSTORE-constant" title="Win32::Certstore::Mixin::Crypto::HCERTSTORE (constant)">Mixin::Crypto::HCERTSTORE</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#HCRYPTPROV_LEGACY-constant" title="Win32::Certstore::Mixin::Crypto::HCRYPTPROV_LEGACY (constant)">Mixin::Crypto::HCRYPTPROV_LEGACY</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#INT_PTR-constant" title="Win32::Certstore::Mixin::Crypto::INT_PTR (constant)">Mixin::Crypto::INT_PTR</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#LMSTR-constant" title="Win32::Certstore::Mixin::Crypto::LMSTR (constant)">Mixin::Crypto::LMSTR</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#LONG-constant" title="Win32::Certstore::Mixin::Crypto::LONG (constant)">Mixin::Crypto::LONG</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#LPCTSTR-constant" title="Win32::Certstore::Mixin::Crypto::LPCTSTR (constant)">Mixin::Crypto::LPCTSTR</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#LPFILETIME-constant" title="Win32::Certstore::Mixin::Crypto::LPFILETIME (constant)">Mixin::Crypto::LPFILETIME</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#LPSTR-constant" title="Win32::Certstore::Mixin::Crypto::LPSTR (constant)">Mixin::Crypto::LPSTR</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#LPTSTR-constant" title="Win32::Certstore::Mixin::Crypto::LPTSTR (constant)">Mixin::Crypto::LPTSTR</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#LPVOID-constant" title="Win32::Certstore::Mixin::Crypto::LPVOID (constant)">Mixin::Crypto::LPVOID</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#PCCERT_CONTEXT-constant" title="Win32::Certstore::Mixin::Crypto::PCCERT_CONTEXT (constant)">Mixin::Crypto::PCCERT_CONTEXT</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#PCERT_INFO-constant" title="Win32::Certstore::Mixin::Crypto::PCERT_INFO (constant)">Mixin::Crypto::PCERT_INFO</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#PCTL_USAGE-constant" title="Win32::Certstore::Mixin::Crypto::PCTL_USAGE (constant)">Mixin::Crypto::PCTL_USAGE</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#PCTL_VERIFY_USAGE_PARA-constant" title="Win32::Certstore::Mixin::Crypto::PCTL_VERIFY_USAGE_PARA (constant)">Mixin::Crypto::PCTL_VERIFY_USAGE_PARA</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#PCTL_VERIFY_USAGE_STATUS-constant" title="Win32::Certstore::Mixin::Crypto::PCTL_VERIFY_USAGE_STATUS (constant)">Mixin::Crypto::PCTL_VERIFY_USAGE_STATUS</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#PKCS_7_ASN_ENCODING-constant" title="Win32::Certstore::Mixin::Crypto::PKCS_7_ASN_ENCODING (constant)">Mixin::Crypto::PKCS_7_ASN_ENCODING</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#PKCS_7_NDR_ENCODING-constant" title="Win32::Certstore::Mixin::Crypto::PKCS_7_NDR_ENCODING (constant)">Mixin::Crypto::PKCS_7_NDR_ENCODING</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#PKCS_7_OR_X509_ASN_ENCODING-constant" title="Win32::Certstore::Mixin::Crypto::PKCS_7_OR_X509_ASN_ENCODING (constant)">Mixin::Crypto::PKCS_7_OR_X509_ASN_ENCODING</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#PWSTR-constant" title="Win32::Certstore::Mixin::Crypto::PWSTR (constant)">Mixin::Crypto::PWSTR</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#X509_ASN_ENCODING-constant" title="Win32::Certstore::Mixin::Crypto::X509_ASN_ENCODING (constant)">Mixin::Crypto::X509_ASN_ENCODING</a></span>, <span class='object_link'><a href="Mixin/Crypto.html#X509_NDR_ENCODING-constant" title="Win32::Certstore::Mixin::Crypto::X509_NDR_ENCODING (constant)">Mixin::Crypto::X509_NDR_ENCODING</a></span></p>
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cert_add-instance_method" title="#cert_add (instance method)">- (Object) <strong>cert_add</strong>(store_handler, certificate_obj) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Adding new certification in open certificate and return boolean
+store_handler =&gt; Open certificate store handler certificate_obj =&gt;
+certificate object must be in OpenSSL::X509.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cert_delete-instance_method" title="#cert_delete (instance method)">- (Object) <strong>cert_delete</strong>(store_handler, certificate_thumbprint) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Deleting certificate from open certificate store and return boolean
+store_handler =&gt; Open certificate store handler certificate_thumbprint
+=&gt; thumbprint is a hash.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cert_get-instance_method" title="#cert_get (instance method)">- (Object) <strong>cert_get</strong>(certificate_thumbprint) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get certificate from open certificate store and return certificate object
+store_handler =&gt; Open certificate store handler certificate_thumbprint
+=&gt; thumbprint is a hash.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cert_list-instance_method" title="#cert_list (instance method)">- (Object) <strong>cert_list</strong>(store_handler) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Listing certificate of open certstore and return list in json.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="Mixin/Helper.html" title="Win32::Certstore::Mixin::Helper (module)">Mixin::Helper</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Mixin/Helper.html#cert_ps_cmd-instance_method" title="Win32::Certstore::Mixin::Helper#cert_ps_cmd (method)">#cert_ps_cmd</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="Mixin/ShellOut.html" title="Win32::Certstore::Mixin::ShellOut (module)">Mixin::ShellOut</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Mixin/ShellOut.html#powershell_out-instance_method" title="Win32::Certstore::Mixin::ShellOut#powershell_out (method)">#powershell_out</a></span>, <span class='object_link'><a href="Mixin/ShellOut.html#powershell_out%21-instance_method" title="Win32::Certstore::Mixin::ShellOut#powershell_out! (method)">#powershell_out!</a></span>, <span class='object_link'><a href="Mixin/ShellOut.html#shell_out_command-instance_method" title="Win32::Certstore::Mixin::ShellOut#shell_out_command (method)">#shell_out_command</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="Mixin/String.html" title="Win32::Certstore::Mixin::String (module)">Mixin::String</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Mixin/String.html#utf8_to_wide-instance_method" title="Win32::Certstore::Mixin::String#utf8_to_wide (method)">#utf8_to_wide</a></span>, <span class='object_link'><a href="Mixin/String.html#wide_to_utf8-instance_method" title="Win32::Certstore::Mixin::String#wide_to_utf8 (method)">#wide_to_utf8</a></span>, <span class='object_link'><a href="Mixin/String.html#wstring-instance_method" title="Win32::Certstore::Mixin::String#wstring (method)">#wstring</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="Mixin/Assertions.html" title="Win32::Certstore::Mixin::Assertions (module)">Mixin::Assertions</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Mixin/Assertions.html#lookup_error-instance_method" title="Win32::Certstore::Mixin::Assertions#lookup_error (method)">#lookup_error</a></span>, <span class='object_link'><a href="Mixin/Assertions.html#validate_certificate-instance_method" title="Win32::Certstore::Mixin::Assertions#validate_certificate (method)">#validate_certificate</a></span>, <span class='object_link'><a href="Mixin/Assertions.html#validate_certificate_obj-instance_method" title="Win32::Certstore::Mixin::Assertions#validate_certificate_obj (method)">#validate_certificate_obj</a></span>, <span class='object_link'><a href="Mixin/Assertions.html#validate_store-instance_method" title="Win32::Certstore::Mixin::Assertions#validate_store (method)">#validate_store</a></span>, <span class='object_link'><a href="Mixin/Assertions.html#validate_thumbprint-instance_method" title="Win32::Certstore::Mixin::Assertions#validate_thumbprint (method)">#validate_thumbprint</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../../FFI/Library.html" title="FFI::Library (module)">FFI::Library</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../../FFI/Library.html#safe_attach_function-instance_method" title="FFI::Library#safe_attach_function (method)">#safe_attach_function</a></span></p>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="cert_add-instance_method">
+  
+    - (<tt>Object</tt>) <strong>cert_add</strong>(store_handler, certificate_obj) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Adding new certification in open certificate and return boolean
+store_handler =&gt; Open certificate store handler certificate_obj =&gt;
+certificate object must be in OpenSSL::X509</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/win32/certstore/store_base.rb', line 38</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_cert_add'>cert_add</span><span class='lparen'>(</span><span class='id identifier rubyid_store_handler'>store_handler</span><span class='comma'>,</span> <span class='id identifier rubyid_certificate_obj'>certificate_obj</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_validate_certificate_obj'>validate_certificate_obj</span><span class='lparen'>(</span><span class='id identifier rubyid_certificate_obj'>certificate_obj</span><span class='rparen'>)</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_cert_args'>cert_args</span> <span class='op'>=</span> <span class='id identifier rubyid_cert_add_args'>cert_add_args</span><span class='lparen'>(</span><span class='id identifier rubyid_store_handler'>store_handler</span><span class='comma'>,</span> <span class='id identifier rubyid_certificate_obj'>certificate_obj</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='const'>CertAddEncodedCertificateToStore</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_cert_args'>cert_args</span><span class='rparen'>)</span>
+      <span class='kw'>true</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_lookup_error'>lookup_error</span>
+    <span class='kw'>end</span>
+  <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+    <span class='id identifier rubyid_lookup_error'>lookup_error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>add</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="cert_delete-instance_method">
+  
+    - (<tt>Object</tt>) <strong>cert_delete</strong>(store_handler, certificate_thumbprint) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Deleting certificate from open certificate store and return boolean
+store_handler =&gt; Open certificate store handler certificate_thumbprint
+=&gt; thumbprint is a hash. which could be sha1 or md5.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/win32/certstore/store_base.rb', line 86</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_cert_delete'>cert_delete</span><span class='lparen'>(</span><span class='id identifier rubyid_store_handler'>store_handler</span><span class='comma'>,</span> <span class='id identifier rubyid_certificate_thumbprint'>certificate_thumbprint</span><span class='rparen'>)</span>
+  <span class='kw'>begin</span>
+    <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_certificate_name'>certificate_name</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='id identifier rubyid_pcert_context'>pcert_context</span> <span class='op'>=</span> <span class='const'>CertFindCertificateInStore</span><span class='lparen'>(</span><span class='id identifier rubyid_store_handler'>store_handler</span><span class='comma'>,</span> <span class='const'>X509_ASN_ENCODING</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='const'>CERT_FIND_ISSUER_STR</span><span class='comma'>,</span> <span class='id identifier rubyid_certificate_name'>certificate_name</span><span class='period'>.</span><span class='id identifier rubyid_to_wstring'>to_wstring</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='kw'>not</span> <span class='id identifier rubyid_pcert_context'>pcert_context</span><span class='period'>.</span><span class='id identifier rubyid_null?'>null?</span><span class='rparen'>)</span>
+      <span class='kw'>if</span> <span class='const'>CertDeleteCertificateFromStore</span><span class='lparen'>(</span><span class='const'>CertDuplicateCertificateContext</span><span class='lparen'>(</span><span class='id identifier rubyid_pcert_context'>pcert_context</span><span class='rparen'>)</span><span class='rparen'>)</span>
+        <span class='kw'>return</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Deleted certificate </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_certificate_name'>certificate_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> successfully</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_lookup_error'>lookup_error</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+    <span class='kw'>return</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Cannot find certificate with name as `</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_certificate_name'>certificate_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>`. Please re-verify certificate Issuer name or Friendly name</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+    <span class='ivar'>@error</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>delete: </span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_lookup_error'>lookup_error</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="cert_get-instance_method">
+  
+    - (<tt>Object</tt>) <strong>cert_get</strong>(certificate_thumbprint) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get certificate from open certificate store and return certificate object
+store_handler =&gt; Open certificate store handler certificate_thumbprint
+=&gt; thumbprint is a hash. which could be sha1 or md5.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+55
+56
+57
+58
+59
+60
+61
+62
+63</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/win32/certstore/store_base.rb', line 55</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_cert_get'>cert_get</span><span class='lparen'>(</span><span class='id identifier rubyid_certificate_thumbprint'>certificate_thumbprint</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_validate_thumbprint'>validate_thumbprint</span><span class='lparen'>(</span><span class='id identifier rubyid_certificate_thumbprint'>certificate_thumbprint</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_thumbprint'>thumbprint</span> <span class='op'>=</span> <span class='id identifier rubyid_update_thumbprint'>update_thumbprint</span><span class='lparen'>(</span><span class='id identifier rubyid_certificate_thumbprint'>certificate_thumbprint</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_cert_pem'>cert_pem</span> <span class='op'>=</span> <span class='id identifier rubyid_get_cert_pem'>get_cert_pem</span><span class='lparen'>(</span><span class='id identifier rubyid_thumbprint'>thumbprint</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_cert_pem'>cert_pem</span> <span class='op'>=</span> <span class='id identifier rubyid_format_pem'>format_pem</span><span class='lparen'>(</span><span class='id identifier rubyid_cert_pem'>cert_pem</span><span class='rparen'>)</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_cert_pem'>cert_pem</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+    <span class='id identifier rubyid_build_openssl_obj'>build_openssl_obj</span><span class='lparen'>(</span><span class='id identifier rubyid_cert_pem'>cert_pem</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="cert_list-instance_method">
+  
+    - (<tt>Object</tt>) <strong>cert_list</strong>(store_handler) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Listing certificate of open certstore and return list in json</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/win32/certstore/store_base.rb', line 66</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_cert_list'>cert_list</span><span class='lparen'>(</span><span class='id identifier rubyid_store_handler'>store_handler</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_cert_name'>cert_name</span> <span class='op'>=</span> <span class='id identifier rubyid_memory_ptr'>memory_ptr</span>
+  <span class='id identifier rubyid_cert_list'>cert_list</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='kw'>begin</span>
+    <span class='kw'>while</span> <span class='lparen'>(</span><span class='id identifier rubyid_pcert_context'>pcert_context</span> <span class='op'>=</span> <span class='const'>CertEnumCertificatesInStore</span><span class='lparen'>(</span><span class='id identifier rubyid_store_handler'>store_handler</span><span class='comma'>,</span> <span class='id identifier rubyid_pcert_context'>pcert_context</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='kw'>not</span> <span class='id identifier rubyid_pcert_context'>pcert_context</span><span class='period'>.</span><span class='id identifier rubyid_null?'>null?</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_cert_args'>cert_args</span> <span class='op'>=</span> <span class='id identifier rubyid_cert_get_name_args'>cert_get_name_args</span><span class='lparen'>(</span><span class='id identifier rubyid_pcert_context'>pcert_context</span><span class='comma'>,</span> <span class='id identifier rubyid_cert_name'>cert_name</span><span class='rparen'>)</span>
+      <span class='kw'>if</span> <span class='const'>CertGetNameStringW</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_cert_args'>cert_args</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_cert_list'>cert_list</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_cert_name'>cert_name</span><span class='period'>.</span><span class='id identifier rubyid_read_wstring'>read_wstring</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+    <span class='const'>CertFreeCertificateContext</span><span class='lparen'>(</span><span class='id identifier rubyid_pcert_context'>pcert_context</span><span class='rparen'>)</span>
+  <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+    <span class='id identifier rubyid_lookup_error'>lookup_error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>list</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_cert_list'>cert_list</span><span class='period'>.</span><span class='id identifier rubyid_to_json'>to_json</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Thu Mar 29 16:33:35 2018 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.6 (ruby-2.4.1).
+</div>
+
+  </body>
+</html>

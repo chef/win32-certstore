@@ -9,12 +9,6 @@ This library provides the following features.
 
 Any valid certificate store can be opened in two ways:
 
-**Notes: Valid certificate store names:  
-  `CA -> Certification authority certificates.`  
-  `MY -> A certificate store that holds certificates with associated private keys.`  
-  `ROOT -> Root certificates.`  
-  `SPC -> Software Publisher Certificate.`**
-
 ```
 Win32::Certstore.open("Root") do |store|
     //your code should be here!
@@ -27,9 +21,14 @@ store = Win32::Certstore.open("Root")
 
 ### Add certificate
 
-Add a valid certificate in a certificate store. 
+This method add new certificate in a open certificate store. 
 
-**Notes: The new certificate should be converted in OpenSSL::X509 :**
+```
+Input   - Certificate Object (OpenSSL::X509)
+Return  - True/False
+```
+
+**Notes: The new certificate should be converted in OpenSSL::X509**
 
 ```
 raw = File.read "C:\GlobalSignRootCA.pem"
@@ -37,7 +36,6 @@ certificate_object = OpenSSL::X509::Certificate.new raw
 
 Win32::Certstore.open('Root') do |store|
   store.add(certificate_object)
-  store.close
 end
 ```
     or
@@ -50,14 +48,39 @@ store.add(certificate_object)
 store.close
 ```
 
+### Get certificate
+
+This method get certificate object from open certificate store.
+
+```
+Input   - Certificate thumbprint
+Return  - Certificate Object (OpenSSL::X509)
+```
+
+```
+Win32::Certstore.open("Root") do |store|
+    store.get(certificate_thumbprint)
+end
+```
+    or
+```
+store = Win32::Certstore.open("Root")
+store.get(certificate_thumbprint)
+store.close
+```
+
 ### List certificates
 
-Lists certificates of a valid certificate store and returns output in JSON format:
+This method lists all certificates from open certificate store.
+
+```
+Input   - NA
+Return  - Certificate List in JSON format.
+```
 
 ```
 Win32::Certstore.open("Root") do |store|
     store.list
-    store.close
 end
 ```
     or
@@ -69,47 +92,71 @@ store.close
 
 ### Delete certificate
 
-Deletes a certificate from certificate store and returns output in string format.
-
-**Notes: The certificate_name should be valid `CN or Common Name` of the certificate :**
+This method delete certificate from open certificate store.
 
 ```
-certificate_name = 'Root Agency'
+Input   - Certificate thumbprint
+Return  - True/False 
+```
+
+```
 Win32::Certstore.open("Root") do |store|
-    store.delete(certificate_name)
-    store.close
+    store.delete(certificate_thumbprint)
 end
 ```
     or
 ```
 store = Win32::Certstore.open("Root")
-store.delete(certificate_name)
+store.delete(certificate_thumbprint)
 store.close
 ```
 
-### Retrieve certificate
+### Search certificate
 
-Retrieve properties of a certificate from certificate store and returns output in hash format.
-
-**Notes: The certificate_name should be valid `CN or Common Name` of the certificate**
+This method search certificate from open certificate store.
 
 ```
-certificate_name = 'GlobalSign Root CA'
+Input   - Search Token as: Comman name, Friendly name, RDN and other attributes
+Return  - Matching certificate list 
+```
+
+```
 Win32::Certstore.open("Root") do |store|
-    store.retrieve(certificate_name)
-    store.close
+    store.search(search_token)
 end
 ```
     or
 ```
 store = Win32::Certstore.open("Root")
-store.retrieve(certificate_name)
+store.search(search_token)
+store.close
+```
+
+### Validate certificate
+
+This method validate certificate from open certificate store.
+
+```
+Input   - Certificate thumbprint
+Return  - True/False 
+
+```
+
+```
+Win32::Certstore.open("Root") do |store|
+    store.valid?(certificate_thumbprint)
+end
+```
+    or
+```
+store = Win32::Certstore.open("Root")
+store.valid?(certificate_thumbprint)
 store.close
 ```
 
 ### Perform multiple operations
 
-You can perform more that one oprations with single certificate store object
+To perform more than one operations with single certificate store object
 
 ```
 raw = File.read "C:\GlobalSignRootCA.pem"
@@ -118,7 +165,6 @@ certificate_object = OpenSSL::X509::Certificate.new raw
 Win32::Certstore.open('Root') do |store|
   store.add(certificate_object)
   store.list
-  store.close
 end
 ```
     or
