@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "mixlib-shellout"
   spec.add_dependency "ffi"
+  spec.metadata["yard.run"] = "yri"
 end
