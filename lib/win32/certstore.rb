@@ -45,32 +45,44 @@ module Win32
       end
     end
 
-    # Adding New certificate to open certificate store
+    # Adds a new certificate to an open certificate store
+    # @param request [Object] of certificate in OpenSSL::X509::Certificate.new format
+    # @return [true, false] only true or false
     def add(certificate_obj)
       cert_add(certstore_handler, certificate_obj)
     end
 
-    # Get certificate from certificate store and return certificate object
+    # Return `OpenSSL::X509` certificate object
+    # @param request [thumbprint<string>] of certificate
+    # @return [Object] of certificates in OpenSSL::X509 format
     def get(certificate_thumbprint)
       cert_get(certificate_thumbprint)
     end
 
-    # Listing all certificate of open certificate store and return in certificates list
+    # Returns all the certificates in a store
+    # @param [nil]
+    # @return [Array] array of certificates list
     def list
       cert_list(certstore_handler)
     end
 
     # Delete existing certificate from open certificate store
+    # @param request [thumbprint<string>] of certificate
+    # @return [true, false] only true or false
     def delete(certificate_thumbprint)
       cert_delete(certstore_handler, certificate_thumbprint)
     end
 
-    # Search certificate from open certificate store and return certificates objects
+    # Returns all matching certificates in a store
+    # @param request[search_token<string>] attributes of certificates as: CN, RDN, Friendly Name and other attributes
+    # @return [Array] array of certificates list
     def search(search_token)
       cert_search(certstore_handler, search_token)
     end
 
-    # Validate certificate from open certificate store and return boolean
+    # Validates a certificate in a certificate store on the basis of time validity
+    # @param request[thumbprint<string>] of certificate
+    # @return [true, false] only true or false
     def valid?(certificate_thumbprint)
       cert_validate(certificate_thumbprint)
     end

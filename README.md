@@ -14,21 +14,23 @@ Win32::Certstore.open("Root") do |store|
     //your code should be here!
 end
 ```
-	or 
+
+or 
+
 ```
 store = Win32::Certstore.open("Root")
 ```
 
 ### Add certificate
 
-This method add new certificate in a open certificate store. 
+This method adds a new certificate to an open certificate store.
 
 ```
 Input   - Certificate Object (OpenSSL::X509)
 Return  - True/False
 ```
 
-**Notes: The new certificate should be converted in OpenSSL::X509**
+**Notes: The certificate must be passed as an `OpenSSL::X509` object.**
 
 ```
 raw = File.read "C:\GlobalSignRootCA.pem"
@@ -38,7 +40,9 @@ Win32::Certstore.open('Root') do |store|
   store.add(certificate_object)
 end
 ```
-    or
+
+or
+
 ```
 raw = File.read "C:\GlobalSignRootCA.pem" 
 certificate_object = OpenSSL::X509::Certificate.new raw
@@ -50,7 +54,7 @@ store.close
 
 ### Get certificate
 
-This method get certificate object from open certificate store.
+Gets a certificate from an open certificate store and returns it as an `OpenSSL::X509` object.
 
 ```
 Input   - Certificate thumbprint
@@ -62,7 +66,9 @@ Win32::Certstore.open("Root") do |store|
     store.get(certificate_thumbprint)
 end
 ```
-    or
+
+or
+
 ```
 store = Win32::Certstore.open("Root")
 store.get(certificate_thumbprint)
@@ -71,7 +77,7 @@ store.close
 
 ### List certificates
 
-This method lists all certificates from open certificate store.
+Lists all certificates in a certificate store.
 
 ```
 Input   - NA
@@ -83,7 +89,9 @@ Win32::Certstore.open("Root") do |store|
     store.list
 end
 ```
-    or
+
+or
+
 ```
 store = Win32::Certstore.open("Root")
 store.list
@@ -92,7 +100,7 @@ store.close
 
 ### Delete certificate
 
-This method delete certificate from open certificate store.
+Deletes a certificate from a certificate store.
 
 ```
 Input   - Certificate thumbprint
@@ -104,7 +112,9 @@ Win32::Certstore.open("Root") do |store|
     store.delete(certificate_thumbprint)
 end
 ```
-    or
+
+or
+
 ```
 store = Win32::Certstore.open("Root")
 store.delete(certificate_thumbprint)
@@ -113,7 +123,7 @@ store.close
 
 ### Search certificate
 
-This method search certificate from open certificate store.
+Searches for a certificate in an open certificate store.
 
 ```
 Input   - Search Token as: Comman name, Friendly name, RDN and other attributes
@@ -125,7 +135,9 @@ Win32::Certstore.open("Root") do |store|
     store.search(search_token)
 end
 ```
-    or
+
+or
+
 ```
 store = Win32::Certstore.open("Root")
 store.search(search_token)
@@ -134,7 +146,7 @@ store.close
 
 ### Validate certificate
 
-This method validate certificate from open certificate store.
+Validates a certificate in a certificate store on the basis of time validity.
 
 ```
 Input   - Certificate thumbprint
@@ -147,14 +159,16 @@ Win32::Certstore.open("Root") do |store|
     store.valid?(certificate_thumbprint)
 end
 ```
-    or
+
+or
+
 ```
 store = Win32::Certstore.open("Root")
 store.valid?(certificate_thumbprint)
 store.close
 ```
 
-### Perform multiple operations
+### Performing multiple operations
 
 To perform more than one operations with single certificate store object
 
@@ -167,7 +181,9 @@ Win32::Certstore.open('Root') do |store|
   store.list
 end
 ```
-    or
+
+or
+
 ```
 raw = File.read "C:\GlobalSignRootCA.pem" 
 certificate_object = OpenSSL::X509::Certificate.new raw
