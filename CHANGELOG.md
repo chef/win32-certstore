@@ -1,3 +1,14 @@
+# win32-certstore Change Log
+
+<!-- latest_release -->
+<!-- latest_release -->
+
+<!-- release_rollup -->
+<!-- release_rollup -->
+
+<!-- latest_stable_release -->
+<!-- latest_stable_release -->
+
 <!-- usage documentation: http://expeditor-docs.es.chef.io/configuration/changelog/ -->
 <!-- latest_release 0.1.0 -->
 ## [v0.1.0](https://github.com/chef/win32-certstore/commits) (2018-04-19)
