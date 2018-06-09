@@ -30,6 +30,7 @@ module Win32
           end
           cmd
         end
+
         # Run a command under powershell with the same API as shell_out.  The
         # options hash is extended to take an "architecture" flag which
         # can be set to :i386 or :x86_64 to force the windows architecture.

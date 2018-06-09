@@ -67,7 +67,7 @@ module Win32
         cert_name = memory_ptr
         cert_list = []
         begin
-          while (pcert_context = CertEnumCertificatesInStore(store_handler, pcert_context)) && (not pcert_context.null?) do
+          while (pcert_context = CertEnumCertificatesInStore(store_handler, pcert_context)) && (not pcert_context.null?)
             cert_args = cert_get_name_args(pcert_context, cert_name, CERT_NAME_FRIENDLY_DISPLAY_TYPE)
             if CertGetNameStringW(*cert_args)
               cert_list << cert_name.read_wstring
@@ -92,7 +92,7 @@ module Win32
         cert_delete_flag = false
         begin
           cert_args = cert_find_args(store_handler, cert_rdn)
-          if (pcert_context = CertFindCertificateInStore(*cert_args) and !pcert_context.null?)
+          if (pcert_context = CertFindCertificateInStore(*cert_args)) && !pcert_context.null?
             cert_delete_flag = CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pcert_context)) || lookup_error
           end
           CertFreeCertificateContext(pcert_context)
@@ -119,10 +119,10 @@ module Win32
       def cert_search(store_handler, search_token)
         raise ArgumentError, "Invalid search token" if !search_token || search_token.strip.empty?
         cert_rdn = memory_ptr
-        certificate_list =[]
+        certificate_list = []
         counter = 0
         begin
-          while (pcert_context = CertEnumCertificatesInStore(store_handler, pcert_context) and !pcert_context.null?)
+          while (pcert_context = CertEnumCertificatesInStore(store_handler, pcert_context)) && !pcert_context.null?
             cert_property = get_cert_property(pcert_context)
             if cert_property.include?(search_token)
               certificate_list << [cert_property[CERT_NAME_FRIENDLY_DISPLAY_TYPE], cert_property[CERT_NAME_RDN_TYPE]]
@@ -147,7 +147,7 @@ module Win32
         [store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, cert_rdn.to_wstring, nil]
       end
 
-      # Match certificate CN exist in cert_rdn 
+      # Match certificate CN exist in cert_rdn
       def is_cn_match?(cert_rdn, certificate_name)
         cert_rdn.read_wstring.match(/(^|\W)#{certificate_name}($|\W)/i)
       end
@@ -171,7 +171,7 @@ module Win32
 
       # Remove extra space and : from thumbprint
       def update_thumbprint(certificate_thumbprint)
-        certificate_thumbprint.gsub(/[^A-Za-z0-9]/, '')
+        certificate_thumbprint.gsub(/[^A-Za-z0-9]/, "")
       end
 
       # Verify OpenSSL::X509::Certificate object
@@ -187,7 +187,7 @@ module Win32
 
       # Get certificate pem
       def get_cert_pem(thumbprint)
-        get_data =  powershell_out!(cert_ps_cmd(thumbprint))
+        get_data = powershell_out!(cert_ps_cmd(thumbprint))
         get_data.stdout
       end
 
@@ -205,6 +205,7 @@ module Win32
       def build_openssl_obj(cert_pem)
         OpenSSL::X509::Certificate.new(cert_pem)
       end
+
       # Create empty memory pointer
       def memory_ptr
         FFI::MemoryPointer.new(2, 256)
