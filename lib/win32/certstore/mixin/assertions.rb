@@ -22,7 +22,7 @@ module Win32
       module Assertions
         # Validate certificate store name
         def validate_store(store_name)
-          unless valid_store_name.include?(store_name&.upcase)
+          unless valid_store_name.include?(store_name.to_s.upcase)
             raise ArgumentError, "Invalid Certificate Store."
           end
         end
@@ -82,7 +82,7 @@ module Win32
         # ROOT -> Root certificates.
         # SPC -> Software Publisher Certificate.
         def valid_store_name
-          %w{MY CA ROOT SPC}
+          %w{MY CA ROOT AUTHROOT DISALLOWED SPC TRUST TRUSTEDPEOPLE TRUSTEDPUBLISHER CLIENTAUTHISSUER TRUSTEDDEVICES SMARTCARDROOT WEBHOSTING REMOTE\ DESKTOP}
         end
       end
     end
