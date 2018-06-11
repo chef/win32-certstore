@@ -284,7 +284,7 @@ describe Win32::Certstore, :windows_only do
         expect { store.valid?(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
       end
     end
- 
+
     context "When passing thumbprint is nil" do
       let (:store_name) { "root" }
       let (:thumbprint) { nil }
