@@ -1,11 +1,30 @@
-sudo: false
-cache: bundler
 language: ruby
+cache: bundler
+dist: trusty
+sudo: false
+
+# Early warning system to catch if Rubygems breaks something
+before_install:
+  - gem install bundler
+  - bundle --version
+  - gem update --system
+  - gem --version
+
 rvm:
-  - 2.3.1
+  - 2.2.0
+  - 2.3.3
+  - 2.4.1
+  - 2.5.1
+  - ruby-head
+
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+
+script:
+  - bundle exec rake spec
+  - bundle exec rake style
+
 branches:
   only:
   - master
-before_install:
-  - gem install bundler
-script: bundle exec rake spec
