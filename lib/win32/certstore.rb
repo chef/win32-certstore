@@ -118,7 +118,7 @@ module Win32
     end
 
     def self.finalize(certstore_handler)
-      proc { puts "DESTROY OBJECT #{certstore_handler}" }
+      proc { "#{certstore_handler}" }
     end
 
     # To close all open certificate store at the end
