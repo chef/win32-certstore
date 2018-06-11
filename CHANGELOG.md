@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.1.1 -->
-## [v0.1.1](https://github.com/chef/win32-certstore/tree/v0.1.1) (2018-06-11)
+<!-- latest_release 0.1.2 -->
+## [v0.1.2](https://github.com/chef/win32-certstore/tree/v0.1.2) (2018-06-11)
 
 #### Merged Pull Requests
-- [MSYS-836] fixes for ruby2.0 and FFI destroy object messages  [#32](https://github.com/chef/win32-certstore/pull/32) ([piyushawasthi](https://github.com/piyushawasthi))
+- Add badges to the readme [#25](https://github.com/chef/win32-certstore/pull/25) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.1.0 -->
 ### Changes since 0.1.0 release
 
 #### Merged Pull Requests
+- Add badges to the readme [#25](https://github.com/chef/win32-certstore/pull/25) ([tas50](https://github.com/tas50)) <!-- 0.1.2 -->
 - [MSYS-836] fixes for ruby2.0 and FFI destroy object messages  [#32](https://github.com/chef/win32-certstore/pull/32) ([piyushawasthi](https://github.com/piyushawasthi)) <!-- 0.1.1 -->
 <!-- release_rollup -->
 
