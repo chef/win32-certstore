@@ -203,9 +203,10 @@ store.close
 
 Ruby 1.9.3+ is required.
 
-## CONTRIBUTING:
+## Contributing
 
-Please file bugs against the WIN32-CERTSTORE project at https://github.com/chef/win32-certstore/issues.
+For information on contributing to this project see https://github.com/chef/chef/blob/master/CONTRIBUTING.md
+
 
 More information on the contribution process for Chef projects can be found in the [Chef Contributions document](http://docs.chef.io/community_contributions.html).
 
