@@ -1,9 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release -->
+<!-- latest_release 0.1.4 -->
+## [v0.1.4](https://github.com/chef/win32-certstore/tree/v0.1.4) (2018-07-05)
+
+#### Merged Pull Requests
+- Add github templates/codeowners file &amp; update contributing docs [#34](https://github.com/chef/win32-certstore/pull/34) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=0.1.3 -->
+### Changes since 0.1.3 release
+
+#### Merged Pull Requests
+- Add github templates/codeowners file &amp; update contributing docs [#34](https://github.com/chef/win32-certstore/pull/34) ([tas50](https://github.com/tas50)) <!-- 0.1.4 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
