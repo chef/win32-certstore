@@ -31,21 +31,21 @@ describe Win32::Certstore::Mixin::Assertions do
     context "When passing empty certificate store name" do
       let(:store_name) { "" }
       it "raises ArgumentError" do
-        expect { certstore.validate_store(store_name) }.to raise_error("Invalid Certificate Store.")
+        expect { certstore.validate_store(store_name) }.to raise_error("Empty Certificate Store.")
       end
     end
 
-    context "When passing invalid certificate store name" do
+    context "When passing new certificate store name" do
       let(:store_name) { "Chef" }
-      it "raises ArgumentError" do
-        expect { certstore.validate_store(store_name) }.to raise_error("Invalid Certificate Store.")
+      it "not raises ArgumentError" do
+        expect { certstore.validate_store(store_name) }.not_to raise_error("Empty Certificate Store.")
       end
     end
 
     context "When passing empty certificate store name" do
       let(:store_name) { nil }
       it "raises ArgumentError" do
-        expect { certstore.validate_store(store_name) }.to raise_error("Invalid Certificate Store.")
+        expect { certstore.validate_store(store_name) }.to raise_error("Empty Certificate Store.")
       end
     end
 
