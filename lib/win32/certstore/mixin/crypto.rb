@@ -76,6 +76,9 @@ module Win32
         CERT_NAME_SEARCH_ALL_NAMES_FLAG                     = 0x2
         CERT_NAME_STR_ENABLE_PUNYCODE_FLAG                  = 0x00200000
 
+        CERT_STORE_PROV_SYSTEM                              = 10
+        CERT_SYSTEM_STORE_LOCAL_MACHINE                     = 0x00020000
+
         # Define ffi pointer
         HCERTSTORE                                          = FFI::TypeDefs[:pointer]
         HCRYPTPROV_LEGACY                                   = FFI::TypeDefs[:pointer]
@@ -172,6 +175,8 @@ module Win32
 
         # To opens the most common system certificate store
         safe_attach_function :CertOpenSystemStoreW, [HCRYPTPROV_LEGACY, LPCTSTR], HCERTSTORE
+        # To open a certificate store for most purposes
+        safe_attach_function :CertOpenStore, [DWORD, DWORD, HCRYPTPROV_LEGACY, DWORD, LPCTSTR], HCERTSTORE
         # To close the already open certificate store
         safe_attach_function :CertCloseStore, [HCERTSTORE, DWORD], BOOL
         # To create encoded certificate context
