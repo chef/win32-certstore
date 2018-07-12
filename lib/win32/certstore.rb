@@ -97,6 +97,10 @@ module Win32
       remove_finalizer
     end
 
+    def self.finalize(certstore_handler)
+      proc { certstore_handler.to_s }
+    end
+
     private
 
     attr_reader :certstore_handler
@@ -115,10 +119,6 @@ module Win32
     # Get all open certificate store handler
     def add_finalizer(certstore_handler)
       ObjectSpace.define_finalizer(self, self.class.finalize(certstore_handler))
-    end
-
-    def self.finalize(certstore_handler)
-      proc { "#{certstore_handler}" }
     end
 
     # To close all open certificate store at the end

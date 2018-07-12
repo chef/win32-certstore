@@ -7,8 +7,6 @@ RSpec::Core::RakeTask.new(:spec) do |spec|
   spec.pattern = FileList["spec/**/**/*_spec.rb"].to_a
 end
 
-task :default => :spec
-
 begin
   require "chefstyle"
   require "rubocop/rake_task"
@@ -18,3 +16,5 @@ begin
 rescue LoadError
   puts "chefstyle/rubocop is not available.  gem install chefstyle to do style checking."
 end
+
+task default: [:spec, :style]

@@ -21,35 +21,35 @@ require "openssl"
 
 describe Win32::Certstore, :windows_only do
 
-  let (:certstore) { Win32::Certstore }
-  let (:certstore_handler) { Win32::Certstore.new(store_name) }
-  let (:certbase) { Win32::Certstore::StoreBase }
+  let(:certstore) { Win32::Certstore }
+  let(:certstore_handler) { Win32::Certstore.new(store_name) }
+  let(:certbase) { Win32::Certstore::StoreBase }
 
   describe "#cert_list" do
     context "When passing empty certificate store name" do
-      let (:store_name) { "" }
+      let(:store_name) { "" }
       it "raises ArgumentError" do
         expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
       end
     end
 
     context "When passing invalid certificate store name" do
-      let (:store_name) { "Chef" }
+      let(:store_name) { "Chef" }
       it "raises ArgumentError" do
         expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
       end
     end
 
     context "When passing nil certificate store name" do
-      let (:store_name) { nil }
+      let(:store_name) { nil }
       it "raises ArgumentError" do
         expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
       end
     end
 
     context "When passing valid certificate" do
-      let (:store_name) { "root" }
-      let (:root_certificate_name) { "Microsoft Root Certificate Authority" }
+      let(:store_name) { "root" }
+      let(:root_certificate_name) { "Microsoft Root Certificate Authority" }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:cert_list).and_return([root_certificate_name])
       end
@@ -64,8 +64,8 @@ describe Win32::Certstore, :windows_only do
 
   describe "#cert_add" do
     context "When passing invalid certificate object" do
-      let (:store_name) { "root" }
-      let (:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
+      let(:store_name) { "root" }
+      let(:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
       it "raises ArgumentError - Invalid Certificate object" do
         allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(false)
         allow(certstore).to receive(:open).with(store_name).and_return(certstore_handler)
@@ -75,8 +75,8 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing certificate path instead of certificate object" do
-      let (:store_name) { "my" }
-      let (:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
+      let(:store_name) { "my" }
+      let(:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
 
       it "raises ArgumentError - Invalid Certificate object" do
         allow(certbase).to receive(:CertAddEncodedCertificateToStore).and_return(false)
@@ -86,9 +86,9 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing valid certificate object" do
-      let (:store_name) { "root" }
-      let (:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
-      let (:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
+      let(:store_name) { "root" }
+      let(:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
+      let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
       it "returns Certificate added successfully" do
         allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(true)
         allow(certstore).to receive(:open).with(store_name).and_return(certstore_handler)
@@ -100,15 +100,15 @@ describe Win32::Certstore, :windows_only do
 
   describe "#cert_get" do
     context "When passing empty certificate store name" do
-      let (:store_name) { "" }
+      let(:store_name) { "" }
       it "raises ArgumentError" do
         expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
       end
     end
 
     context "When passing empty thumbprint" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { " " }
+      let(:store_name) { "root" }
+      let(:thumbprint) { " " }
       it "raises ArgumentError" do
         store = certstore.open(store_name)
         expect { store.get(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
@@ -116,8 +116,8 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing thumbprint is nil" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { nil }
+      let(:store_name) { "root" }
+      let(:thumbprint) { nil }
       it "raises ArgumentError" do
         store = certstore.open(store_name)
         expect { store.get(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
@@ -125,8 +125,8 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing invalid thumbprint" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
       end
@@ -138,9 +138,9 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing valid thumbprint" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
-      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
+      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -154,9 +154,9 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing valid thumbprint with spaces" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
-      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
+      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -170,9 +170,9 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing valid thumbprint with :" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
-      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
+      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -188,15 +188,15 @@ describe Win32::Certstore, :windows_only do
 
   describe "#cert_delete" do
     context "When passing empty certificate store name" do
-      let (:store_name) { "" }
+      let(:store_name) { "" }
       it "raises ArgumentError" do
         expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
       end
     end
 
     context "When passing empty thumbprint" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { " " }
+      let(:store_name) { "root" }
+      let(:thumbprint) { " " }
       it "raises ArgumentError" do
         store = certstore.open(store_name)
         expect { store.delete(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
@@ -204,8 +204,8 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing thumbprint is nil" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { nil }
+      let(:store_name) { "root" }
+      let(:thumbprint) { nil }
       it "raises ArgumentError" do
         store = certstore.open(store_name)
         expect { store.delete(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
@@ -213,8 +213,8 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing invalid thumbprint" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(false)
         allow_any_instance_of(certbase).to receive(:lookup_error).and_return(false)
@@ -226,9 +226,9 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing valid thumbprint" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
-      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
+      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
         allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
@@ -240,9 +240,9 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing valid thumbprint with spaces" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
-      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
+      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
         allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
@@ -254,9 +254,9 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing valid thumbprint with :" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
-      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
+      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
         allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
@@ -270,15 +270,15 @@ describe Win32::Certstore, :windows_only do
 
   describe "#cert_validate" do
     context "When passing empty certificate store name" do
-      let (:store_name) { "" }
+      let(:store_name) { "" }
       it "raises ArgumentError" do
         expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
       end
     end
 
     context "When passing empty thumbprint" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { " " }
+      let(:store_name) { "root" }
+      let(:thumbprint) { " " }
       it "raises ArgumentError" do
         store = certstore.open(store_name)
         expect { store.valid?(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
@@ -286,8 +286,8 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing thumbprint is nil" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { nil }
+      let(:store_name) { "root" }
+      let(:thumbprint) { nil }
       it "raises ArgumentError" do
         store = certstore.open(store_name)
         expect { store.valid?(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
@@ -295,8 +295,8 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing invalid thumbprint" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
       end
@@ -307,9 +307,9 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing valid certificate's thumbprint" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
-      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
+      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -320,9 +320,9 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing valid certificate's thumbprint with spaces" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
-      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
+      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -333,9 +333,9 @@ describe Win32::Certstore, :windows_only do
     end
 
     context "When passing valid certificate's thumbprint with :" do
-      let (:store_name) { "root" }
-      let (:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
-      let (:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
+      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -348,24 +348,24 @@ describe Win32::Certstore, :windows_only do
 
   describe "#cert_search" do
     context "When passing empty token" do
-      let (:store_name) { "root" }
-      let (:token) { " " }
+      let(:store_name) { "root" }
+      let(:token) { " " }
       it "raises ArgumentError" do
         store = certstore.open(store_name)
         expect { store.search(token) }.to raise_error(ArgumentError, "Invalid search token")
       end
     end
     context "When search token is nil" do
-      let (:store_name) { "root" }
-      let (:token) { nil }
+      let(:store_name) { "root" }
+      let(:token) { nil }
       it "raises ArgumentError" do
         store = certstore.open(store_name)
         expect { store.search(token) }.to raise_error(ArgumentError, "Invalid search token")
       end
     end
     context "When passing invalid search token" do
-      let (:store_name) { "root" }
-      let (:token) { "invalid search" }
+      let(:store_name) { "root" }
+      let(:token) { "invalid search" }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_property).and_return("")
       end
@@ -377,8 +377,8 @@ describe Win32::Certstore, :windows_only do
       end
     end
     context "When passing valid search token CN" do
-      let (:store_name) { "root" }
-      let (:token) { "GlobalSign Root CA" }
+      let(:store_name) { "root" }
+      let(:token) { "GlobalSign Root CA" }
       before(:each) do
         allow(certbase).to receive(:get_cert_property).and_return(["", "", "BE, GlobalSign nv-sa, Root CA, GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "", ""])
       end
@@ -395,10 +395,10 @@ describe Win32::Certstore, :windows_only do
 
   describe "Perform more than one operations with single certstore object" do
     context "Perform add and list with single certstore object" do
-      let (:store_name) { "root" }
-      let (:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
-      let (:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
-      let (:root_certificate_name) { "Microsoft Root Certificate Authority" }
+      let(:store_name) { "root" }
+      let(:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
+      let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
+      let(:root_certificate_name) { "Microsoft Root Certificate Authority" }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:cert_list).and_return([root_certificate_name])
       end
@@ -416,11 +416,11 @@ describe Win32::Certstore, :windows_only do
 
   describe "#Failed with FFI::LastError" do
     context "While adding or deleting or retrieving certificate" do
-      let (:store_name) { "root" }
-      let (:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
-      let (:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
-      let (:certificate_name) { "GlobalSign" }
-      let (:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
+      let(:store_name) { "root" }
+      let(:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
+      let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
+      let(:certificate_name) { "GlobalSign" }
+      let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
 
       it "returns 'The operation was canceled by the user'" do
         allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(false)
