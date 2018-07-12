@@ -69,7 +69,6 @@ module Win32
         def run_command_with_os_architecture(script, options)
           options ||= {}
           options = options.dup
-          arch = options.delete(:architecture)
 
           shell_out_command(
             build_powershell_command(script),

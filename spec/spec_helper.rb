@@ -7,5 +7,5 @@ end
 require "win32-certstore" if windows?
 
 RSpec.configure do |config|
-  config.filter_run_excluding :windows_only => true unless windows?
+  config.filter_run_excluding windows_only: true unless windows?
 end

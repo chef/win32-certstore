@@ -44,7 +44,7 @@ module Win32
           else
             lookup_error
           end
-        rescue Exception => e
+        rescue
           lookup_error("add")
         end
       end
@@ -74,7 +74,7 @@ module Win32
             end
           end
           CertFreeCertificateContext(pcert_context)
-        rescue Exception => e
+        rescue
           lookup_error("list")
         end
         cert_list.to_json
@@ -85,7 +85,6 @@ module Win32
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_delete(store_handler, certificate_thumbprint)
         validate_thumbprint(certificate_thumbprint)
-        cert_name = memory_ptr
         thumbprint = update_thumbprint(certificate_thumbprint)
         cert_pem = format_pem(get_cert_pem(thumbprint))
         cert_rdn = get_rdn(build_openssl_obj(cert_pem))
@@ -96,7 +95,7 @@ module Win32
             cert_delete_flag = CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pcert_context)) || lookup_error
           end
           CertFreeCertificateContext(pcert_context)
-        rescue Exception => e
+        rescue
           lookup_error("delete")
         end
         cert_delete_flag
@@ -118,9 +117,7 @@ module Win32
       # search_token => CN, RDN or any certificate attribute
       def cert_search(store_handler, search_token)
         raise ArgumentError, "Invalid search token" if !search_token || search_token.strip.empty?
-        cert_rdn = memory_ptr
         certificate_list = []
-        counter = 0
         begin
           while (pcert_context = CertEnumCertificatesInStore(store_handler, pcert_context)) && !pcert_context.null?
             cert_property = get_cert_property(pcert_context)
@@ -129,7 +126,7 @@ module Win32
             end
           end
           CertFreeCertificateContext(pcert_context)
-        rescue Exception => e
+        rescue
           lookup_error
         end
         certificate_list
