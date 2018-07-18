@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.1.5 -->
-## [v0.1.5](https://github.com/chef/win32-certstore/tree/v0.1.5) (2018-07-12)
+<!-- latest_release 0.1.6 -->
+## [v0.1.6](https://github.com/chef/win32-certstore/tree/v0.1.6) (2018-07-18)
 
 #### Merged Pull Requests
-- Fixed all chefstyling and update configuration [#38](https://github.com/chef/win32-certstore/pull/38) ([piyushawasthi](https://github.com/piyushawasthi))
+- Fixed MSYS-857 &amp; MSYS-838  [#37](https://github.com/chef/win32-certstore/pull/37) ([piyushawasthi](https://github.com/piyushawasthi))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.1.3 -->
 ### Changes since 0.1.3 release
 
 #### Merged Pull Requests
+- Fixed MSYS-857 &amp; MSYS-838  [#37](https://github.com/chef/win32-certstore/pull/37) ([piyushawasthi](https://github.com/piyushawasthi)) <!-- 0.1.6 -->
 - Fixed all chefstyling and update configuration [#38](https://github.com/chef/win32-certstore/pull/38) ([piyushawasthi](https://github.com/piyushawasthi)) <!-- 0.1.5 -->
 - Add github templates/codeowners file &amp; update contributing docs [#34](https://github.com/chef/win32-certstore/pull/34) ([tas50](https://github.com/tas50)) <!-- 0.1.4 -->
 <!-- release_rollup -->
