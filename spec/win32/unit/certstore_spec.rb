@@ -467,7 +467,7 @@ describe Win32::Certstore, :windows_only do
         allow(certbase).to receive(:CertDeleteCertificateFromStore).and_return(false)
         allow(FFI::LastError).to receive(:error).and_return(-2147024891)
         store = certstore.open(store_name)
-        expect { store.delete(thumbprint) }.to raise_error(SystemCallError)
+        expect { store.delete(thumbprint) }.not_to raise_error(SystemCallError)
       end
     end
   end

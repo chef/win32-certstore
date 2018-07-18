@@ -107,7 +107,7 @@ module Win32
 
     # To open certstore and return open certificate store pointer
     def open(store_name)
-      certstore_handler = CertOpenSystemStoreW(nil, wstring(store_name))
+      certstore_handler = CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, nil, CERT_SYSTEM_STORE_LOCAL_MACHINE, wstring(store_name))
       unless certstore_handler
         last_error = FFI::LastError.error
         raise SystemCallError.new("Unable to open the Certificate Store `#{store_name}`.", last_error)
