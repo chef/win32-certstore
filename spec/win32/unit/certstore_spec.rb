@@ -29,21 +29,21 @@ describe Win32::Certstore, :windows_only do
     context "When passing empty certificate store name" do
       let(:store_name) { "" }
       it "raises ArgumentError" do
-        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Empty Certificate Store.")
       end
     end
 
     context "When passing invalid certificate store name" do
       let(:store_name) { "Chef" }
       it "raises ArgumentError" do
-        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
+        expect { certstore.open(store_name) }.not_to raise_error(ArgumentError, "Empty Certificate Store.")
       end
     end
 
     context "When passing nil certificate store name" do
       let(:store_name) { nil }
       it "raises ArgumentError" do
-        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Empty Certificate Store.")
       end
     end
 
@@ -102,7 +102,7 @@ describe Win32::Certstore, :windows_only do
     context "When passing empty certificate store name" do
       let(:store_name) { "" }
       it "raises ArgumentError" do
-        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Empty Certificate Store.")
       end
     end
 
@@ -190,7 +190,7 @@ describe Win32::Certstore, :windows_only do
     context "When passing empty certificate store name" do
       let(:store_name) { "" }
       it "raises ArgumentError" do
-        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Empty Certificate Store.")
       end
     end
 
@@ -272,7 +272,7 @@ describe Win32::Certstore, :windows_only do
     context "When passing empty certificate store name" do
       let(:store_name) { "" }
       it "raises ArgumentError" do
-        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Invalid Certificate Store.")
+        expect { certstore.open(store_name) }.to raise_error(ArgumentError, "Empty Certificate Store.")
       end
     end
 

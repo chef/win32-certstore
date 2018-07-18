@@ -22,8 +22,8 @@ module Win32
       module Assertions
         # Validate certificate store name
         def validate_store(store_name)
-          unless valid_store_name.include?(store_name.to_s.upcase)
-            raise ArgumentError, "Invalid Certificate Store."
+          if store_name.to_s.strip.empty?
+            raise ArgumentError, "Empty Certificate Store."
           end
         end
 
