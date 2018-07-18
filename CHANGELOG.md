@@ -1,30 +1,27 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.1.7 -->
-## [v0.1.7](https://github.com/chef/win32-certstore/tree/v0.1.7) (2018-07-18)
-
-#### Merged Pull Requests
-- MSYS-856 : Removed store validation [#36](https://github.com/chef/win32-certstore/pull/36) ([piyushawasthi](https://github.com/piyushawasthi))
+<!-- latest_release -->
 <!-- latest_release -->
 
-<!-- release_rollup since=0.1.3 -->
-### Changes since 0.1.3 release
-
-#### Merged Pull Requests
-- MSYS-856 : Removed store validation [#36](https://github.com/chef/win32-certstore/pull/36) ([piyushawasthi](https://github.com/piyushawasthi)) <!-- 0.1.7 -->
-- Fixed MSYS-857 &amp; MSYS-838  [#37](https://github.com/chef/win32-certstore/pull/37) ([piyushawasthi](https://github.com/piyushawasthi)) <!-- 0.1.6 -->
-- Fixed all chefstyling and update configuration [#38](https://github.com/chef/win32-certstore/pull/38) ([piyushawasthi](https://github.com/piyushawasthi)) <!-- 0.1.5 -->
-- Add github templates/codeowners file &amp; update contributing docs [#34](https://github.com/chef/win32-certstore/pull/34) ([tas50](https://github.com/tas50)) <!-- 0.1.4 -->
+<!-- release_rollup -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v0.1.7](https://github.com/chef/win32-certstore/tree/v0.1.7) (2018-07-18)
+
+#### Merged Pull Requests
+- Add github templates/codeowners file &amp; update contributing docs [#34](https://github.com/chef/win32-certstore/pull/34) ([tas50](https://github.com/tas50))
+- Fixed all chefstyling and update configuration [#38](https://github.com/chef/win32-certstore/pull/38) ([piyushawasthi](https://github.com/piyushawasthi))
+- Fixed MSYS-857 &amp; MSYS-838  [#37](https://github.com/chef/win32-certstore/pull/37) ([piyushawasthi](https://github.com/piyushawasthi))
+- MSYS-856 : Removed store validation [#36](https://github.com/chef/win32-certstore/pull/36) ([piyushawasthi](https://github.com/piyushawasthi))
+<!-- latest_stable_release -->
+
 ## [v0.1.3](https://github.com/chef/win32-certstore/tree/v0.1.3) (2018-06-11)
 
 #### Merged Pull Requests
 - [MSYS-836] fixes for ruby2.0 and FFI destroy object messages  [#32](https://github.com/chef/win32-certstore/pull/32) ([piyushawasthi](https://github.com/piyushawasthi))
 - Add badges to the readme [#25](https://github.com/chef/win32-certstore/pull/25) ([tas50](https://github.com/tas50))
 - [MSYS-837] Update Travis for Ruby multiple version and add Chefstyle to Travis [#33](https://github.com/chef/win32-certstore/pull/33) ([piyushawasthi](https://github.com/piyushawasthi))
-<!-- latest_stable_release -->
 
 
 
