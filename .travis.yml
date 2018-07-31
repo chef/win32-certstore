@@ -1,6 +1,5 @@
 language: ruby
 cache: bundler
-dist: trusty
 sudo: false
 
 # Early warning system to catch if Rubygems breaks something
