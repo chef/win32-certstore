@@ -32,6 +32,7 @@ build-iPhoneSimulator/
 ## Documentation cache and generated files:
 /.yardoc/
 /_yardoc/
+doc
 
 ## Environment normalization:
 /.bundle/
