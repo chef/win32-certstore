@@ -266,6 +266,19 @@ describe Win32::Certstore, :windows_only do
         expect(store.delete(thumbprint)).to eql(true)
       end
     end
+
+    context "When thumbprint not found" do
+      let(:store_name) { "root" }
+      let(:thumbprint) { "invalid_thumbprint" }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
+      end
+      it "returns nil" do
+        store = certstore.open(store_name)
+        cert_obj = store.get(thumbprint)
+        expect(cert_obj).to eql(nil)
+      end
+    end
   end
 
   describe "#cert_validate" do

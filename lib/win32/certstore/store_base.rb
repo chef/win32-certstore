@@ -87,7 +87,7 @@ module Win32
         validate_thumbprint(certificate_thumbprint)
         thumbprint = update_thumbprint(certificate_thumbprint)
         cert_pem = format_pem(get_cert_pem(thumbprint))
-        cert_rdn = get_rdn(build_openssl_obj(cert_pem))
+        cert_rdn = get_rdn(build_openssl_obj(cert_pem)) unless cert_pem.empty?
         cert_delete_flag = false
         begin
           cert_args = cert_find_args(store_handler, cert_rdn)
@@ -96,7 +96,11 @@ module Win32
           end
           CertFreeCertificateContext(pcert_context)
         rescue
-          lookup_error("delete")
+          if cert_pem.empty?
+            raise SystemCallError.new("Invalid thumbprint #{certificate_thumbprint}.")
+          else
+            lookup_error("delete")
+          end
         end
         cert_delete_flag
       end
