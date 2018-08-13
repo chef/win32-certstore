@@ -1,20 +1,18 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.1.8 -->
+<!-- latest_release -->
+<!-- latest_release -->
+
+<!-- release_rollup -->
+<!-- release_rollup -->
+
+<!-- latest_stable_release -->
 ## [v0.1.8](https://github.com/chef/win32-certstore/tree/v0.1.8) (2018-08-13)
 
 #### Merged Pull Requests
 - Delete certificate raise an exception if user pass invalid thumbprint [#41](https://github.com/chef/win32-certstore/pull/41) ([piyushawasthi](https://github.com/piyushawasthi))
-<!-- latest_release -->
-
-<!-- release_rollup since=0.1.7 -->
-### Changes since 0.1.7 release
-
-#### Merged Pull Requests
-- Delete certificate raise an exception if user pass invalid thumbprint [#41](https://github.com/chef/win32-certstore/pull/41) ([piyushawasthi](https://github.com/piyushawasthi)) <!-- 0.1.8 -->
-<!-- release_rollup -->
-
 <!-- latest_stable_release -->
+
 ## [v0.1.7](https://github.com/chef/win32-certstore/tree/v0.1.7) (2018-07-18)
 
 #### Merged Pull Requests
@@ -22,7 +20,6 @@
 - Fixed all chefstyling and update configuration [#38](https://github.com/chef/win32-certstore/pull/38) ([piyushawasthi](https://github.com/piyushawasthi))
 - Fixed MSYS-857 &amp; MSYS-838  [#37](https://github.com/chef/win32-certstore/pull/37) ([piyushawasthi](https://github.com/piyushawasthi))
 - MSYS-856 : Removed store validation [#36](https://github.com/chef/win32-certstore/pull/36) ([piyushawasthi](https://github.com/piyushawasthi))
-<!-- latest_stable_release -->
 
 ## [v0.1.3](https://github.com/chef/win32-certstore/tree/v0.1.3) (2018-06-11)
 
