@@ -1,9 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release -->
+<!-- latest_release 0.1.8 -->
+## [v0.1.8](https://github.com/chef/win32-certstore/tree/v0.1.8) (2018-08-13)
+
+#### Merged Pull Requests
+- Delete certificate raise an exception if user pass invalid thumbprint [#41](https://github.com/chef/win32-certstore/pull/41) ([piyushawasthi](https://github.com/piyushawasthi))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=0.1.7 -->
+### Changes since 0.1.7 release
+
+#### Merged Pull Requests
+- Delete certificate raise an exception if user pass invalid thumbprint [#41](https://github.com/chef/win32-certstore/pull/41) ([piyushawasthi](https://github.com/piyushawasthi)) <!-- 0.1.8 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
