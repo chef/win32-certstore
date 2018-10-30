@@ -1,9 +1,12 @@
-# Documentation available at http://expeditor-docs.es.chef.io/
-
+# Documentation available at https://expeditor.chef.io/docs/getting-started/
+---
 # Slack channel in Chef Software slack to send notifications about build failures, etc
 slack:
-  notify_channel: sustaining-notify
+  notify_channel:
+    - sustaining-notify
+    - chef-notify
 
+# This publish is triggered by the `built_in:publish_rubygems` artifact_action.
 rubygems:
   - win32-certstore
 
@@ -12,11 +15,12 @@ github:
   delete_branch_on_merge: true
   # The tag format to use (e.g. v1.0.0)
   version_tag_format: "v{{version}}"
+  # allow bumping the minor release via label
+  minor_bump_labels:
+    - "Expeditor: Bump Minor Version"
 
-promote:
-  actions:
-    - built_in:rollover_changelog
-    - built_in:publish_rubygems
+changelog:
+  rollup_header: Changes not yet released to rubygems.org
 
 # These actions are taken, in order they are specified, anytime a Pull Request is merged.
 merge_actions:
@@ -32,3 +36,8 @@ merge_actions:
         - "Expeditor: Skip All"
   - built_in:build_gem:
       only_if: built_in:bump_version
+
+promote:
+  actions:
+    - built_in:rollover_changelog
+    - built_in:publish_rubygems
