@@ -9,8 +9,6 @@ group :docs do
   gem "github-markup"
 end
 
-gem "rb-readline"
-
 group(:development, :test) do
   gem "rake"
   # for testing new chefstyle rules
