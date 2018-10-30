@@ -1,26 +1,23 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.1.10 -->
-## [v0.1.10](https://github.com/chef/win32-certstore/tree/v0.1.10) (2018-10-30)
-
-#### Merged Pull Requests
-- Update the gemspec to skip the readme, but ship the license [#43](https://github.com/chef/win32-certstore/pull/43) ([tas50](https://github.com/tas50))
+<!-- latest_release -->
 <!-- latest_release -->
 
-<!-- release_rollup since=0.1.8 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Update the gemspec to skip the readme, but ship the license [#43](https://github.com/chef/win32-certstore/pull/43) ([tas50](https://github.com/tas50)) <!-- 0.1.10 -->
-- Update expeditor config and gemfile groups [#42](https://github.com/chef/win32-certstore/pull/42) ([tas50](https://github.com/tas50)) <!-- 0.1.9 -->
+<!-- release_rollup -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v0.1.10](https://github.com/chef/win32-certstore/tree/v0.1.10) (2018-10-30)
+
+#### Merged Pull Requests
+- Update expeditor config and gemfile groups [#42](https://github.com/chef/win32-certstore/pull/42) ([tas50](https://github.com/tas50))
+- Update the gemspec to skip the readme, but ship the license [#43](https://github.com/chef/win32-certstore/pull/43) ([tas50](https://github.com/tas50))
+<!-- latest_stable_release -->
+
 ## [v0.1.8](https://github.com/chef/win32-certstore/tree/v0.1.8) (2018-08-13)
 
 #### Merged Pull Requests
 - Delete certificate raise an exception if user pass invalid thumbprint [#41](https://github.com/chef/win32-certstore/pull/41) ([piyushawasthi](https://github.com/piyushawasthi))
-<!-- latest_stable_release -->
 
 ## [v0.1.7](https://github.com/chef/win32-certstore/tree/v0.1.7) (2018-07-18)
 
