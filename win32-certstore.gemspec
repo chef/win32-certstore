@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Win32::Certstore::VERSION
   spec.authors       = ["nimisha"]
   spec.email         = ["nimisha.sharad@msystechnologies.com"]
-
+  spec.license       = "Apache-2.0"
   spec.summary       = "Ruby library for accessing the certificate store on Windows."
   spec.homepage      = "https://github.com/chef/win32-certstore"
 
