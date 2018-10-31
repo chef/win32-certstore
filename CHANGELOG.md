@@ -1,9 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release -->
+<!-- latest_release 0.1.11 -->
+## [v0.1.11](https://github.com/chef/win32-certstore/tree/v0.1.11) (2018-10-31)
+
+#### Merged Pull Requests
+- Add missing license directive in the gemspec [#44](https://github.com/chef/win32-certstore/pull/44) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=0.1.10 -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- Add missing license directive in the gemspec [#44](https://github.com/chef/win32-certstore/pull/44) ([tas50](https://github.com/tas50)) <!-- 0.1.11 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
