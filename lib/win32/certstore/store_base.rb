@@ -50,7 +50,6 @@ module Win32
       end
 
       # Get certificate from open certificate store and return certificate object
-      # store_handler => Open certificate store handler
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_get(certificate_thumbprint)
         validate_thumbprint(certificate_thumbprint)
@@ -188,7 +187,7 @@ module Win32
 
       # Get certificate pem
       def get_cert_pem(thumbprint)
-        get_data = powershell_out!(cert_ps_cmd(thumbprint))
+        get_data = powershell_out!(cert_ps_cmd(thumbprint, store_name))
         get_data.stdout
       end
 

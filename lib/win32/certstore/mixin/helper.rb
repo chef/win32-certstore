@@ -23,10 +23,10 @@ module Win32
       module Helper
 
         # PSCommand to search certificate from thumbprint and convert in pem
-        def cert_ps_cmd(thumbprint)
+        def cert_ps_cmd(thumbprint, store_name)
           <<-EOH
             $content = $null
-            $cert = Get-ChildItem Cert:\ -Recurse | Where { $_.Thumbprint -eq '#{thumbprint}' }
+            $cert = Get-ChildItem Cert:\\LocalMachine\\'#{store_name}' -Recurse | Where { $_.Thumbprint -eq '#{thumbprint}' }
             if($cert -ne $null)
             {
             $content = @(
