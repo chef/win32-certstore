@@ -55,6 +55,7 @@ module Win32
         PKCS_7_ASN_ENCODING                                 = 0x00010000
         PKCS_7_NDR_ENCODING                                 = 0x00020000
         PKCS_7_OR_X509_ASN_ENCODING                         = (PKCS_7_ASN_ENCODING | X509_ASN_ENCODING)
+        ENCODING_TYPE                                       = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING
 
         # Certificate Display Format
         CERT_NAME_EMAIL_TYPE                                = 1
@@ -67,8 +68,12 @@ module Win32
         CERT_NAME_UPN_TYPE                                  = 8
 
         # Retrieve Certificates flag
-        CERT_FIND_SUBJECT_STR                               = 0x00080007
-        CERT_FIND_ISSUER_STR                                = 0x00080004
+        CERT_COMPARE_SHA1_HASH                              = 1
+        CERT_INFO_SUBJECT_FLAG                              = 7
+        CERT_COMPARE_NAME_STR_W                             = 8
+        CERT_COMPARE_SHIFT                                  = 16
+        CERT_FIND_SHA1_HASH                                 = CERT_COMPARE_SHA1_HASH << CERT_COMPARE_SHIFT
+        CERT_FIND_SUBJECT_STR                               = CERT_COMPARE_NAME_STR_W << CERT_COMPARE_SHIFT | CERT_INFO_SUBJECT_FLAG
 
         # List Certificates Flag
         CERT_NAME_ISSUER_FLAG                               = 0x1
@@ -118,6 +123,23 @@ module Win32
             super(nil)
             if str
               self[:pbData] = FFI::MemoryPointer.new(2, 128)
+            end
+          end
+        end
+
+        class CRYPT_HASH_BLOB < FFI::Struct
+          layout :cbData, DWORD, # Count, in bytes, of data
+                 :pbData, :pointer # Pointer to data buffer
+
+          def initialize(str = nil)
+            super(nil)
+            if str
+              byte_arr = [str].pack("H*").unpack("C*") # Converting string to its byte array
+
+              buffer = FFI::MemoryPointer.new(:char, byte_arr.size) # Create the pointer to the array
+              buffer.put_array_of_char 0, byte_arr                  # Fill the memory location with data
+              self[:pbData] = buffer
+              self[:cbData] = byte_arr.size
             end
           end
         end

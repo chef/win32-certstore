@@ -40,11 +40,3 @@ module FFI
     end
   end
 end
-
-class String
-  include Win32::Certstore::Mixin::String
-
-  def to_wstring
-    utf8_to_wide(self)
-  end
-end

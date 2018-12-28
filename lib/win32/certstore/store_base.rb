@@ -85,21 +85,16 @@ module Win32
       def cert_delete(store_handler, certificate_thumbprint)
         validate_thumbprint(certificate_thumbprint)
         thumbprint = update_thumbprint(certificate_thumbprint)
-        cert_pem = format_pem(get_cert_pem(thumbprint))
-        cert_rdn = get_rdn(build_openssl_obj(cert_pem)) unless cert_pem.empty?
         cert_delete_flag = false
         begin
-          cert_args = cert_find_args(store_handler, cert_rdn)
-          if (pcert_context = CertFindCertificateInStore(*cert_args)) && !pcert_context.null?
+          cert_args = cert_find_args(store_handler, thumbprint)
+          pcert_context = CertFindCertificateInStore(*cert_args)
+          if !pcert_context.null?
             cert_delete_flag = CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pcert_context)) || lookup_error
           end
           CertFreeCertificateContext(pcert_context)
         rescue
-          if cert_pem.empty?
-            raise SystemCallError.new("Invalid thumbprint #{certificate_thumbprint}.")
-          else
-            lookup_error("delete")
-          end
+          lookup_error("delete")
         end
         cert_delete_flag
       end
@@ -143,8 +138,8 @@ module Win32
       end
 
       # Build arguments for CertFindCertificateInStore
-      def cert_find_args(store_handler, cert_rdn)
-        [store_handler, X509_ASN_ENCODING, 0, CERT_FIND_ISSUER_STR, cert_rdn.to_wstring, nil]
+      def cert_find_args(store_handler, thumbprint)
+        [store_handler, ENCODING_TYPE, 0, CERT_FIND_SHA1_HASH, CRYPT_HASH_BLOB.new(thumbprint), nil]
       end
 
       # Match certificate CN exist in cert_rdn
@@ -189,11 +184,6 @@ module Win32
       def get_cert_pem(thumbprint)
         get_data = powershell_out!(cert_ps_cmd(thumbprint, store_name))
         get_data.stdout
-      end
-
-      # To get RDN from certificate object
-      def get_rdn(cert_obj)
-        cert_obj.issuer.to_s.concat("/").scan(/=(.*?)\//).join(", ")
       end
 
       # Format pem
