@@ -227,41 +227,25 @@ describe Win32::Certstore, :windows_only do
 
     context "When passing valid thumbprint" do
       let(:store_name) { "root" }
-      let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
       let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
       before(:each) do
-        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
+        allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(FFI::MemoryPointer.new(1))
+        allow_any_instance_of(certbase).to receive(:CertDuplicateCertificateContext).and_return(true)
         allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
+        allow_any_instance_of(certbase).to receive(:CertFreeCertificateContext).and_return(true)
       end
-      it "returns true" do
+      it "returns true when thumbprint has no spaces" do
+        thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829909c"
         store = certstore.open(store_name)
         expect(store.delete(thumbprint)).to eql(true)
       end
-    end
-
-    context "When passing valid thumbprint with spaces" do
-      let(:store_name) { "root" }
-      let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
-      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
-      before(:each) do
-        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
-        allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
-      end
-      it "returns true" do
+      it "returns true when thumbprint has spaces" do
+        thumbprint = "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c"
         store = certstore.open(store_name)
         expect(store.delete(thumbprint)).to eql(true)
       end
-    end
-
-    context "When passing valid thumbprint with :" do
-      let(:store_name) { "root" }
-      let(:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
-      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
-      before(:each) do
-        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
-        allow_any_instance_of(certbase).to receive(:CertDeleteCertificateFromStore).and_return(true)
-      end
-      it "returns true" do
+      it "returns true when thumbprint is colon(:) seperated" do
+        thumbprint = "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c"
         store = certstore.open(store_name)
         expect(store.delete(thumbprint)).to eql(true)
       end
