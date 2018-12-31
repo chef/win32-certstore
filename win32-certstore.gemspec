@@ -6,11 +6,13 @@ require "win32/certstore/version"
 Gem::Specification.new do |spec|
   spec.name          = "win32-certstore"
   spec.version       = Win32::Certstore::VERSION
-  spec.authors       = ["nimisha"]
-  spec.email         = ["nimisha.sharad@msystechnologies.com"]
+  spec.authors       = ["Chef Software"]
+  spec.email         = ["oss@chef.io"]
   spec.license       = "Apache-2.0"
   spec.summary       = "Ruby library for accessing the certificate store on Windows."
   spec.homepage      = "https://github.com/chef/win32-certstore"
+
+  spec.required_ruby_version = ">= 2.3"
 
   spec.files         = Dir["LICENSE", "lib/**/*"]
   spec.require_paths = ["lib"]
