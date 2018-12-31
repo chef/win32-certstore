@@ -29,9 +29,10 @@ module Win32
     include Win32::Certstore::Mixin::String
     include Win32::Certstore::StoreBase
 
-    attr_reader :store_name
+    attr_accessor :store_name
 
     def initialize(store_name)
+      @store_name = store_name
       @certstore_handler = open(store_name)
     end
 
