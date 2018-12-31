@@ -1,9 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release -->
+<!-- latest_release 0.1.12 -->
+## [v0.1.12](https://github.com/chef/win32-certstore/tree/v0.1.12) (2018-12-31)
+
+#### Merged Pull Requests
+- Fixes certificate get method to fetch certificate from given store. [#45](https://github.com/chef/win32-certstore/pull/45) ([Vasu1105](https://github.com/Vasu1105))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=0.1.11 -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- Fixes certificate get method to fetch certificate from given store. [#45](https://github.com/chef/win32-certstore/pull/45) ([Vasu1105](https://github.com/Vasu1105)) <!-- 0.1.12 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
