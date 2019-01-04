@@ -1,28 +1,25 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.2.1 -->
-## [v0.2.1](https://github.com/chef/win32-certstore/tree/v0.2.1) (2019-01-04)
-
-#### Merged Pull Requests
-- Fixing deletion of a certificate by its thumbprint. [#46](https://github.com/chef/win32-certstore/pull/46) ([Nimesh-Msys](https://github.com/Nimesh-Msys))
+<!-- latest_release -->
 <!-- latest_release -->
 
-<!-- release_rollup since=0.1.11 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Fixing deletion of a certificate by its thumbprint. [#46](https://github.com/chef/win32-certstore/pull/46) ([Nimesh-Msys](https://github.com/Nimesh-Msys)) <!-- 0.2.1 -->
-- Require ruby 2.3 or later [#49](https://github.com/chef/win32-certstore/pull/49) ([tas50](https://github.com/tas50)) <!-- 0.2.0 -->
-- Remove unnecessary config in the gemspec [#48](https://github.com/chef/win32-certstore/pull/48) ([tas50](https://github.com/tas50)) <!-- 0.1.13 -->
-- Fixes certificate get method to fetch certificate from given store. [#45](https://github.com/chef/win32-certstore/pull/45) ([Vasu1105](https://github.com/Vasu1105)) <!-- 0.1.12 -->
+<!-- release_rollup -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v0.2.1](https://github.com/chef/win32-certstore/tree/v0.2.1) (2019-01-04)
+
+#### Merged Pull Requests
+- Fixes certificate get method to fetch certificate from given store. [#45](https://github.com/chef/win32-certstore/pull/45) ([Vasu1105](https://github.com/Vasu1105))
+- Remove unnecessary config in the gemspec [#48](https://github.com/chef/win32-certstore/pull/48) ([tas50](https://github.com/tas50))
+- Require ruby 2.3 or later [#49](https://github.com/chef/win32-certstore/pull/49) ([tas50](https://github.com/tas50))
+- Fixing deletion of a certificate by its thumbprint. [#46](https://github.com/chef/win32-certstore/pull/46) ([Nimesh-Msys](https://github.com/Nimesh-Msys))
+<!-- latest_stable_release -->
+
 ## [v0.1.11](https://github.com/chef/win32-certstore/tree/v0.1.11) (2018-10-31)
 
 #### Merged Pull Requests
 - Add missing license directive in the gemspec [#44](https://github.com/chef/win32-certstore/pull/44) ([tas50](https://github.com/tas50))
-<!-- latest_stable_release -->
 
 ## [v0.1.10](https://github.com/chef/win32-certstore/tree/v0.1.10) (2018-10-30)
 
