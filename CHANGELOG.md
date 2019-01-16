@@ -1,20 +1,18 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.2.2 -->
+<!-- latest_release -->
+<!-- latest_release -->
+
+<!-- release_rollup -->
+<!-- release_rollup -->
+
+<!-- latest_stable_release -->
 ## [v0.2.2](https://github.com/chef/win32-certstore/tree/v0.2.2) (2019-01-16)
 
 #### Merged Pull Requests
 - Unpin the bundler dev dep [#51](https://github.com/chef/win32-certstore/pull/51) ([tas50](https://github.com/tas50))
-<!-- latest_release -->
-
-<!-- release_rollup since=0.2.1 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Unpin the bundler dev dep [#51](https://github.com/chef/win32-certstore/pull/51) ([tas50](https://github.com/tas50)) <!-- 0.2.2 -->
-<!-- release_rollup -->
-
 <!-- latest_stable_release -->
+
 ## [v0.2.1](https://github.com/chef/win32-certstore/tree/v0.2.1) (2019-01-04)
 
 #### Merged Pull Requests
@@ -22,7 +20,6 @@
 - Remove unnecessary config in the gemspec [#48](https://github.com/chef/win32-certstore/pull/48) ([tas50](https://github.com/tas50))
 - Require ruby 2.3 or later [#49](https://github.com/chef/win32-certstore/pull/49) ([tas50](https://github.com/tas50))
 - Fixing deletion of a certificate by its thumbprint. [#46](https://github.com/chef/win32-certstore/pull/46) ([Nimesh-Msys](https://github.com/Nimesh-Msys))
-<!-- latest_stable_release -->
 
 ## [v0.1.11](https://github.com/chef/win32-certstore/tree/v0.1.11) (2018-10-31)
 
