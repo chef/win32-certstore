@@ -1,7 +1,7 @@
 language: ruby
 cache: bundler
 sudo: false
-distro: xenial
+dist: xenial
 
 # Early warning system to catch if Rubygems breaks something
 before_install:
@@ -25,4 +25,5 @@ branches:
   only:
   - master
 
+bundler_args: --jobs 7 --without docs debug
 script: bundle exec rake
