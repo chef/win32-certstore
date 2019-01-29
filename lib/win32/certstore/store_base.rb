@@ -49,6 +49,36 @@ module Win32
         end
       end
 
+      # Adds a PFX certificate to certificate store
+      #
+      # @see https://docs.microsoft.com/en-us/windows/desktop/api/wincrypt/nf-wincrypt-pfximportcertstore PFXImportCertStore function
+      # @see https://docs.microsoft.com/en-us/windows/desktop/api/wincrypt/nf-wincrypt-certaddcertificatecontexttostore CertAddCertificateContextToStore
+      #
+      # @param certstore_handler [FFI::Pointer] Handle of the store where certificate should be imported
+      # @param path [String] Path of the certificate that should be imported
+      # @param password [String] Password of the certificate
+      #
+      # @return [Boolean]
+      #
+      # @raise [SystemCallError] when Crypt API would not be able to perform some action
+      #
+      def cert_add_pfx(certstore_handler, path, password = "")
+        # Imports a PFX BLOB and returns the handle of a store
+        pfx_cert_store = PFXImportCertStore(CRYPT_DATA_BLOB.new(File.binread(path)), wstring(password), 0)
+        raise if pfx_cert_store.null?
+        # Find the certificate context in certificate store
+        cert_context = CertFindCertificateInStore(pfx_cert_store, ENCODING_TYPE, 0, CERT_FIND_ANY, nil, nil)
+        close_cert_store(pfx_cert_store)
+        raise if cert_context.null?
+        # Add certificate context to the certificate store
+        args = add_certcontxt_args(certstore_handler, cert_context)
+        cert_added = CertAddCertificateContextToStore(*args)
+        raise unless cert_added
+        cert_added
+      rescue
+        lookup_error("Add a PFX")
+      end
+
       # Get certificate from open certificate store and return certificate object
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_get(certificate_thumbprint)
@@ -130,6 +160,14 @@ module Win32
         certificate_list
       end
 
+      # To close and destroy pointer of open certificate store handler
+      def close_cert_store(certstore_handler = @certstore_handler)
+        closed = CertCloseStore(certstore_handler, CERT_CLOSE_STORE_FORCE_FLAG)
+        raise unless closed
+      rescue
+        lookup_error("close")
+      end
+
       private
 
       # Build arguments for CertAddEncodedCertificateToStore
@@ -140,6 +178,11 @@ module Win32
       # Build arguments for CertFindCertificateInStore
       def cert_find_args(store_handler, thumbprint)
         [store_handler, ENCODING_TYPE, 0, CERT_FIND_SHA1_HASH, CRYPT_HASH_BLOB.new(thumbprint), nil]
+      end
+
+      # Build arguments for CertAddCertificateContextToStore
+      def add_certcontxt_args(certstore_handler, cert_context)
+        [certstore_handler, cert_context, CERT_STORE_ADD_REPLACE_EXISTING, nil]
       end
 
       # Match certificate CN exist in cert_rdn

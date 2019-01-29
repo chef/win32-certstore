@@ -53,6 +53,20 @@ module Win32
       cert_add(certstore_handler, certificate_obj)
     end
 
+    # Adds a PFX certificate to certificate store
+    #
+    # @note Unlike other certificates, PFX can be password protected and may contain a private key.
+    #       Therefore we need a different approach to import them.
+    #
+    # @param path [String] Path of the certificate that should be imported
+    # @param password [String] Password of the certificate if it is protected
+    #
+    # @return [Boolean]
+    #
+    def add_pfx(path, password)
+      cert_add_pfx(certstore_handler, path, password)
+    end
+
     # Return `OpenSSL::X509` certificate object
     # @param request [thumbprint<string>] of certificate
     # @return [Object] of certificates in OpenSSL::X509 format
@@ -90,11 +104,7 @@ module Win32
 
     # To close and destroy pointer of open certificate store handler
     def close
-      closed = CertCloseStore(@certstore_handler, CERT_CLOSE_STORE_FORCE_FLAG)
-      unless closed
-        last_error = FFI::LastError.error
-        raise SystemCallError.new("Unable to close the Certificate Store.", last_error)
-      end
+      close_cert_store
       remove_finalizer
     end
 

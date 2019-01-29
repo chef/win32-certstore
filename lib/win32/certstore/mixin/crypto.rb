@@ -68,12 +68,17 @@ module Win32
         CERT_NAME_UPN_TYPE                                  = 8
 
         # Retrieve Certificates flag
+        CERT_COMPARE_ANY                                    = 0
         CERT_COMPARE_SHA1_HASH                              = 1
         CERT_INFO_SUBJECT_FLAG                              = 7
         CERT_COMPARE_NAME_STR_W                             = 8
         CERT_COMPARE_SHIFT                                  = 16
         CERT_FIND_SHA1_HASH                                 = CERT_COMPARE_SHA1_HASH << CERT_COMPARE_SHIFT
         CERT_FIND_SUBJECT_STR                               = CERT_COMPARE_NAME_STR_W << CERT_COMPARE_SHIFT | CERT_INFO_SUBJECT_FLAG
+        CERT_FIND_ANY                                       = CERT_COMPARE_ANY << CERT_COMPARE_SHIFT
+
+        CERT_STORE_ADD_USE_EXISTING                         = 2
+        CERT_STORE_ADD_REPLACE_EXISTING                     = 3
 
         # List Certificates Flag
         CERT_NAME_ISSUER_FLAG                               = 0x1
@@ -140,6 +145,19 @@ module Win32
               buffer.put_array_of_char 0, byte_arr                  # Fill the memory location with data
               self[:pbData] = buffer
               self[:cbData] = byte_arr.size
+            end
+          end
+        end
+
+        class CRYPT_DATA_BLOB < FFI::Struct
+          layout :cbData, DWORD, # Count, in bytes, of data
+                 :pbData, :pointer # Pointer to data buffer
+
+          def initialize(str = nil)
+            super(nil)
+            if str
+              self[:pbData] = FFI::MemoryPointer.from_string(str)
+              self[:cbData] = str.size
             end
           end
         end
@@ -224,6 +242,10 @@ module Win32
         safe_attach_function :CertFindCertificateInStore, [HCERTSTORE, DWORD, DWORD, DWORD, LPVOID, PCCERT_CONTEXT], PCCERT_CONTEXT
 
         safe_attach_function :PFXExportCertStoreEx, [HCERTSTORE, CRYPT_INTEGER_BLOB, LPCTSTR, LPVOID, DWORD], BOOL
+
+        # Fetches store handler of a PFX certificate
+        attach_function :PFXImportCertStore, [CRYPT_DATA_BLOB, LPCTSTR, DWORD], HCERTSTORE
+        attach_function :CertAddCertificateContextToStore, [HCERTSTORE, PCCERT_CONTEXT, DWORD, PCCERT_CONTEXT], BOOL
       end
     end
   end
