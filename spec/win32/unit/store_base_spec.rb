@@ -39,7 +39,7 @@ describe Win32::Certstore, :windows_only do
       it "raises an error" do
         pfx_path = "Invalid"
         expect { subject.cert_add_pfx(certstore_handler, pfx_path, password) }
-          .to raise_error(SystemCallError, "The system cannot find the file specified. - Unable to Add a PFX certificate.")
+          .to raise_error(Errno::NOERROR, "No error - Unable to Add a PFX certificate.")
       end
     end
     context "invalid password" do
