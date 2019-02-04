@@ -1,25 +1,22 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.2.4 -->
+<!-- latest_release -->
+<!-- latest_release -->
+
+<!-- release_rollup -->
+<!-- release_rollup -->
+
+<!-- latest_stable_release -->
 ## [v0.2.4](https://github.com/chef/win32-certstore/tree/v0.2.4) (2019-02-04)
 
 #### Merged Pull Requests
 - Properly close the cert store when we&#39;re done with it &amp; display errors [#52](https://github.com/chef/win32-certstore/pull/52) ([Nimesh-Msys](https://github.com/Nimesh-Msys))
-<!-- latest_release -->
-
-<!-- release_rollup since=0.2.3 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Properly close the cert store when we&#39;re done with it &amp; display errors [#52](https://github.com/chef/win32-certstore/pull/52) ([Nimesh-Msys](https://github.com/Nimesh-Msys)) <!-- 0.2.4 -->
-<!-- release_rollup -->
-
 <!-- latest_stable_release -->
+
 ## [v0.2.3](https://github.com/chef/win32-certstore/tree/v0.2.3) (2019-01-29)
 
 #### Merged Pull Requests
 - Importing PFX certificates with their private keys [#50](https://github.com/chef/win32-certstore/pull/50) ([Nimesh-Msys](https://github.com/Nimesh-Msys))
-<!-- latest_stable_release -->
 
 ## [v0.2.2](https://github.com/chef/win32-certstore/tree/v0.2.2) (2019-01-16)
 
