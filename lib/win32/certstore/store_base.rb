@@ -68,7 +68,6 @@ module Win32
         raise if pfx_cert_store.null?
         # Find the certificate context in certificate store
         cert_context = CertFindCertificateInStore(pfx_cert_store, ENCODING_TYPE, 0, CERT_FIND_ANY, nil, nil)
-        close_cert_store(pfx_cert_store)
         raise if cert_context.null?
         # Add certificate context to the certificate store
         args = add_certcontxt_args(certstore_handler, cert_context)
@@ -77,6 +76,10 @@ module Win32
         cert_added
       rescue
         lookup_error("Add a PFX")
+      ensure
+        if pfx_cert_store && !pfx_cert_store.null?
+          close_cert_store(pfx_cert_store)
+        end
       end
 
       # Get certificate from open certificate store and return certificate object
@@ -163,9 +166,7 @@ module Win32
       # To close and destroy pointer of open certificate store handler
       def close_cert_store(certstore_handler = @certstore_handler)
         closed = CertCloseStore(certstore_handler, CERT_CLOSE_STORE_FORCE_FLAG)
-        raise unless closed
-      rescue
-        lookup_error("close")
+        lookup_error("close") unless closed
       end
 
       private

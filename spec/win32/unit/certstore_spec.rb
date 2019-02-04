@@ -377,14 +377,14 @@ describe Win32::Certstore, :windows_only do
       let(:store_name) { "root" }
       let(:token) { "GlobalSign Root CA" }
       before(:each) do
-        allow(certbase).to receive(:get_cert_property).and_return(["", "", "BE, GlobalSign nv-sa, Root CA, GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "", ""])
+        allow_any_instance_of(certbase).to receive(:get_cert_property).and_return(["", "", "BE, GlobalSign nv-sa, Root CA, GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "GlobalSign Root CA", "", ""])
       end
       it "returns valid " do
         store = certstore.open(store_name)
         cert_list = store.search(token)
         expect(cert_list).to be_an_instance_of(Array)
         cert_list.flatten!
-        expect(cert_list.first).to eql("GlobalSign Root CA - R1")
+        expect(cert_list.first).to eql("GlobalSign Root CA")
         expect(cert_list.last).to eql("BE, GlobalSign nv-sa, Root CA, GlobalSign Root CA")
       end
     end
