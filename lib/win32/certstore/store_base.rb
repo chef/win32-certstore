@@ -63,16 +63,17 @@ module Win32
       # @raise [SystemCallError] when Crypt API would not be able to perform some action
       #
       def cert_add_pfx(certstore_handler, path, password = "")
+        cert_added = false
         # Imports a PFX BLOB and returns the handle of a store
         pfx_cert_store = PFXImportCertStore(CRYPT_DATA_BLOB.new(File.binread(path)), wstring(password), 0)
         raise if pfx_cert_store.null?
-        # Find the certificate context in certificate store
-        cert_context = CertFindCertificateInStore(pfx_cert_store, ENCODING_TYPE, 0, CERT_FIND_ANY, nil, nil)
-        raise if cert_context.null?
-        # Add certificate context to the certificate store
-        args = add_certcontxt_args(certstore_handler, cert_context)
-        cert_added = CertAddCertificateContextToStore(*args)
-        raise unless cert_added
+        # Find all the certificate contexts in certificate store and add them ino the store
+        while (cert_context = CertEnumCertificatesInStore(pfx_cert_store, cert_context)) && (not cert_context.null?)
+          # Add certificate context to the certificate store
+          args = add_certcontxt_args(certstore_handler, cert_context)
+          cert_added = CertAddCertificateContextToStore(*args)
+          raise unless cert_added
+        end
         cert_added
       rescue
         lookup_error("Add a PFX")

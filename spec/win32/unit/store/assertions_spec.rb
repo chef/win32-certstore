@@ -80,7 +80,7 @@ describe Win32::Certstore::Mixin::Assertions do
     end
 
     context "When passing valid certificate file" do
-      let(:cert_file_path) { '.\win32\unit\assets\test.der' }
+      let(:cert_file_path) { '.\win32\assets\test.der' }
       it "does not raise ArgumentError" do
         expect { certstore.validate_certificate(cert_file_path) }.not_to raise_error(ArgumentError)
       end

@@ -25,8 +25,9 @@ describe Win32::Certstore, :windows_only do
 
   describe "#cert_add_pfx" do
     let(:certstore_handler) { mem_pointer }
-    let(:pfx_path) { '.\spec\win32\unit\assets\pfx_cert.pfx' }
-    let(:pem_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
+    let(:pfx_path) { '.\spec\win32\assets\pfx_cert.pfx' }
+    let(:pfx_wt_root_path) { '.\spec\win32\assets\pfx_with_testroot.pfx' }
+    let(:pem_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
     let(:password) { "chef@123" }
     context "invalid certstore_handler" do
       it "raises an error" do
@@ -61,6 +62,15 @@ describe Win32::Certstore, :windows_only do
           .to receive(:CertAddCertificateContextToStore).and_return(true)
 
         expect(subject.cert_add_pfx(certstore_handler, pfx_path, password))
+          .to be_truthy
+      end
+    end
+    context "valid arguments with test root" do
+      it "returns true" do
+        allow_any_instance_of(Win32::Certstore::Mixin::Crypto)
+          .to receive(:CertAddCertificateContextToStore).and_return(true)
+
+        expect(subject.cert_add_pfx(certstore_handler, pfx_wt_root_path, password))
           .to be_truthy
       end
     end

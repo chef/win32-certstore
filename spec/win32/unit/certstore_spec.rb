@@ -65,7 +65,7 @@ describe Win32::Certstore, :windows_only do
   describe "#cert_add" do
     context "When passing invalid certificate object" do
       let(:store_name) { "root" }
-      let(:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
+      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
       it "raises ArgumentError - Invalid Certificate object" do
         allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(false)
         allow(certstore).to receive(:open).with(store_name).and_return(certstore_handler)
@@ -76,7 +76,7 @@ describe Win32::Certstore, :windows_only do
 
     context "When passing certificate path instead of certificate object" do
       let(:store_name) { "my" }
-      let(:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
+      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
 
       it "raises ArgumentError - Invalid Certificate object" do
         allow(certbase).to receive(:CertAddEncodedCertificateToStore).and_return(false)
@@ -87,7 +87,7 @@ describe Win32::Certstore, :windows_only do
 
     context "When passing valid certificate object" do
       let(:store_name) { "root" }
-      let(:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
+      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
       let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
       it "returns Certificate added successfully" do
         allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(true)
@@ -140,7 +140,7 @@ describe Win32::Certstore, :windows_only do
     context "When passing valid thumbprint" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
-      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -156,7 +156,7 @@ describe Win32::Certstore, :windows_only do
     context "When passing valid thumbprint with spaces" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
-      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -172,7 +172,7 @@ describe Win32::Certstore, :windows_only do
     context "When passing valid thumbprint with :" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
-      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -227,7 +227,7 @@ describe Win32::Certstore, :windows_only do
 
     context "When passing valid thumbprint" do
       let(:store_name) { "root" }
-      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:CertFindCertificateInStore).and_return(FFI::MemoryPointer.new(1))
         allow_any_instance_of(certbase).to receive(:CertDuplicateCertificateContext).and_return(true)
@@ -306,7 +306,7 @@ describe Win32::Certstore, :windows_only do
     context "When passing valid certificate's thumbprint" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829909c" }
-      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -319,7 +319,7 @@ describe Win32::Certstore, :windows_only do
     context "When passing valid certificate's thumbprint with spaces" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
-      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -332,7 +332,7 @@ describe Win32::Certstore, :windows_only do
     context "When passing valid certificate's thumbprint with :" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
-      let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+      let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
       end
@@ -393,7 +393,7 @@ describe Win32::Certstore, :windows_only do
   describe "Perform more than one operations with single certstore object" do
     context "Perform add and list with single certstore object" do
       let(:store_name) { "root" }
-      let(:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
+      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
       let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
       let(:root_certificate_name) { "Microsoft Root Certificate Authority" }
       before(:each) do
@@ -414,7 +414,7 @@ describe Win32::Certstore, :windows_only do
   describe "#Failed with FFI::LastError" do
     context "While adding or deleting or retrieving certificate" do
       let(:store_name) { "root" }
-      let(:cert_file_path) { '.\spec\win32\unit\assets\GlobalSignRootCA.pem' }
+      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
       let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
       let(:certificate_name) { "GlobalSign" }
       let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }

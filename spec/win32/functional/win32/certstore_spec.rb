@@ -28,7 +28,7 @@ RSpec.describe Win32::Certstore, :windows_only do
 
   describe "#get" do
     before { add_cert }
-    let(:cert_pem) { File.read('.\spec\win32\unit\assets\GlobalSignRootCA.pem') }
+    let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
 
     # passing valid thumbprint
     it "returns the certificate_object if found" do
@@ -52,7 +52,7 @@ RSpec.describe Win32::Certstore, :windows_only do
   end
 
   def add_cert
-    raw = File.read ".\\spec\\win32\\unit\\assets\\GlobalSignRootCA.pem"
+    raw = File.read ".\\spec\\win32\\assets\\GlobalSignRootCA.pem"
     certificate_object = OpenSSL::X509::Certificate.new raw
     @store.add(certificate_object)
   end
