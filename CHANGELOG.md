@@ -1,9 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release -->
+<!-- latest_release 0.2.5 -->
+## [v0.2.5](https://github.com/chef/win32-certstore/tree/v0.2.5) (2019-03-11)
+
+#### Merged Pull Requests
+- Update appveyor config and use that badge the readme [#54](https://github.com/chef/win32-certstore/pull/54) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=0.2.4 -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- Update appveyor config and use that badge the readme [#54](https://github.com/chef/win32-certstore/pull/54) ([tas50](https://github.com/tas50)) <!-- 0.2.5 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
