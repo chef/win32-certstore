@@ -1,27 +1,24 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.3.0 -->
-## [v0.3.0](https://github.com/chef/win32-certstore/tree/v0.3.0) (2019-03-11)
-
-#### Merged Pull Requests
-- Add chefstyle testing in appveyor / travis [#55](https://github.com/chef/win32-certstore/pull/55) ([tas50](https://github.com/tas50))
+<!-- latest_release -->
 <!-- latest_release -->
 
-<!-- release_rollup since=0.2.4 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Add chefstyle testing in appveyor / travis [#55](https://github.com/chef/win32-certstore/pull/55) ([tas50](https://github.com/tas50)) <!-- 0.3.0 -->
-- Import all the certificates (Main &amp; Nested) while importing a PFX certificate [#53](https://github.com/chef/win32-certstore/pull/53) ([Nimesh-Msys](https://github.com/Nimesh-Msys)) <!-- 0.2.6 -->
-- Update appveyor config and use that badge the readme [#54](https://github.com/chef/win32-certstore/pull/54) ([tas50](https://github.com/tas50)) <!-- 0.2.5 -->
+<!-- release_rollup -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v0.3.0](https://github.com/chef/win32-certstore/tree/v0.3.0) (2019-03-11)
+
+#### Merged Pull Requests
+- Update appveyor config and use that badge the readme [#54](https://github.com/chef/win32-certstore/pull/54) ([tas50](https://github.com/tas50))
+- Import all the certificates (Main &amp; Nested) while importing a PFX certificate [#53](https://github.com/chef/win32-certstore/pull/53) ([Nimesh-Msys](https://github.com/Nimesh-Msys))
+- Add chefstyle testing in appveyor / travis [#55](https://github.com/chef/win32-certstore/pull/55) ([tas50](https://github.com/tas50))
+<!-- latest_stable_release -->
+
 ## [v0.2.4](https://github.com/chef/win32-certstore/tree/v0.2.4) (2019-02-04)
 
 #### Merged Pull Requests
 - Properly close the cert store when we&#39;re done with it &amp; display errors [#52](https://github.com/chef/win32-certstore/pull/52) ([Nimesh-Msys](https://github.com/Nimesh-Msys))
-<!-- latest_stable_release -->
 
 ## [v0.2.3](https://github.com/chef/win32-certstore/tree/v0.2.3) (2019-01-29)
 
