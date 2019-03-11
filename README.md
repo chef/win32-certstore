@@ -1,5 +1,5 @@
 # win32-certstore
-[![Build Status](https://travis-ci.org/chef/win32-certstore.svg?branch=master)](https://travis-ci.org/chef/win32-certstore)
+[![Build status](https://ci.appveyor.com/api/projects/status/tgjqi0hokjjqre5x/branch/master?svg=true)](https://ci.appveyor.com/project/chef/win32-certstore/branch/master)
 [![Gem Version](https://badge.fury.io/rb/win32-certstore.svg)](https://badge.fury.io/rb/win32-certstore)
 
 Ruby library for accessing the certificate store on Microsoft Windows:

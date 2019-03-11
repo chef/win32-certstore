@@ -1,9 +1,11 @@
 version: "master-{build}"
 
-os: Visual Studio 2015
+os: Visual Studio 2017
 platform:
   - x64
 
+cache:
+  - vendor/bundle
 environment:
   matrix:
     - ruby_version: "25-x64"
@@ -15,6 +17,17 @@ environment:
 
 clone_folder: c:\projects\win32-certstore
 clone_depth: 1
+
+skip_commits:
+  # version bumps by Expeditor happen as a separate commit after the merge, we can skip
+  message: /Bump version to [0-9.]+ by Chef Expeditor/
+  # if ONLY the files listed below are changed in a commit, skip
+  files:
+    - MAINTAINERS.md
+    - MAINTAINERS.toml
+    - CHANGELOG.md
+    - RELEASE_NOTES.md
+
 skip_tags: true
 branches:
   only:
