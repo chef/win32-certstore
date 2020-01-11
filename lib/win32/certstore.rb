@@ -60,11 +60,12 @@ module Win32
     #
     # @param path [String] Path of the certificate that should be imported
     # @param password [String] Password of the certificate if it is protected
+    # @param key_properties [Integer] dwFlags used to specify properties of the pfx key, see certstore/store_base.rb cert_add_pfx function
     #
     # @return [Boolean]
     #
-    def add_pfx(path, password)
-      cert_add_pfx(certstore_handler, path, password)
+    def add_pfx(path, password, key_properties = 0)
+      cert_add_pfx(certstore_handler, path, password, key_properties)
     end
 
     # Return `OpenSSL::X509` certificate object
