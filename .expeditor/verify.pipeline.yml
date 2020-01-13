@@ -44,7 +44,8 @@ steps:
 
 - label: ":windows: :ruby:"
   command:
-    - /workdir/.expeditor/buildkite/verify.ps1
+    - bundle install --jobs=7 --retry=3 --without docs debug
+    - bundle exec rake spec
   expeditor:
     executor:
       docker:
