@@ -26,4 +26,4 @@ rescue LoadError
   puts "chefstyle gem is not installed. bundle install first to make sure all dependencies are installed."
 end
 
-task default: [:spec, :style]
+task default: %i{spec style}

@@ -67,6 +67,7 @@ module Win32
         # Imports a PFX BLOB and returns the handle of a store
         pfx_cert_store = PFXImportCertStore(CRYPT_DATA_BLOB.new(File.binread(path)), wstring(password), 0)
         raise if pfx_cert_store.null?
+
         # Find all the certificate contexts in certificate store and add them ino the store
         while (cert_context = CertEnumCertificatesInStore(pfx_cert_store, cert_context)) && (not cert_context.null?)
           # Add certificate context to the certificate store
@@ -123,7 +124,7 @@ module Win32
         begin
           cert_args = cert_find_args(store_handler, thumbprint)
           pcert_context = CertFindCertificateInStore(*cert_args)
-          if !pcert_context.null?
+          unless pcert_context.null?
             cert_delete_flag = CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pcert_context)) || lookup_error
           end
           CertFreeCertificateContext(pcert_context)
@@ -149,6 +150,7 @@ module Win32
       # search_token => CN, RDN or any certificate attribute
       def cert_search(store_handler, search_token)
         raise ArgumentError, "Invalid search token" if !search_token || search_token.strip.empty?
+
         certificate_list = []
         begin
           while (pcert_context = CertEnumCertificatesInStore(store_handler, pcert_context)) && !pcert_context.null?
@@ -217,6 +219,7 @@ module Win32
       # Verify OpenSSL::X509::Certificate object
       def verify_certificate(cert_pem)
         return "Certificate not found" if cert_pem.empty?
+
         valid_duration?(build_openssl_obj(cert_pem))
       end
 

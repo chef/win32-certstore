@@ -1,5 +1,5 @@
 # win32-certstore
-[![Build status](https://ci.appveyor.com/api/projects/status/tgjqi0hokjjqre5x/branch/master?svg=true)](https://ci.appveyor.com/project/chef/win32-certstore/branch/master)
+[![Build status](https://badge.buildkite.com/ba68b9ac04486e2ddf6587b35c1eac00260d4216829c289ce6.svg?branch=master)](https://buildkite.com/chef-oss/chef-win32-certstore-master-verify)
 [![Gem Version](https://badge.fury.io/rb/win32-certstore.svg)](https://badge.fury.io/rb/win32-certstore)
 
 Ruby library for accessing the certificate store on Microsoft Windows:
@@ -18,7 +18,7 @@ Win32::Certstore.open("Root") do |store|
 end
 ```
 
-or 
+or
 
 ```
 store = Win32::Certstore.open("Root")
@@ -35,7 +35,7 @@ Return  - True/False
 
 **Notes: The certificate must be passed as an `OpenSSL::X509` object.**
 
-```
+```ruby
 raw = File.read "C:\GlobalSignRootCA.pem"
 certificate_object = OpenSSL::X509::Certificate.new raw
 
@@ -46,8 +46,8 @@ end
 
 or
 
-```
-raw = File.read "C:\GlobalSignRootCA.pem" 
+```ruby
+raw = File.read "C:\GlobalSignRootCA.pem"
 certificate_object = OpenSSL::X509::Certificate.new raw
 
 store = Win32::Certstore.open('Root')
@@ -64,7 +64,7 @@ Input   - Certificate thumbprint
 Return  - Certificate Object (OpenSSL::X509)
 ```
 
-```
+```ruby
 Win32::Certstore.open("Root") do |store|
     store.get(certificate_thumbprint)
 end
@@ -72,7 +72,7 @@ end
 
 or
 
-```
+```ruby
 store = Win32::Certstore.open("Root")
 store.get(certificate_thumbprint)
 store.close
@@ -87,7 +87,7 @@ Input   - NA
 Return  - Certificate List in JSON format.
 ```
 
-```
+```ruby
 Win32::Certstore.open("Root") do |store|
     store.list
 end
@@ -95,7 +95,7 @@ end
 
 or
 
-```
+```ruby
 store = Win32::Certstore.open("Root")
 store.list
 store.close
@@ -107,10 +107,10 @@ Deletes a certificate from a certificate store.
 
 ```
 Input   - Certificate thumbprint
-Return  - True/False 
+Return  - True/False
 ```
 
-```
+```ruby
 Win32::Certstore.open("Root") do |store|
     store.delete(certificate_thumbprint)
 end
@@ -118,7 +118,7 @@ end
 
 or
 
-```
+```ruby
 store = Win32::Certstore.open("Root")
 store.delete(certificate_thumbprint)
 store.close
@@ -130,10 +130,10 @@ Searches for a certificate in an open certificate store.
 
 ```
 Input   - Search Token as: Comman name, Friendly name, RDN and other attributes
-Return  - Matching certificate list 
+Return  - Matching certificate list
 ```
 
-```
+```ruby
 Win32::Certstore.open("Root") do |store|
     store.search(search_token)
 end
@@ -141,7 +141,7 @@ end
 
 or
 
-```
+```ruby
 store = Win32::Certstore.open("Root")
 store.search(search_token)
 store.close
@@ -153,11 +153,11 @@ Validates a certificate in a certificate store on the basis of time validity.
 
 ```
 Input   - Certificate thumbprint
-Return  - True/False 
+Return  - True/False
 
 ```
 
-```
+```ruby
 Win32::Certstore.open("Root") do |store|
     store.valid?(certificate_thumbprint)
 end
@@ -165,7 +165,7 @@ end
 
 or
 
-```
+```ruby
 store = Win32::Certstore.open("Root")
 store.valid?(certificate_thumbprint)
 store.close
@@ -175,7 +175,7 @@ store.close
 
 To perform more than one operations with single certificate store object
 
-```
+```ruby
 raw = File.read "C:\GlobalSignRootCA.pem"
 certificate_object = OpenSSL::X509::Certificate.new raw
 
@@ -187,8 +187,8 @@ end
 
 or
 
-```
-raw = File.read "C:\GlobalSignRootCA.pem" 
+```ruby
+raw = File.read "C:\GlobalSignRootCA.pem"
 certificate_object = OpenSSL::X509::Certificate.new raw
 
 store = Win32::Certstore.open('Root')
@@ -201,19 +201,18 @@ store.close
 
 ### Ruby
 
-Ruby 1.9.3+ is required.
+Ruby 2.3+ is required.
 
 ## Contributing
 
 For information on contributing to this project see https://github.com/chef/chef/blob/master/CONTRIBUTING.md
 
-
 More information on the contribution process for Chef projects can be found in the [Chef Contributions document](http://docs.chef.io/community_contributions.html).
 
-# LICENSE:
+# LICENSE
 
 Author:: Bryan McLellan (<btm@chef.io>)
-Copyright:: 2017-2018 Chef Software, Inc.
+Copyright:: 2017-2020 Chef Software, Inc.
 License:: Apache License, Version 2.0
 
 Licensed under the Apache License, Version 2.0 (the "License");
