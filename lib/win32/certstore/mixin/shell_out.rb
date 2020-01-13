@@ -28,6 +28,7 @@ module Win32
           if cmd.error!
             raise Mixlib::ShellOut::ShellCommandFailed, cmd.error!
           end
+
           cmd
         end
 
@@ -96,7 +97,7 @@ module Win32
             "-InputFormat None",
           ]
 
-          "powershell.exe #{flags.join(' ')} -Command \"#{script.gsub('"', '\"')}\""
+          "powershell.exe #{flags.join(" ")} -Command \"#{script.gsub('"', '\"')}\""
         end
       end
     end

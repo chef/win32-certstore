@@ -113,17 +113,17 @@ module Win32
 
         class FILETIME < FFI::Struct
           layout :dwLowDateTime, DWORD,
-                 :dwHighDateTime, DWORD
+            :dwHighDateTime, DWORD
         end
 
         class CRYPT_INTEGER_BLOB < FFI::Struct
           layout :cbData, DWORD, # Count, in bytes, of data
-                 :pbData, :pointer # Pointer to data buffer
+            :pbData, :pointer # Pointer to data buffer
         end
 
         class CRYPT_NAME_BLOB < FFI::Struct
           layout :cbData, DWORD, # Count, in bytes, of data
-                 :pbData, :pointer # Pointer to data buffer
+            :pbData, :pointer # Pointer to data buffer
           def initialize(str = nil)
             super(nil)
             if str
@@ -134,7 +134,7 @@ module Win32
 
         class CRYPT_HASH_BLOB < FFI::Struct
           layout :cbData, DWORD, # Count, in bytes, of data
-                 :pbData, :pointer # Pointer to data buffer
+            :pbData, :pointer # Pointer to data buffer
 
           def initialize(str = nil)
             super(nil)
@@ -151,7 +151,7 @@ module Win32
 
         class CRYPT_DATA_BLOB < FFI::Struct
           layout :cbData, DWORD, # Count, in bytes, of data
-                 :pbData, :pointer # Pointer to data buffer
+            :pbData, :pointer # Pointer to data buffer
 
           def initialize(str = nil)
             super(nil)
@@ -164,47 +164,47 @@ module Win32
 
         class CERT_EXTENSION < FFI::Struct
           layout :pszObjId, LPTSTR,
-                 :fCritical, BOOL,
-                 :Value, CRYPT_INTEGER_BLOB
+            :fCritical, BOOL,
+            :Value, CRYPT_INTEGER_BLOB
         end
 
         class CRYPT_BIT_BLOB < FFI::Struct
           layout :cbData, DWORD,
-                 :pbData, BYTE,
-                 :cUnusedBits, DWORD
+            :pbData, BYTE,
+            :cUnusedBits, DWORD
         end
 
         class CRYPT_ALGORITHM_IDENTIFIER < FFI::Struct
           layout :pszObjId, LPSTR,
-                 :Parameters, CRYPT_INTEGER_BLOB
+            :Parameters, CRYPT_INTEGER_BLOB
         end
 
         class CERT_PUBLIC_KEY_INFO < FFI::Struct
           layout :Algorithm, CRYPT_ALGORITHM_IDENTIFIER,
-                 :PublicKey, CRYPT_BIT_BLOB
+            :PublicKey, CRYPT_BIT_BLOB
         end
 
         class CERT_INFO < FFI::Struct
           layout :dwVersion, DWORD,
-               :SerialNumber, CRYPT_INTEGER_BLOB,
-               :SignatureAlgorithm, CRYPT_ALGORITHM_IDENTIFIER,
-               :Issuer, CRYPT_NAME_BLOB,
-               :NotBefore, FILETIME,
-               :NotAfter, FILETIME,
-               :Subject, CRYPT_NAME_BLOB,
-               :SubjectPublicKeyInfo, CERT_PUBLIC_KEY_INFO,
-               :IssuerUniqueId, CRYPT_BIT_BLOB,
-               :SubjectUniqueId, CRYPT_BIT_BLOB,
-               :cExtension, DWORD,
-               :rgExtension, CERT_EXTENSION
+            :SerialNumber, CRYPT_INTEGER_BLOB,
+            :SignatureAlgorithm, CRYPT_ALGORITHM_IDENTIFIER,
+            :Issuer, CRYPT_NAME_BLOB,
+            :NotBefore, FILETIME,
+            :NotAfter, FILETIME,
+            :Subject, CRYPT_NAME_BLOB,
+            :SubjectPublicKeyInfo, CERT_PUBLIC_KEY_INFO,
+            :IssuerUniqueId, CRYPT_BIT_BLOB,
+            :SubjectUniqueId, CRYPT_BIT_BLOB,
+            :cExtension, DWORD,
+            :rgExtension, CERT_EXTENSION
         end
 
         class CERT_CONTEXT < FFI::Struct
           layout :dwCertEncodingType, DWORD,
-                 :pbCertEncoded, BYTE,
-                 :cbCertEncoded, DWORD,
-                 :pCertInfo, CERT_INFO,
-                 :hCertStore, HCERTSTORE
+            :pbCertEncoded, BYTE,
+            :cbCertEncoded, DWORD,
+            :pCertInfo, CERT_INFO,
+            :hCertStore, HCERTSTORE
         end
 
         ###############################################################################
