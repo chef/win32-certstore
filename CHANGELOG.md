@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.3.1 -->
-## [v0.3.1](https://github.com/chef/win32-certstore/tree/v0.3.1) (2020-01-13)
+<!-- latest_release 0.3.2 -->
+## [v0.3.2](https://github.com/chef/win32-certstore/tree/v0.3.2) (2020-01-13)
 
 #### Merged Pull Requests
-- Move testing to Buildkite [#58](https://github.com/chef/win32-certstore/pull/58) ([tas50](https://github.com/tas50))
+- Update testing for Buildkite [#59](https://github.com/chef/win32-certstore/pull/59) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.3.0 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Update testing for Buildkite [#59](https://github.com/chef/win32-certstore/pull/59) ([tas50](https://github.com/tas50)) <!-- 0.3.2 -->
 - Move testing to Buildkite [#58](https://github.com/chef/win32-certstore/pull/58) ([tas50](https://github.com/tas50)) <!-- 0.3.1 -->
 <!-- release_rollup -->
 
