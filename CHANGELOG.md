@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.3.2 -->
-## [v0.3.2](https://github.com/chef/win32-certstore/tree/v0.3.2) (2020-01-13)
+<!-- latest_release 0.4.0 -->
+## [v0.4.0](https://github.com/chef/win32-certstore/tree/v0.4.0) (2020-01-14)
 
 #### Merged Pull Requests
-- Update testing for Buildkite [#59](https://github.com/chef/win32-certstore/pull/59) ([tas50](https://github.com/tas50))
+- Add the ability to set specify properties in add_pfx method [#57](https://github.com/chef/win32-certstore/pull/57) ([amunoz951](https://github.com/amunoz951))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.3.0 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Add the ability to set specify properties in add_pfx method [#57](https://github.com/chef/win32-certstore/pull/57) ([amunoz951](https://github.com/amunoz951)) <!-- 0.4.0 -->
 - Update testing for Buildkite [#59](https://github.com/chef/win32-certstore/pull/59) ([tas50](https://github.com/tas50)) <!-- 0.3.2 -->
 - Move testing to Buildkite [#58](https://github.com/chef/win32-certstore/pull/58) ([tas50](https://github.com/tas50)) <!-- 0.3.1 -->
 <!-- release_rollup -->
