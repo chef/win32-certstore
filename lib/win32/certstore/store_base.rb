@@ -57,15 +57,16 @@ module Win32
       # @param certstore_handler [FFI::Pointer] Handle of the store where certificate should be imported
       # @param path [String] Path of the certificate that should be imported
       # @param password [String] Password of the certificate
+      # @param key_properties [Integer] dwFlags used to specify properties of the pfx key, see link above
       #
       # @return [Boolean]
       #
       # @raise [SystemCallError] when Crypt API would not be able to perform some action
       #
-      def cert_add_pfx(certstore_handler, path, password = "")
+      def cert_add_pfx(certstore_handler, path, password = "", key_properties = 0)
         cert_added = false
         # Imports a PFX BLOB and returns the handle of a store
-        pfx_cert_store = PFXImportCertStore(CRYPT_DATA_BLOB.new(File.binread(path)), wstring(password), 0)
+        pfx_cert_store = PFXImportCertStore(CRYPT_DATA_BLOB.new(File.binread(path)), wstring(password), key_properties)
         raise if pfx_cert_store.null?
 
         # Find all the certificate contexts in certificate store and add them ino the store
