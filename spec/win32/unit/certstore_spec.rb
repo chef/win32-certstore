@@ -17,7 +17,7 @@
 #
 
 require "spec_helper"
-require "openssl"
+require "openssl" unless defined?(OpenSSL)
 
 describe Win32::Certstore, :windows_only do
 

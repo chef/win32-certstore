@@ -1,4 +1,4 @@
-require "rubygems"
+require "rubygems" unless defined?(Gem)
 require "bundler"
 require "bundler/gem_tasks"
 
