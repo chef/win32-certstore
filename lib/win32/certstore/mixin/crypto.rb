@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-require "ffi"
+require "ffi" unless defined?(FFI)
 
 module Win32
   class Certstore

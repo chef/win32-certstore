@@ -19,8 +19,8 @@ require_relative "mixin/crypto"
 require_relative "mixin/string"
 require_relative "mixin/shell_out"
 require_relative "mixin/unicode"
-require "openssl"
-require "json"
+require "openssl" unless defined?(OpenSSL)
+require "json" unless defined?(JSON)
 
 module Win32
   class Certstore

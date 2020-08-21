@@ -17,7 +17,7 @@
 #
 
 require "spec_helper"
-require "openssl"
+require "openssl" unless defined?(OpenSSL)
 
 RSpec.describe Win32::Certstore, :windows_only do
   before { open_cert_store("My") }
