@@ -1,4 +1,4 @@
-$LOAD_PATH.unshift File.expand_path("../../lib/win32", __FILE__)
+$LOAD_PATH.unshift File.expand_path("../lib/win32", __dir__)
 
 def windows?
   !!(RUBY_PLATFORM =~ /mswin|mingw|windows/)
