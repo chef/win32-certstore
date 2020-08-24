@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.4.2 -->
-## [v0.4.2](https://github.com/chef/win32-certstore/tree/v0.4.2) (2020-08-21)
+<!-- latest_release 0.4.3 -->
+## [v0.4.3](https://github.com/chef/win32-certstore/tree/v0.4.3) (2020-08-24)
 
 #### Merged Pull Requests
-- Remove redundant coding comment [#62](https://github.com/chef/win32-certstore/pull/62) ([tas50](https://github.com/tas50))
+- Simplify our use of expand_path [#64](https://github.com/chef/win32-certstore/pull/64) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.4.1 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Simplify our use of expand_path [#64](https://github.com/chef/win32-certstore/pull/64) ([tas50](https://github.com/tas50)) <!-- 0.4.3 -->
 - Remove redundant coding comment [#62](https://github.com/chef/win32-certstore/pull/62) ([tas50](https://github.com/tas50)) <!-- 0.4.2 -->
 <!-- release_rollup -->
 
