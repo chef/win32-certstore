@@ -231,7 +231,7 @@ module Win32
 
       # Get certificate pem
       def get_cert_pem(thumbprint)
-        get_data = powershell_out!(cert_ps_cmd(thumbprint, store_name))
+        get_data = powershell_out!(cert_ps_cmd(thumbprint, store_name, @store_location))
         get_data.stdout
       end
 

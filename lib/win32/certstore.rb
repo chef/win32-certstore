@@ -31,18 +31,19 @@ module Win32
 
     attr_accessor :store_name
 
-    def initialize(store_name)
+    def initialize(store_name, store_location)
       @store_name = store_name
-      @certstore_handler = open(store_name)
+      @store_location = store_location
+      @certstore_handler = open(store_name, store_location)
     end
 
     # To open given certificate store
-    def self.open(store_name)
+    def self.open(store_name, store_location)
       validate_store(store_name)
       if block_given?
-        yield new(store_name)
+        yield new(store_name, store_location)
       else
-        new(store_name)
+        new(store_name, store_location)
       end
     end
 
@@ -118,8 +119,15 @@ module Win32
     attr_reader :certstore_handler
 
     # To open certstore and return open certificate store pointer
-    def open(store_name)
-      certstore_handler = CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, nil, CERT_SYSTEM_STORE_LOCAL_MACHINE, wstring(store_name))
+
+    def open(store_name, store_location)
+      which_store_location = if store_location == "CurrentUser"
+                               CERT_SYSTEM_STORE_CURRENT_USER
+                             else
+                               CERT_SYSTEM_STORE_LOCAL_MACHINE
+                             end
+      certstore_handler = CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, nil, which_store_location, wstring(store_name))
+      # certstore_handler = CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, nil, CERT_SYSTEM_STORE_LOCAL_MACHINE, wstring(store_name))
       unless certstore_handler
         last_error = FFI::LastError.error
         raise SystemCallError.new("Unable to open the Certificate Store `#{store_name}`.", last_error)

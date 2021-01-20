@@ -88,6 +88,7 @@ module Win32
 
         CERT_STORE_PROV_SYSTEM                              = 10
         CERT_SYSTEM_STORE_LOCAL_MACHINE                     = 0x00020000
+        CERT_SYSTEM_STORE_CURRENT_USER                      = 0x00010000
 
         # Define ffi pointer
         HCERTSTORE                                          = FFI::TypeDefs[:pointer]
