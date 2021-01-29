@@ -1,8 +1,8 @@
 require "spec_helper"
-require "win32/certstore/mixin/shell_out"
+require "win32/certstore/mixin/shell_exec"
 
-describe Win32::Certstore::Mixin::ShellOut do
-  let(:string_class) { Class.new { include Win32::Certstore::Mixin::ShellOut } }
+describe Win32::Certstore::Mixin::ShellExec do
+  let(:string_class) { Class.new { include Win32::Certstore::Mixin::ShellExec } }
   subject(:string_obj) { string_class.new }
 
   context "when testing individual methods" do
