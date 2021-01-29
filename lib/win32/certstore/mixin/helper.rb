@@ -21,9 +21,8 @@ module Win32
   class Certstore
     module Mixin
       module Helper
-
         # PSCommand to search certificate from thumbprint and convert in pem
-        def cert_ps_cmd(thumbprint, store_name, store_location)
+        def cert_ps_cmd(thumbprint, store_name, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE)
           <<-EOH
             $content = $null
             $cert = Get-ChildItem Cert:\\'#{store_location}'\\'#{store_name}' -Recurse | Where { $_.Thumbprint -eq '#{thumbprint}' }
@@ -43,7 +42,6 @@ module Win32
         def valid_duration?(cert_obj)
           cert_obj.not_before < Time.now.utc && cert_obj.not_after > Time.now.utc
         end
-
       end
     end
   end

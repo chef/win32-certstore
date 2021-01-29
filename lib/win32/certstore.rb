@@ -31,19 +31,21 @@ module Win32
 
     attr_accessor :store_name
 
-    def initialize(store_name, store_location)
+    # Initializes a new instance of a certificate store.
+    # takes 2 parameters - the store name (My, Root, etc) and the location (CurrentUser or LocalMachine), it defaults to LocalMachine for backwards compatibility
+    def initialize(store_name, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE)
       @store_name = store_name
       @store_location = store_location
-      @certstore_handler = open(store_name, store_location)
+      @certstore_handler = open(store_name, store_location: store_location)
     end
 
     # To open given certificate store
-    def self.open(store_name, store_location)
+    def self.open(store_name, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE)
       validate_store(store_name)
       if block_given?
-        yield new(store_name, store_location)
+        yield new(store_name, store_location: store_location)
       else
-        new(store_name, store_location)
+        new(store_name, store_location: store_location)
       end
     end
 
@@ -120,14 +122,8 @@ module Win32
 
     # To open certstore and return open certificate store pointer
 
-    def open(store_name, store_location)
-      which_store_location = if store_location == "CurrentUser"
-                               CERT_SYSTEM_STORE_CURRENT_USER
-                             else
-                               CERT_SYSTEM_STORE_LOCAL_MACHINE
-                             end
-      certstore_handler = CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, nil, which_store_location, wstring(store_name))
-      # certstore_handler = CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, nil, CERT_SYSTEM_STORE_LOCAL_MACHINE, wstring(store_name))
+    def open(store_name, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE)
+      certstore_handler = CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, nil, store_location, wstring(store_name))
       unless certstore_handler
         last_error = FFI::LastError.error
         raise SystemCallError.new("Unable to open the Certificate Store `#{store_name}`.", last_error)

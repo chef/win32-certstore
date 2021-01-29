@@ -231,7 +231,12 @@ module Win32
 
       # Get certificate pem
       def get_cert_pem(thumbprint)
-        get_data = powershell_out!(cert_ps_cmd(thumbprint, store_name, @store_location))
+        converted_store = if @store_location == CERT_SYSTEM_STORE_LOCAL_MACHINE
+                            "LocalMachine"
+                          else
+                            "CurrentUser"
+                          end
+        get_data = powershell_out!(cert_ps_cmd(thumbprint, store_name, store_location: converted_store))
         get_data.stdout
       end
 
