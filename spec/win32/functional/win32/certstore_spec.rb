@@ -68,6 +68,9 @@ RSpec.describe Win32::Certstore, :windows_only do
 end
 
 # Now testing new code and what happens if you want to import something into CurrentUser - 1/29/2021
+# Defining the store constant here as the spec doesn't read from the values in the crypto.rb file.
+CERT_SYSTEM_STORE_CURRENT_USER = 0x00010000
+
 RSpec.describe Win32::Certstore, :windows_only do
   before { open_cert_store("My", CERT_SYSTEM_STORE_CURRENT_USER) }
   after(:each) do
