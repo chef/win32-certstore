@@ -3,6 +3,8 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in win32-certstore.gemspec
 gemspec
 
+gem 'mixlib-shellout', '< 3.0.12'
+
 group :docs do
   gem "yard"
   gem "github-markup"
