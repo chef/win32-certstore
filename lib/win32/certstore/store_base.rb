@@ -17,7 +17,7 @@
 
 require_relative "mixin/crypto"
 require_relative "mixin/string"
-require_relative "mixin/shell_out"
+require_relative "mixin/shell_exec"
 require_relative "mixin/unicode"
 require "openssl" unless defined?(OpenSSL)
 require "json" unless defined?(JSON)
@@ -28,7 +28,7 @@ module Win32
       include Win32::Certstore::Mixin::Crypto
       include Win32::Certstore::Mixin::Assertions
       include Win32::Certstore::Mixin::String
-      include Win32::Certstore::Mixin::ShellOut
+      include Win32::Certstore::Mixin::ShellExec
       include Win32::Certstore::Mixin::Unicode
       include Win32::Certstore::Mixin::Helper
 
@@ -231,8 +231,14 @@ module Win32
 
       # Get certificate pem
       def get_cert_pem(thumbprint)
-        get_data = powershell_out!(cert_ps_cmd(thumbprint, store_name))
+        converted_store = if @store_location == CERT_SYSTEM_STORE_LOCAL_MACHINE
+                            "LocalMachine"
+                          else
+                            "CurrentUser"
+                          end
+        get_data = powershell_exec!(cert_ps_cmd(thumbprint, store_name, store_location: converted_store))
         get_data.stdout
+        # get_data.result
       end
 
       # Format pem

@@ -20,7 +20,7 @@ require "mixlib/shellout" unless defined?(Mixlib::ShellOut)
 module Win32
   class Certstore
     module Mixin
-      module ShellOut
+      module ShellExec
         def shell_out_command(*command_args)
           cmd = Mixlib::ShellOut.new(*command_args)
           cmd.live_stream
@@ -39,7 +39,7 @@ module Win32
         # @param script [String] script to run
         # @param options [Hash] options hash
         # @return [Mixlib::Shellout] mixlib-shellout object
-        def powershell_out(*command_args)
+        def powershell_exec(*command_args)
           script = command_args.first
           options = command_args.last.is_a?(Hash) ? command_args.last : nil
 
@@ -52,8 +52,8 @@ module Win32
         # @param script [String] script to run
         # @param options [Hash] options hash
         # @return [Mixlib::Shellout] mixlib-shellout object
-        def powershell_out!(*command_args)
-          cmd = powershell_out(*command_args)
+        def powershell_exec!(*command_args)
+          cmd = powershell_exec(*command_args)
           cmd.error!
           cmd
         end
