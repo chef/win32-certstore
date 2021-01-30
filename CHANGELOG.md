@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.4.4 -->
-## [v0.4.4](https://github.com/chef/win32-certstore/tree/v0.4.4) (2021-01-30)
+<!-- latest_release 0.5.0 -->
+## [v0.5.0](https://github.com/chef/win32-certstore/tree/v0.5.0) (2021-01-30)
 
 #### Merged Pull Requests
-- refactored the code to be properly location aware. Previously, certs … [#66](https://github.com/chef/win32-certstore/pull/66) ([johnmccrae](https://github.com/johnmccrae))
+- updated the unit tests to verify connecting to the CurrentUser store [#67](https://github.com/chef/win32-certstore/pull/67) ([johnmccrae](https://github.com/johnmccrae))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.4.1 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- updated the unit tests to verify connecting to the CurrentUser store [#67](https://github.com/chef/win32-certstore/pull/67) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.5.0 -->
 - refactored the code to be properly location aware. Previously, certs … [#66](https://github.com/chef/win32-certstore/pull/66) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.4.4 -->
 - Simplify our use of expand_path [#64](https://github.com/chef/win32-certstore/pull/64) ([tas50](https://github.com/tas50)) <!-- 0.4.3 -->
 - Remove redundant coding comment [#62](https://github.com/chef/win32-certstore/pull/62) ([tas50](https://github.com/tas50)) <!-- 0.4.2 -->
