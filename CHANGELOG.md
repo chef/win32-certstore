@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.5.1 -->
-## [v0.5.1](https://github.com/chef/win32-certstore/tree/v0.5.1) (2021-01-31)
+<!-- latest_release 0.5.2 -->
+## [v0.5.2](https://github.com/chef/win32-certstore/tree/v0.5.2) (2021-02-01)
 
 #### Merged Pull Requests
-- Updated the expeditor verify pipeline to test against Ruby 3.0 [#68](https://github.com/chef/win32-certstore/pull/68) ([johnmccrae](https://github.com/johnmccrae))
+- Update mixlib-shellout requirement from &lt; 3.0.12 to &lt; 3.2.3 [#69](https://github.com/chef/win32-certstore/pull/69) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.4.1 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Update mixlib-shellout requirement from &lt; 3.0.12 to &lt; 3.2.3 [#69](https://github.com/chef/win32-certstore/pull/69) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot])) <!-- 0.5.2 -->
 - Updated the expeditor verify pipeline to test against Ruby 3.0 [#68](https://github.com/chef/win32-certstore/pull/68) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.5.1 -->
 - updated the unit tests to verify connecting to the CurrentUser store [#67](https://github.com/chef/win32-certstore/pull/67) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.5.0 -->
 - refactored the code to be properly location aware. Previously, certs … [#66](https://github.com/chef/win32-certstore/pull/66) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.4.4 -->
