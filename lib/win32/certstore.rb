@@ -78,6 +78,17 @@ module Win32
       cert_get(certificate_thumbprint)
     end
 
+    # Returns a filepath to a PKCS12 container. The filepath is in a temporary folder so normal housekeeping by the OS should clear it.
+    # However, you should delete it yourself anyway.
+    # @param request [thumbprint<string>] is the thumbprint of the pfx blob you want to capture
+    # @param request [store_location:<string>] of location in the Cert store where the pfx is located, typically 'LocalMachine'
+    # @param request [export_password:<string>] of the password to export with. P12 objects are an encrypted container that have a private key in \
+    # them and a password is required to export them.
+    # @return [Object] of certificate set in PKSC12 format
+    def get_pfx(certificate_thumbprint, store_location: @store_location, export_password:)
+      get_cert_pfx(certificate_thumbprint, store_location: store_location, export_password: export_password)
+    end
+
     # Returns all the certificates in a store
     # @param [nil]
     # @return [Array] array of certificates list

@@ -21,20 +21,52 @@ module Win32
   class Certstore
     module Mixin
       module Helper
-        # PSCommand to search certificate from thumbprint and convert in pem
-        def cert_ps_cmd(thumbprint, store_name, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE)
+
+        CERT_SYSTEM_STORE_LOCAL_MACHINE                     = 0x00020000
+        CERT_SYSTEM_STORE_CURRENT_USER                      = 0x00010000
+
+        # PSCommand to search certificate from thumbprint and either turn it into a pem or return a path to a pfx object
+        def cert_ps_cmd(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, export_password: "1234")
           <<-EOH
-            $content = $null
-            $cert = Get-ChildItem Cert:\\'#{store_location}'\\'#{store_name}' -Recurse | Where { $_.Thumbprint -eq '#{thumbprint}' }
-            if($cert -ne $null)
-            {
-            $content = @(
-              '-----BEGIN CERTIFICATE-----'
-              [System.Convert]::ToBase64String($cert.RawData, 'InsertLineBreaks')
-              '-----END CERTIFICATE-----'
-            )
+            $cert = Get-ChildItem Cert:\'#{store_location}' -Recurse | Where { $_.Thumbprint -eq '#{thumbprint}' }
+
+            # The function and the code below test to see if a) the cert has a private key and b) it has a
+            # Enhanced Usage of Client Auth. Those 2 attributes would mean this is a pfx-able object
+            function test_cert_values{
+              $usagelist = ($cert).EnhancedKeyUsageList
+              foreach($use in $usagelist){
+                if($use.FriendlyName -like "Client Authentication" ){
+                    return $true
+                }
+                else {
+                    return $false
+                }
+              }
             }
-            $content
+
+            $result = test_cert_values
+
+            if((($cert).HasPrivateKey) -and ($result -eq $true)){
+              $temproot = [System.IO.Path]::GetTempPath()
+              $file_name = '#{thumbprint}'
+              $file_path = $temproot + "$file_name.pfx"
+
+              $mypwd = ConvertTo-SecureString -String '#{export_password}' -Force -AsPlainText
+              $cert | Export-PfxCertificate -FilePath $file_path -Password $mypwd | Out-Null
+              $file_path
+            }
+            else {
+              $content = $null
+              if($cert -ne $null)
+              {
+              $content = @(
+                '-----BEGIN CERTIFICATE-----'
+                [System.Convert]::ToBase64String($cert.RawData, 'InsertLineBreaks')
+                '-----END CERTIFICATE-----'
+              )
+              }
+              $content
+            }
           EOH
         end
 
