@@ -186,7 +186,7 @@ describe Win32::Certstore, :windows_only do
     end
   end
 
-  CERT_SYSTEM_STORE_LOCAL_MACHINE                     = 0x00020000
+  CERT_SYSTEM_STORE_LOCAL_MACHINE = 0x00020000
 
   describe "#get_cert_pfx" do
     context "When passing empty certificate store name" do
@@ -223,14 +223,10 @@ describe Win32::Certstore, :windows_only do
       end
       it "returns nil" do
         store = certstore.open(store_name)
-        cert_obj = store.get_pfx(thumbprint,store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE,export_password: password)
+        cert_obj = store.get_pfx(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, export_password: password)
         expect(cert_obj).to eql("")
       end
     end
-
-#     p12 = OpenSSL::PKCS12.new(File.read('/path/to/p12'), "pass_phrase")
-# key = p12.key
-# certificate = p12.certificate
 
     context "When passing valid thumbprint" do
       let(:store_name) { "root" }
