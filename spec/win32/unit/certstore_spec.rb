@@ -277,8 +277,6 @@ describe Win32::Certstore, :windows_only do
     end
   end
 
-
-
   describe "#cert_delete" do
     context "When passing empty certificate store name" do
       let(:store_name) { "" }
