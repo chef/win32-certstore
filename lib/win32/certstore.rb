@@ -85,7 +85,7 @@ module Win32
     # @param request [export_password:<string>] of the password to export with. P12 objects are an encrypted container that have a private key in \
     # them and a password is required to export them.
     # @return [Object] of certificate set in PKSC12 format
-    def get_pfx(certificate_thumbprint, store_location: @store_location, export_password:, cert_path: '')
+    def get_pfx(certificate_thumbprint, store_location: @store_location, export_password:, cert_path: "")
       get_cert_pfx(certificate_thumbprint, store_location: store_location, export_password: export_password, cert_path: cert_path)
     end
 
