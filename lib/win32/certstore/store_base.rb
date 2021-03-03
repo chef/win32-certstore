@@ -241,13 +241,13 @@ module Win32
       end
 
       # Get PFX object
-      def get_cert_pfx(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, export_password:)
+      def get_cert_pfx(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, export_password:, cert_path: )
         converted_store = if store_location == CERT_SYSTEM_STORE_LOCAL_MACHINE
                             "LocalMachine"
                           else
                             "CurrentUser"
                           end
-        get_data = powershell_exec!(cert_ps_cmd(thumbprint, export_password: export_password, store_location: converted_store))
+        get_data = powershell_exec!(cert_ps_cmd(thumbprint, export_password: export_password, store_location: converted_store, cert_path: cert_path))
         get_data.stdout
       end
 
