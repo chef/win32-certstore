@@ -1,9 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release -->
+<!-- latest_release 0.5.4 -->
+## [v0.5.4](https://github.com/chef/win32-certstore/tree/v0.5.4) (2021-03-04)
+
+#### Merged Pull Requests
+- added support to properly export a pfx object to disk [#75](https://github.com/chef/win32-certstore/pull/75) ([johnmccrae](https://github.com/johnmccrae))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=0.5.3 -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- added support to properly export a pfx object to disk [#75](https://github.com/chef/win32-certstore/pull/75) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.5.4 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
