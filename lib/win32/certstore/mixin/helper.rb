@@ -34,10 +34,8 @@ module Win32
                 if($use.FriendlyName -like "Client Authentication" ){
                     return $true
                 }
-                else {
-                    return $false
-                }
               }
+              return $false
             }
 
             $result = test_cert_values
