@@ -21,12 +21,8 @@ module Win32
   class Certstore
     module Mixin
       module Helper
-
-        CERT_SYSTEM_STORE_LOCAL_MACHINE                     = 0x00020000
-        CERT_SYSTEM_STORE_CURRENT_USER                      = 0x00010000
-
         # PSCommand to search certificate from thumbprint and either turn it into a pem or return a path to a pfx object
-        def cert_ps_cmd(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, export_password: "1234", cert_path:)
+        def cert_ps_cmd(thumbprint, store_location: 'LocalMachine', export_password: "1234", output_path:)
           <<-EOH
             $cert = Get-ChildItem Cert:\'#{store_location}' -Recurse | Where { $_.Thumbprint -eq '#{thumbprint}' }
 
@@ -46,15 +42,17 @@ module Win32
 
             $result = test_cert_values
 
-            $output_path = "#{cert_path}"
-            if([string]::IsNullOrEmpty($output_path))
+            $output_path = "#{output_path}"
+            if([string]::IsNullOrEmpty($output_path)){
               $temproot = [System.IO.Path]::GetTempPath()
-            else
+            }
+            else{
               $temproot = $output_path
+            }
 
             if((($cert).HasPrivateKey) -and ($result -eq $true)){
               $file_name = '#{thumbprint}'
-              $file_path = $temproot + "$file_name.pfx"
+              $file_path = $(Join-Path -Path $temproot -ChildPath "$file_name.pfx")
               $mypwd = ConvertTo-SecureString -String '#{export_password}' -Force -AsPlainText
               $cert | Export-PfxCertificate -FilePath $file_path -Password $mypwd | Out-Null
               $file_path
