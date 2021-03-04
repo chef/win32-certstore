@@ -236,9 +236,19 @@ module Win32
                           else
                             "CurrentUser"
                           end
-        get_data = powershell_exec!(cert_ps_cmd(thumbprint, store_name, store_location: converted_store))
+        get_data = powershell_exec!(cert_ps_cmd(thumbprint, store_location: converted_store))
         get_data.stdout
-        # get_data.result
+      end
+
+      # Get PFX object
+      def get_cert_pfx(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, export_password:, output_path: )
+        converted_store = if store_location == CERT_SYSTEM_STORE_LOCAL_MACHINE
+                            "LocalMachine"
+                          else
+                            "CurrentUser"
+                          end
+        get_data = powershell_exec!(cert_ps_cmd(thumbprint, export_password: export_password, store_location: converted_store, output_path: output_path))
+        get_data.stdout
       end
 
       # Format pem

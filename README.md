@@ -201,7 +201,7 @@ store.close
 
 ### Ruby
 
-Ruby 2.3+ is required.
+Ruby 2.5+ is required.
 
 ## Contributing
 
@@ -212,7 +212,7 @@ More information on the contribution process for Chef projects can be found in t
 # LICENSE
 
 Author:: Bryan McLellan (<btm@chef.io>)
-Copyright:: 2017-2020 Chef Software, Inc.
+Copyright:: 2017-2021 Chef Software, Inc.
 License:: Apache License, Version 2.0
 
 Licensed under the Apache License, Version 2.0 (the "License");

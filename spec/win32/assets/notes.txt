@@ -1,0 +1,6 @@
+Steve Balmer pfx file password is 1234
+included in this container :
+Root CA is Friendlanders Hosiery
+Intermediate CA is from the same fake company
+Steve crt
+Steve key

@@ -186,6 +186,72 @@ describe Win32::Certstore, :windows_only do
     end
   end
 
+  CERT_SYSTEM_STORE_LOCAL_MACHINE = 0x00020000
+
+  describe "#get_cert_pfx" do
+    context "When passing invalid thumbprint" do
+      let(:store_name) { "root" }
+      let(:thumbprint) { "b1bc968bd4f49d622aa89a81f2150152a41d829c" }
+      let(:password) { "1234" }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pfx).and_return("")
+      end
+      it "returns nil" do
+        store = certstore.open(store_name)
+        cert_obj = store.get_pfx(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, export_password: password)
+        expect(cert_obj).to eql("")
+      end
+    end
+
+    context "When passing valid thumbprint" do
+      let(:store_name) { "root" }
+      let(:password) { "1234" }
+      let(:thumbprint) { "d77803da081a5a556ab44c9cc74818767782c84b" }
+      let(:cert_pfx) { File.binread('.\spec\win32\assets\steveb.pfx') }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pfx).and_return(cert_pfx)
+      end
+      it "returns OpenSSL::PKCS12::Container Binary Object" do
+        store = certstore.open(store_name)
+        cert_obj = store.get_pfx(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, export_password: password)
+        p12 = OpenSSL::PKCS12.new(cert_obj, password)
+        expect(p12).to be_an_instance_of(OpenSSL::PKCS12)
+      end
+    end
+
+    context "When passing valid thumbprint I get a private key back" do
+      let(:store_name) { "root" }
+      let(:password) { "1234" }
+      let(:thumbprint) { "d77803da081a5a556ab44c9cc74818767782c84b" }
+      let(:cert_pfx) { File.binread('.\spec\win32\assets\steveb.pfx') }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pfx).and_return(cert_pfx)
+      end
+      it "returns OpenSSL::PKCS12 Private Key" do
+        store = certstore.open(store_name)
+        cert_obj = store.get_pfx(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, export_password: password)
+        p12 = OpenSSL::PKCS12.new(cert_obj, password)
+        expect(p12.key).to be_an_instance_of(OpenSSL::PKey::RSA)
+      end
+    end
+
+    context "When passing valid thumbprint I get a certificate back" do
+      let(:store_name) { "root" }
+      let(:password) { "1234" }
+      let(:thumbprint) { "d77803da081a5a556ab44c9cc74818767782c84b" }
+      let(:cert_pfx) { File.binread('.\spec\win32\assets\steveb.pfx') }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pfx).and_return(cert_pfx)
+      end
+      it "returns OpenSSL::PKCS12 Certificate" do
+        store = certstore.open(store_name)
+        cert_obj = store.get_pfx(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, export_password: password, output_path: 'c:\foo\bar')
+        p12 = OpenSSL::PKCS12.new(cert_obj, password)
+        expect(p12.certificate).to be_an_instance_of(OpenSSL::X509::Certificate)
+      end
+    end
+  end
+
   describe "#cert_delete" do
     context "When passing empty certificate store name" do
       let(:store_name) { "" }
