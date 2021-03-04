@@ -46,6 +46,25 @@ RSpec.describe Win32::Certstore, :windows_only do
     end
   end
 
+  describe "#get_pfx" do
+    before { add_pfx }
+    let(:cert_pfx) { File.binread('.\spec\win32\assets\steveb.pfx') }
+
+    # passing valid thumbprint
+    it "returns the certificate_object if found" do
+      thumbprint = "d77803da081a5a556ab44c9cc74818767782c84b"
+      expect(@store).to receive(:get_pfx).with(thumbprint).and_return(cert_pfx)
+      @store.get_pfx(thumbprint)
+    end
+
+    # passing invalid thumbprint
+    it "returns nil if certificate not found" do
+      thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829cab"
+      expect(@store).to receive(:get_pfx).with(thumbprint).and_return(nil)
+      @store.get_pfx(thumbprint)
+    end
+  end
+
   private
 
   def open_cert_store(store)
@@ -56,6 +75,11 @@ RSpec.describe Win32::Certstore, :windows_only do
     raw = File.read ".\\spec\\win32\\assets\\GlobalSignRootCA.pem"
     certificate_object = OpenSSL::X509::Certificate.new raw
     @store.add(certificate_object)
+  end
+
+  def add_pfx
+    raw = ".\\spec\\win32\\assets\\steveb.pfx"
+    @store.add_pfx(raw, "1234")
   end
 
   def close_store
