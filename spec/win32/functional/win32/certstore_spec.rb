@@ -48,16 +48,13 @@ RSpec.describe Win32::Certstore, :windows_only do
 
   describe "#get_pfx" do
     before { add_pfx }
-    #let(:cert_pfx) { File.binread('.\spec\win32\assets\steveb.pfx') }
-    let(:cert_pfx) { 'd77803da081a5a556ab44c9cc74818767782c84b.pfx' }
+    let(:cert_pfx) { "d77803da081a5a556ab44c9cc74818767782c84b.pfx" }
 
     # passing valid thumbprint
     it "returns the certificate_object if found" do
       thumbprint = "d77803da081a5a556ab44c9cc74818767782c84b"
       out_put = @store.get_pfx(thumbprint, export_password: "1234")
       file = ::File.basename(out_put.strip)
-      # expect(@store).to receive(:get_pfx).with(thumbprint).and_return(cert_pfx)
-      # @store.get_pfx(thumbprint)
       expect(file).to eq(cert_pfx)
     end
 
