@@ -22,7 +22,7 @@ module Win32
     module Mixin
       module Helper
         # PSCommand to search certificate from thumbprint and either turn it into a pem or return a path to a pfx object
-        def cert_ps_cmd(thumbprint, store_location: "LocalMachine", export_password: "1234", output_path:"")
+        def cert_ps_cmd(thumbprint, store_location: "LocalMachine", export_password: "1234", output_path: "")
           <<-EOH
             $cert = Get-ChildItem Cert:\'#{store_location}' -Recurse | Where { $_.Thumbprint -eq '#{thumbprint}' }
 
