@@ -87,11 +87,15 @@ module Win32
 
       # Get certificate from open certificate store and return certificate object
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
-      def cert_get(certificate_thumbprint)
+      def cert_get(certificate_thumbprint, store_name:, store_location:)
         validate_thumbprint(certificate_thumbprint)
         thumbprint = update_thumbprint(certificate_thumbprint)
-        cert_pem = get_cert_pem(thumbprint)
+        cert_pem = get_cert_pem(thumbprint, store_name: store_name, store_location: store_location)
         cert_pem = format_pem(cert_pem)
+        if cert_pem.empty?
+          raise ArgumentError, "Unable to retrieve the certificate"
+        end
+
         unless cert_pem.empty?
           build_openssl_obj(cert_pem)
         end
@@ -138,10 +142,10 @@ module Win32
       # Verify certificate from open certificate store and return boolean or exceptions
       # store_handler => Open certificate store handler
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
-      def cert_validate(certificate_thumbprint)
+      def cert_validate(certificate_thumbprint, store_location:, store_name:)
         validate_thumbprint(certificate_thumbprint)
         thumbprint = update_thumbprint(certificate_thumbprint)
-        cert_pem = get_cert_pem(thumbprint)
+        cert_pem = get_cert_pem(thumbprint, store_name: store_name, store_location: store_location)
         cert_pem = format_pem(cert_pem)
         verify_certificate(cert_pem)
       end
@@ -230,24 +234,19 @@ module Win32
       end
 
       # Get certificate pem
-      def get_cert_pem(thumbprint)
-        converted_store = if @store_location == CERT_SYSTEM_STORE_LOCAL_MACHINE
-                            "LocalMachine"
-                          else
-                            "CurrentUser"
-                          end
-        get_data = powershell_exec!(cert_ps_cmd(thumbprint, store_location: converted_store))
-        get_data.stdout
-      end
-
-      # Get PFX object
-      def get_cert_pfx(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, export_password:, output_path: )
+      def get_cert_pem(thumbprint, store_name:, store_location:)
         converted_store = if store_location == CERT_SYSTEM_STORE_LOCAL_MACHINE
                             "LocalMachine"
                           else
                             "CurrentUser"
                           end
-        get_data = powershell_exec!(cert_ps_cmd(thumbprint, export_password: export_password, store_location: converted_store, output_path: output_path))
+        get_data = powershell_exec!(cert_ps_cmd(thumbprint, store_location: converted_store, store_name: store_name))
+        get_data.stdout
+      end
+
+      # Get Private Key, requires PowerShell 7.1.2 and .Net 5.o or later
+      def get_cert_key(thumbprint, store_location:, store_name: )
+        get_data = powershell_exec!(key_ps_cmd(thumbprint, store_location: store_location, store_name: store_name))
         get_data.stdout
       end
 

@@ -22,51 +22,41 @@ module Win32
     module Mixin
       module Helper
         # PSCommand to search certificate from thumbprint and either turn it into a pem or return a path to a pfx object
-        def cert_ps_cmd(thumbprint, store_location: "LocalMachine", export_password: "1234", output_path: "")
+        def key_ps_cmd(thumbprint, store_location: "LocalMachine", store_name: "My")
+          <<-CMD
+            $Location = [Security.Cryptography.X509Certificates.StoreLocation]::#{store_location}
+            $StoreName = [Security.Cryptography.X509Certificates.StoreName]::#{store_name}
+            $Store = New-Object System.Security.Cryptography.X509Certificates.X509Store -ArgumentList $Location
+            $OpenFlags = [System.Security.Cryptography.X509Certificates.OpenFlags]::ReadOnly
+            $Store.Open($OpenFlags)
+            $mycert = $Store.Certificates | Where-Object {$_.Thumbprint -eq "#{thumbprint}"}
+            $mykey = $mycert.PrivateKey
+            $decrypted_key = $mykey.ExportRSAPrivateKey()
+            if ($null -ne $decrypted_key){
+              $content = @(
+              '-----BEGIN RSA PRIVATE KEY-----'
+                  [System.Convert]::ToBase64String($decrypted_key, 'InsertLineBreaks')
+              '-----END RSA PRIVATE KEY-----'
+              )
+            }
+            $content
+          CMD
+        end
+
+        def cert_ps_cmd(thumbprint, store_location: "LocalMachine", store_name: "My")
           <<-EOH
-            $cert = Get-ChildItem Cert:\'#{store_location}' -Recurse | Where { $_.Thumbprint -eq '#{thumbprint}' }
+            $cert = Get-ChildItem Cert:\\#{store_location}\\#{store_name} -Recurse | Where { $_.Thumbprint -eq "#{thumbprint}" }
 
-            # The function and the code below test to see if a) the cert has a private key and b) it has a
-            # Enhanced Usage of Client Auth. Those 2 attributes would mean this is a pfx-able object
-            function test_cert_values{
-              $usagelist = ($cert).EnhancedKeyUsageList
-              foreach($use in $usagelist){
-                if($use.FriendlyName -like "Client Authentication" ){
-                    return $true
-                }
-              }
-              return $false
-            }
-
-            $result = test_cert_values
-
-            $output_path = "#{output_path}"
-            if([string]::IsNullOrEmpty($output_path)){
-              $temproot = [System.IO.Path]::GetTempPath()
-            }
-            else{
-              $temproot = $output_path
-            }
-
-            if((($cert).HasPrivateKey) -and ($result -eq $true)){
-              $file_name = '#{thumbprint}'
-              $file_path = $(Join-Path -Path $temproot -ChildPath "$file_name.pfx")
-              $mypwd = ConvertTo-SecureString -String '#{export_password}' -Force -AsPlainText
-              $cert | Export-PfxCertificate -FilePath $file_path -Password $mypwd | Out-Null
-              $file_path
-            }
-            else {
-              $content = $null
-              if($cert -ne $null)
-              {
+            $content = $null
+            if($null -ne $cert)
+            {
               $content = @(
                 '-----BEGIN CERTIFICATE-----'
                 [System.Convert]::ToBase64String($cert.RawData, 'InsertLineBreaks')
                 '-----END CERTIFICATE-----'
               )
-              }
-              $content
             }
+            $content
           EOH
         end
 

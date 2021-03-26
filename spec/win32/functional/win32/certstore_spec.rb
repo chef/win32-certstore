@@ -34,34 +34,15 @@ RSpec.describe Win32::Certstore, :windows_only do
     # passing valid thumbprint
     it "returns the certificate_object if found" do
       thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829c"
-      expect(@store).to receive(:cert_get).with(thumbprint).and_return(cert_pem)
-      @store.get(thumbprint)
+      expect(@store).to receive(:cert_get).with(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My").and_return(cert_pem)
+      @store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My")
     end
 
     # passing invalid thumbprint
     it "returns nil if certificate not found" do
       thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829cab"
-      expect(@store).to receive(:cert_get).with(thumbprint).and_return(nil)
-      @store.get(thumbprint)
-    end
-  end
-
-  describe "#get_pfx" do
-    before { add_pfx }
-    let(:cert_pfx) { "d77803da081a5a556ab44c9cc74818767782c84b.pfx" }
-
-    # passing valid thumbprint
-    it "returns the certificate_object if found" do
-      thumbprint = "d77803da081a5a556ab44c9cc74818767782c84b"
-      out_put = @store.get_pfx(thumbprint, export_password: "1234")
-      file = ::File.basename(out_put.strip)
-      expect(file).to eq(cert_pfx)
-    end
-
-    # passing invalid thumbprint
-    it "returns nil if certificate not found" do
-      thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829cab"
-      expect(@store.get_pfx(thumbprint, export_password: "1234")).to eq("")
+      expect(@store).to receive(:cert_get).with(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My").and_return(nil)
+      @store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My")
     end
   end
 
@@ -109,15 +90,15 @@ RSpec.describe Win32::Certstore, :windows_only do
     # passing valid thumbprint
     it "returns the certificate_object if found" do
       thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829c"
-      expect(@store).to receive(:cert_get).with(thumbprint).and_return(cert_pem)
-      @store.get(thumbprint)
+      expect(@store).to receive(:cert_get).with(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My").and_return(cert_pem)
+      @store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My")
     end
 
     # passing invalid thumbprint
     it "returns nil if certificate not found" do
       thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829cab"
-      expect(@store).to receive(:cert_get).with(thumbprint).and_return(nil)
-      @store.get(thumbprint)
+      expect(@store).to receive(:cert_get).with(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My").and_return(nil)
+      @store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My")
     end
   end
 
