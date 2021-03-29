@@ -244,12 +244,6 @@ module Win32
         get_data.stdout
       end
 
-      # Get Private Key, requires PowerShell 7.1.2 and .Net 5.o or later
-      def get_cert_key(thumbprint, store_location:, store_name: )
-        get_data = powershell_exec!(key_ps_cmd(thumbprint, store_location: store_location, store_name: store_name))
-        get_data.stdout
-      end
-
       # Format pem
       def format_pem(cert_pem)
         cert_pem.delete("\r")

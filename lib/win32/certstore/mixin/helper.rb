@@ -21,28 +21,6 @@ module Win32
   class Certstore
     module Mixin
       module Helper
-        # PSCommand to search certificate from thumbprint and either turn it into a pem or return a path to a pfx object
-        def key_ps_cmd(thumbprint, store_location: "LocalMachine", store_name: "My")
-          <<-CMD
-            $Location = [Security.Cryptography.X509Certificates.StoreLocation]::#{store_location}
-            $StoreName = [Security.Cryptography.X509Certificates.StoreName]::#{store_name}
-            $Store = New-Object System.Security.Cryptography.X509Certificates.X509Store -ArgumentList $Location
-            $OpenFlags = [System.Security.Cryptography.X509Certificates.OpenFlags]::ReadOnly
-            $Store.Open($OpenFlags)
-            $mycert = $Store.Certificates | Where-Object {$_.Thumbprint -eq "#{thumbprint}"}
-            $mykey = $mycert.PrivateKey
-            $decrypted_key = $mykey.ExportRSAPrivateKey()
-            if ($null -ne $decrypted_key){
-              $content = @(
-              '-----BEGIN RSA PRIVATE KEY-----'
-                  [System.Convert]::ToBase64String($decrypted_key, 'InsertLineBreaks')
-              '-----END RSA PRIVATE KEY-----'
-              )
-            }
-            $content
-          CMD
-        end
-
         def cert_ps_cmd(thumbprint, store_location: "LocalMachine", store_name: "My")
           <<-EOH
             $cert = Get-ChildItem Cert:\\#{store_location}\\#{store_name} -Recurse | Where { $_.Thumbprint -eq "#{thumbprint}" }

@@ -78,17 +78,6 @@ module Win32
       cert_get(certificate_thumbprint, store_name: store_name, store_location: store_location)
     end
 
-    # Returns a filepath to a PKCS12 container. The filepath is in a temporary folder so normal housekeeping by the OS should clear it.
-    # However, you should delete it yourself anyway.
-    # @param [certificate_thumbprint<string>] Is the thumbprint of the pfx blob you want to capture
-    # @param [store_location:<string>] A location in the Cert store where the pfx is located, typically 'LocalMachine'
-    # @param [store_name:<string>] A store name from the approved list of stores : MY, ROOT, CA, etc.
-    # @return [Object] of certificate in OpenSSL::X509 format
-    # NOTE: This only works with .NET 5.0 and PowerShell 7.1.2 or later.
-    def get_key(certificate_thumbprint, store_location: @store_location, store_name: @store_name)
-      get_cert_key(certificate_thumbprint, store_location: store_location, store_name: store_name)
-    end
-
     # Returns all the certificates in a store
     # @param [nil]
     # @return [Array] array of certificates list

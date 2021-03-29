@@ -259,7 +259,7 @@ describe Win32::Certstore, :windows_only do
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
       end
-      it "returns nil" do
+      it "raises Error" do
         store = certstore.open(store_name)
         expect { store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: store_name) }.to raise_error(ArgumentError, "Unable to retrieve the certificate")
       end
