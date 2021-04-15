@@ -36,14 +36,12 @@ module Win32
           ustring += "\000\000" if ustring.length == 0 || ustring[-1].chr != "\000"
 
           # encode it all as UTF-16LE AKA Windows Wide Character AKA Windows Unicode
-          ustring = begin
-            if ustring.respond_to?(:encode)
-              ustring.encode("UTF-16LE")
-            else
-              require "iconv"
-              Iconv.conv("UTF-16LE", "UTF-8", ustring)
-            end
-          end
+          ustring = if ustring.respond_to?(:encode)
+                      ustring.encode("UTF-16LE")
+                    else
+                      require "iconv"
+                      Iconv.conv("UTF-16LE", "UTF-8", ustring)
+                    end
           ustring
         end
 
@@ -53,14 +51,12 @@ module Win32
           wstring = wstring.force_encoding("UTF-16LE") if wstring.respond_to?(:force_encoding)
 
           # encode it all as UTF-8
-          wstring = begin
-            if wstring.respond_to?(:encode)
-              wstring.encode("UTF-8")
-            else
-              require "iconv"
-              Iconv.conv("UTF-8", "UTF-16LE", wstring)
-            end
-          end
+          wstring = if wstring.respond_to?(:encode)
+                      wstring.encode("UTF-8")
+                    else
+                      require "iconv"
+                      Iconv.conv("UTF-8", "UTF-16LE", wstring)
+                    end
           # remove trailing CRLF and NULL characters
           wstring.strip!
           wstring
