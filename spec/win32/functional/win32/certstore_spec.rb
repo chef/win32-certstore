@@ -39,10 +39,9 @@ RSpec.describe Win32::Certstore, :windows_only do
     end
 
     # passing invalid thumbprint
-    it "returns nil if certificate not found" do
+    it "returns ArgumentError if certificate not found" do
       thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829cab"
-      expect(@store).to receive(:cert_get).with(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My").and_return(nil)
-      @store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My")
+      expect { @store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My") }.to raise_error(ArgumentError)
     end
   end
 
