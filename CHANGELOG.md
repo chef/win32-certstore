@@ -15,13 +15,15 @@
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v0.6.1](https://github.com/chef/win32-certstore/tree/v0.6.1) (2021-04-15)
+<!-- latest_stable_release -->
+
 ## [v0.6.1](https://github.com/chef/win32-certstore/tree/v0.6.1) (2021-03-04)
 
 #### Merged Pull Requests
 - added support to properly export a pfx object to disk [#75](https://github.com/chef/win32-certstore/pull/75) ([johnmccrae](https://github.com/johnmccrae))
 - Remove the release notes [#77](https://github.com/chef/win32-certstore/pull/77) ([tas50](https://github.com/tas50))
 - refactoring the helper.rb to put a default for output_path. Generic calls to cert_ps_cmd fail since they won&#39;t provide a path by default [#76](https://github.com/chef/win32-certstore/pull/76) ([johnmccrae](https://github.com/johnmccrae))
-<!-- latest_stable_release -->
 
 ## [v0.5.3](https://github.com/chef/win32-certstore/tree/v0.5.3) (2021-02-01)
 
