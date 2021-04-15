@@ -1,22 +1,19 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.6.2 -->
+<!-- latest_release -->
+<!-- latest_release -->
+
+<!-- release_rollup -->
+<!-- release_rollup -->
+
+<!-- latest_stable_release -->
 ## [v0.6.2](https://github.com/chef/win32-certstore/tree/v0.6.2) (2021-04-15)
 
 #### Merged Pull Requests
 - Updated Certstore to correctly understand CurrentUser vs LocalMachine stores [#79](https://github.com/chef/win32-certstore/pull/79) ([johnmccrae](https://github.com/johnmccrae))
-<!-- latest_release -->
-
-<!-- release_rollup since=0.6.1 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Updated Certstore to correctly understand CurrentUser vs LocalMachine stores [#79](https://github.com/chef/win32-certstore/pull/79) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.2 -->
-<!-- release_rollup -->
-
 <!-- latest_stable_release -->
+
 ## [v0.6.1](https://github.com/chef/win32-certstore/tree/v0.6.1) (2021-04-15)
-<!-- latest_stable_release -->
 
 ## [v0.6.1](https://github.com/chef/win32-certstore/tree/v0.6.1) (2021-03-04)
 
