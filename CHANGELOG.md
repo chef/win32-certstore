@@ -1,9 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release -->
+<!-- latest_release 0.6.3 -->
+## [v0.6.3](https://github.com/chef/win32-certstore/tree/v0.6.3) (2021-04-29)
+
+#### Merged Pull Requests
+- Upgrade to GitHub-native Dependabot [#80](https://github.com/chef/win32-certstore/pull/80) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=0.6.2 -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- Upgrade to GitHub-native Dependabot [#80](https://github.com/chef/win32-certstore/pull/80) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot])) <!-- 0.6.3 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
