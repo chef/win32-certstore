@@ -11,4 +11,4 @@ StackOverflow discussions that are relevant]
 
 - [ ] New functionality includes tests
 - [ ] All tests pass
-- [ ] All commits have been signed-off for the Developer Certificate of Origin. See <https://github.com/chef/chef/blob/master/CONTRIBUTING.md#developer-certification-of-origin-dco>
+- [ ] All commits have been signed-off for the Developer Certificate of Origin. See <https://github.com/chef/chef/blob/main/CONTRIBUTING.md#developer-certification-of-origin-dco>
