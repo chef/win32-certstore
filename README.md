@@ -1,5 +1,5 @@
 # win32-certstore
-[![Build status](https://badge.buildkite.com/ba68b9ac04486e2ddf6587b35c1eac00260d4216829c289ce6.svg?branch=master)](https://buildkite.com/chef-oss/chef-win32-certstore-master-verify)
+[![Build status](https://badge.buildkite.com/ba68b9ac04486e2ddf6587b35c1eac00260d4216829c289ce6.svg?branch=main)](https://buildkite.com/chef-oss/chef-win32-certstore-main-verify)
 [![Gem Version](https://badge.fury.io/rb/win32-certstore.svg)](https://badge.fury.io/rb/win32-certstore)
 
 Ruby library for accessing the certificate store on Microsoft Windows:
@@ -205,7 +205,7 @@ Ruby 2.5+ is required.
 
 ## Contributing
 
-For information on contributing to this project see https://github.com/chef/chef/blob/master/CONTRIBUTING.md
+For information on contributing to this project see https://github.com/chef/chef/blob/main/CONTRIBUTING.md
 
 More information on the contribution process for Chef projects can be found in the [Chef Contributions document](http://docs.chef.io/community_contributions.html).
 
