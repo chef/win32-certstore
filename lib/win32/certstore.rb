@@ -78,6 +78,17 @@ module Win32
       cert_get(certificate_thumbprint, store_name: store_name, store_location: store_location)
     end
 
+    # Return `OpenSSL::X509` certificate object if present otherwise raise a "Certificate not found!" error
+    # @param request [thumbprint<string>] of certificate
+    # @return [Object] of certificates in OpenSSL::X509 format
+    def get!(certificate_thumbprint, store_name: @store_name, store_location: @store_location)
+      cert_pem = cert_get(certificate_thumbprint, store_name: store_name, store_location: store_location)
+
+      raise ArgumentError, "Unable to retrieve the certificate" if cert_pem.empty?
+
+      cert_pem
+    end
+
     # Returns all the certificates in a store
     # @param [nil]
     # @return [Array] array of certificates list

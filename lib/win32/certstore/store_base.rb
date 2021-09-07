@@ -218,8 +218,6 @@ module Win32
 
       # Verify OpenSSL::X509::Certificate object
       def verify_certificate(cert_pem)
-        return "Certificate not found" if cert_pem.empty?
-
         valid_duration?(build_openssl_obj(cert_pem))
       end
 
