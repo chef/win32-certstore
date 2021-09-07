@@ -92,13 +92,8 @@ module Win32
         thumbprint = update_thumbprint(certificate_thumbprint)
         cert_pem = get_cert_pem(thumbprint, store_name: store_name, store_location: store_location)
         cert_pem = format_pem(cert_pem)
-        if cert_pem.empty?
-          raise ArgumentError, "Unable to retrieve the certificate"
-        end
 
-        unless cert_pem.empty?
-          build_openssl_obj(cert_pem)
-        end
+        cert_pem.empty? ? cert_pem : build_openssl_obj(cert_pem)
       end
 
       # Listing certificate of open certstore and return list in json
