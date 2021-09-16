@@ -142,6 +142,8 @@ module Win32
         thumbprint = update_thumbprint(certificate_thumbprint)
         cert_pem = get_cert_pem(thumbprint, store_name: store_name, store_location: store_location)
         cert_pem = format_pem(cert_pem)
+        return "Certificate not found" if cert_pem.empty?
+
         verify_certificate(cert_pem)
       end
 

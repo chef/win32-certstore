@@ -300,7 +300,7 @@ describe Win32::Certstore, :windows_only do
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
       end
-      it "returns Certificate not found" do
+      it "returns false" do
         store = certstore.open(store_name)
         expect(store.valid?(thumbprint)).to eql(false)
       end

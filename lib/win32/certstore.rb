@@ -114,7 +114,13 @@ module Win32
     # @param request[thumbprint<string>] of certificate
     # @return [true, false] only true or false
     def valid?(certificate_thumbprint, store_location: "", store_name: "")
-      cert_validate(certificate_thumbprint, store_location: store_location, store_name: store_name)
+      cert_validate(certificate_thumbprint, store_location: store_location, store_name: store_name).yield_self do |x|
+        if x.is_a?(TrueClass) || x.is_a?(FalseClass)
+          x
+        else
+          false
+        end
+      end
     end
 
     # To close and destroy pointer of open certificate store handler
