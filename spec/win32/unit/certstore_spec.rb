@@ -29,7 +29,7 @@ describe Win32::Certstore, :windows_only do
   let(:certbase) { Win32::Certstore::StoreBase }
   let(:certstore_handler) { Win32::Certstore.new(store_name, store_location: store_location) }
 
-    describe "#cert_list" do
+  describe "#cert_list" do
     context "When passing empty certificate store name to the CurrentUser store" do
       let(:store_name) { "" }
       it "raises ArgumentError" do
@@ -41,7 +41,7 @@ describe Win32::Certstore, :windows_only do
       let(:store_name) { "Chef" }
       it "raises ArgumentError" do
         # expect { certstore.open(store_name) }.not_to raise_error(ArgumentError, "Empty Certificate Store.")
-        expect { certstore.open(store_name, store_location: store_location) }.not_to raise_error()
+        expect { certstore.open(store_name, store_location: store_location) }.not_to raise_error
       end
     end
 
@@ -288,7 +288,7 @@ describe Win32::Certstore, :windows_only do
     end
   end
 
-    describe "#cert_search" do
+  describe "#cert_search" do
     context "When passing empty token" do
       let(:store_name) { "root" }
       let(:token) { " " }
@@ -387,7 +387,7 @@ describe Win32::Certstore, :windows_only do
   let(:certstore) { Win32::Certstore }
   let(:certstore_handler) { Win32::Certstore.new(store_name, store_location: store_location) }
 
-    describe "#cert_list" do
+  describe "#cert_list" do
     context "When passing empty certificate store name to the LocalMachine store" do
       let(:store_name) { "" }
       it "raises ArgumentError" do

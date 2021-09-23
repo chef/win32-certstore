@@ -77,8 +77,6 @@ RSpec.describe Win32::Certstore, :windows_only do
   end
 end
 
-
-
 RSpec.describe Win32::Certstore, :windows_only do
   before { open_cert_store("My", CERT_SYSTEM_STORE_CURRENT_USER) }
   after(:each) do
