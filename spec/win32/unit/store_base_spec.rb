@@ -53,7 +53,7 @@ describe Win32::Certstore, :windows_only do
     context "other than PFX certificates" do
       it "raises an error" do
         expect { subject.cert_add_pfx(certstore_handler, pem_path, password) }
-          .to raise_error(SystemCallError, "An error occurred during encode or decode operation. - Unable to Add a PFX certificate.")
+          .to raise_error(SystemCallError, "The operation completed successfully. - Unable to Add a PFX certificate.")
       end
     end
     context "valid arguments" do

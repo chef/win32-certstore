@@ -43,7 +43,9 @@ module Win32
 
         # Validate thumbprint
         def validate_thumbprint(cert_thumbprint)
-          if cert_thumbprint.nil? || cert_thumbprint.strip.empty?
+          if cert_thumbprint.nil? || cert_thumbprint.empty? || cert_thumbprint.strip.empty?
+            raise ArgumentError, "Invalid certificate thumbprint."
+          elsif !cert_thumbprint.match?(/[0-9A-Fa-f]/) || cert_thumbprint.length != 40
             raise ArgumentError, "Invalid certificate thumbprint."
           end
         end

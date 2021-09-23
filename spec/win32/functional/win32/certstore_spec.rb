@@ -19,36 +19,42 @@
 require "spec_helper"
 require "openssl" unless defined?(OpenSSL)
 
+# Now testing new code and what happens if you want to import something into CurrentUser - 1/29/2021
+# Defining the store constant here as the spec doesn't read from the values in the crypto.rb file.
+CERT_SYSTEM_STORE_LOCAL_MACHINE = 0x00020000
+CERT_SYSTEM_STORE_CURRENT_USER = 0x00010000
+
 # Testing loading certs into LocalMachine - this is testing legacy usage
 RSpec.describe Win32::Certstore, :windows_only do
-  before { open_cert_store("My") }
+  before { open_cert_store("My", CERT_SYSTEM_STORE_LOCAL_MACHINE ) }
   after(:each) do
     delete_cert
     close_store
   end
 
-  describe "#get" do
+  describe "#get from LocalMachine" do
     before { add_cert }
     let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
 
     # passing valid thumbprint
     it "returns the certificate_object if found" do
       thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829c"
-      expect(@store).to receive(:cert_get).with(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My").and_return(cert_pem)
-      @store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My")
+      expect(@store).to receive(:cert_get).with(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, store_name: "My").and_return(cert_pem)
+      @store.get(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, store_name: "My")
     end
 
     # passing invalid thumbprint
-    it "returns ArgumentError if certificate not found" do
+    it "returns nil if certificate not found", :focus do
       thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829cab"
-      expect { @store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: "My") }.to raise_error(ArgumentError)
+      expect(@store).to receive(:cert_get).with(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, store_name: "My").and_return(nil)
+      @store.get(thumbprint, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE, store_name: "My")
     end
   end
 
   private
 
-  def open_cert_store(store)
-    @store = Win32::Certstore.open(store)
+  def open_cert_store(store, store_location)
+    @store = Win32::Certstore.open(store, store_location: store_location)
   end
 
   def add_cert
@@ -71,9 +77,7 @@ RSpec.describe Win32::Certstore, :windows_only do
   end
 end
 
-# Now testing new code and what happens if you want to import something into CurrentUser - 1/29/2021
-# Defining the store constant here as the spec doesn't read from the values in the crypto.rb file.
-CERT_SYSTEM_STORE_CURRENT_USER = 0x00010000
+
 
 RSpec.describe Win32::Certstore, :windows_only do
   before { open_cert_store("My", CERT_SYSTEM_STORE_CURRENT_USER) }
@@ -82,7 +86,7 @@ RSpec.describe Win32::Certstore, :windows_only do
     close_store
   end
 
-  describe "#get" do
+  describe "#get from CurrentUser" do
     before { add_cert }
     let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
 

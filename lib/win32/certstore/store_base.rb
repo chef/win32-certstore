@@ -89,16 +89,10 @@ module Win32
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_get(certificate_thumbprint, store_name:, store_location:)
         validate_thumbprint(certificate_thumbprint)
-        thumbprint = update_thumbprint(certificate_thumbprint)
-        cert_pem = get_cert_pem(thumbprint, store_name: store_name, store_location: store_location)
-        cert_pem = format_pem(cert_pem)
-        if cert_pem.empty?
-          raise ArgumentError, "Unable to retrieve the certificate"
-        end
-
-        unless cert_pem.empty?
-          build_openssl_obj(cert_pem)
-        end
+        cert_pem = get_cert_pem(certificate_thumbprint, store_name: store_name, store_location: store_location)
+        verify_certificate(cert_pem)
+        # cert_pem = format_pem(cert_pem)
+        format_pem(cert_pem)
       end
 
       # Listing certificate of open certstore and return list in json
@@ -124,10 +118,10 @@ module Win32
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_delete(store_handler, certificate_thumbprint)
         validate_thumbprint(certificate_thumbprint)
-        thumbprint = update_thumbprint(certificate_thumbprint)
+
         cert_delete_flag = false
         begin
-          cert_args = cert_find_args(store_handler, thumbprint)
+          cert_args = cert_find_args(store_handler, certificate_thumbprint)
           pcert_context = CertFindCertificateInStore(*cert_args)
           unless pcert_context.null?
             cert_delete_flag = CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pcert_context)) || lookup_error
@@ -144,8 +138,7 @@ module Win32
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_validate(certificate_thumbprint, store_location:, store_name:)
         validate_thumbprint(certificate_thumbprint)
-        thumbprint = update_thumbprint(certificate_thumbprint)
-        cert_pem = get_cert_pem(thumbprint, store_name: store_name, store_location: store_location)
+        cert_pem = get_cert_pem(certificate_thumbprint, store_name: store_name, store_location: store_location)
         cert_pem = format_pem(cert_pem)
         verify_certificate(cert_pem)
       end
@@ -223,7 +216,7 @@ module Win32
 
       # Verify OpenSSL::X509::Certificate object
       def verify_certificate(cert_pem)
-        return "Certificate not found" if cert_pem.empty?
+        raise ArgumentError, "Certificate not found" if cert_pem.empty?
 
         valid_duration?(build_openssl_obj(cert_pem))
       end
