@@ -131,9 +131,10 @@ describe Win32::Certstore, :windows_only do
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
       end
-      it "raises ArgumentError" do
+      it "returns empty string" do
         store = certstore.open(store_name)
-        expect { store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: store_name) }.to raise_error(ArgumentError, "Unable to retrieve the certificate")
+        cert_obj = store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: store_name)
+        expect(cert_obj).to be_empty
       end
     end
 
@@ -259,9 +260,10 @@ describe Win32::Certstore, :windows_only do
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
       end
-      it "raises Error" do
+      it "returns empty string" do
         store = certstore.open(store_name)
-        expect { store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: store_name) }.to raise_error(ArgumentError, "Unable to retrieve the certificate")
+        cert_obj = store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: store_name)
+        expect(cert_obj).to be_empty
       end
     end
   end
@@ -298,9 +300,9 @@ describe Win32::Certstore, :windows_only do
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
       end
-      it "returns Certificate not found" do
+      it "returns false" do
         store = certstore.open(store_name)
-        expect(store.valid?(thumbprint)).to eql("Certificate not found")
+        expect(store.valid?(thumbprint)).to eql(false)
       end
     end
 
@@ -597,9 +599,10 @@ describe Win32::Certstore, :windows_only do
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
       end
-      it "returns nil" do
+      it "returns empty string" do
         store = certstore.open(store_name, store_location: store_location)
-        expect { store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: store_name) }.to raise_error(ArgumentError, "Unable to retrieve the certificate")
+        cert_obj = store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: store_name)
+        expect(cert_obj).to be_empty
       end
     end
 
@@ -732,9 +735,10 @@ describe Win32::Certstore, :windows_only do
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
       end
-      it "returns nil" do
+      it "returns empty string" do
         store = certstore.open(store_name, store_location: store_location)
-        expect { store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: store_name) }.to raise_error(ArgumentError, "Unable to retrieve the certificate")
+        cert_obj = store.get(thumbprint, store_location: CERT_SYSTEM_STORE_CURRENT_USER, store_name: store_name)
+        expect(cert_obj).to be_empty
       end
     end
   end
@@ -775,9 +779,9 @@ describe Win32::Certstore, :windows_only do
       before(:each) do
         allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return("")
       end
-      it "returns Certificate not found" do
+      it "returns false" do
         store = certstore.open(store_name, store_location: store_location)
-        expect(store.valid?(thumbprint)).to eql("Certificate not found")
+        expect(store.valid?(thumbprint)).to eql(false)
       end
     end
 
