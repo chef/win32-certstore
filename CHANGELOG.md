@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.6.4 -->
-## [v0.6.4](https://github.com/chef/win32-certstore/tree/v0.6.4) (2021-08-31)
+<!-- latest_release 0.6.5 -->
+## [v0.6.5](https://github.com/chef/win32-certstore/tree/v0.6.5) (2021-09-28)
 
 #### Merged Pull Requests
-- Replace deprecated --without flag with bundle config [#82](https://github.com/chef/win32-certstore/pull/82) ([jayashrig158](https://github.com/jayashrig158))
+- don&#39;t raise error in get if certificate is empty [#84](https://github.com/chef/win32-certstore/pull/84) ([rishichawda](https://github.com/rishichawda))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.6.2 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- don&#39;t raise error in get if certificate is empty [#84](https://github.com/chef/win32-certstore/pull/84) ([rishichawda](https://github.com/rishichawda)) <!-- 0.6.5 -->
 - Replace deprecated --without flag with bundle config [#82](https://github.com/chef/win32-certstore/pull/82) ([jayashrig158](https://github.com/jayashrig158)) <!-- 0.6.4 -->
 - Upgrade to GitHub-native Dependabot [#80](https://github.com/chef/win32-certstore/pull/80) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot])) <!-- 0.6.3 -->
 <!-- release_rollup -->
