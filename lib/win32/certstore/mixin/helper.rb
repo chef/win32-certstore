@@ -22,17 +22,20 @@ module Win32
     module Mixin
       module Helper
         def cert_ps_cmd(thumbprint, store_location: "LocalMachine", store_name: "My")
+          # the PowerShell block below uses a "Here-String" - it is explicitly formatted against the left margin.
           <<-EOH
-            $cert = Get-ChildItem Cert:\\#{store_location}\\#{store_name} -Recurse | Where { $_.Thumbprint -eq "#{thumbprint}" }
+            $cert = Get-ChildItem Cert:\\#{store_location}\\#{store_name} -Recurse | Where-Object { $_.Thumbprint -eq "#{thumbprint}" }
 
+            $certdata = [System.Convert]::ToBase64String($cert.RawData, 'InsertLineBreaks')
             $content = $null
             if($null -ne $cert)
             {
-              $content = @(
-                '-----BEGIN CERTIFICATE-----'
-                [System.Convert]::ToBase64String($cert.RawData, 'InsertLineBreaks')
-                '-----END CERTIFICATE-----'
-              )
+              $content =
+@"
+-----BEGIN CERTIFICATE-----
+$($certdata)
+-----END CERTIFICATE-----
+"@
             }
             $content
           EOH

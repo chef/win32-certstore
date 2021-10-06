@@ -29,23 +29,23 @@ module Win32
     include Win32::Certstore::Mixin::String
     include Win32::Certstore::StoreBase
 
-    attr_accessor :store_name
+    attr_accessor :store_name, :store_location
 
     # Initializes a new instance of a certificate store.
     # takes 2 parameters - the store name (My, Root, etc) and the location (CurrentUser or LocalMachine), it defaults to LocalMachine for backwards compatibility
-    def initialize(store_name, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE)
+    def initialize(store_name, store_location)
       @store_name = store_name
       @store_location = store_location
-      @certstore_handler = open(store_name, store_location: store_location)
+      @certstore_handler = open(store_name, store_location)
     end
 
     # To open given certificate store
     def self.open(store_name, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE)
       validate_store(store_name)
       if block_given?
-        yield new(store_name, store_location: store_location)
+        yield new(store_name, store_location)
       else
-        new(store_name, store_location: store_location)
+        new(store_name, store_location)
       end
     end
 
@@ -74,15 +74,15 @@ module Win32
     # Return `OpenSSL::X509` certificate object
     # @param request [thumbprint<string>] of certificate
     # @return [Object] of certificates in OpenSSL::X509 format
-    def get(certificate_thumbprint, store_name: @store_name, store_location: @store_location)
-      cert_get(certificate_thumbprint, store_name: store_name, store_location: store_location)
+    def get(certificate_thumbprint)
+      cert_get(certificate_thumbprint)
     end
 
     # Return `OpenSSL::X509` certificate object if present otherwise raise a "Certificate not found!" error
     # @param request [thumbprint<string>] of certificate
     # @return [Object] of certificates in OpenSSL::X509 format
-    def get!(certificate_thumbprint, store_name: @store_name, store_location: @store_location)
-      cert_pem = cert_get(certificate_thumbprint, store_name: store_name, store_location: store_location)
+    def get!(certificate_thumbprint)
+      cert_pem = cert_get(certificate_thumbprint)
 
       raise ArgumentError, "Unable to retrieve the certificate" if cert_pem.empty?
 
@@ -110,11 +110,15 @@ module Win32
       cert_search(certstore_handler, search_token)
     end
 
+    def get_thumbprint(search_token)
+      cert_lookup_by_token(search_token)
+    end
+
     # Validates a certificate in a certificate store on the basis of time validity
     # @param request[thumbprint<string>] of certificate
     # @return [true, false] only true or false
-    def valid?(certificate_thumbprint, store_location: "", store_name: "")
-      cert_validate(certificate_thumbprint, store_location: store_location, store_name: store_name).yield_self do |x|
+    def valid?(certificate_thumbprint)
+      cert_validate(certificate_thumbprint).yield_self do |x|
         if x.is_a?(TrueClass) || x.is_a?(FalseClass)
           x
         else
@@ -139,7 +143,7 @@ module Win32
 
     # To open certstore and return open certificate store pointer
 
-    def open(store_name, store_location: CERT_SYSTEM_STORE_LOCAL_MACHINE)
+    def open(store_name, store_location)
       certstore_handler = CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, nil, store_location, wstring(store_name))
       unless certstore_handler
         last_error = FFI::LastError.error
