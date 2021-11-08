@@ -20,6 +20,7 @@ require_relative "mixin/string"
 require_relative "mixin/unicode"
 require "openssl" unless defined?(OpenSSL)
 require "json" unless defined?(JSON)
+require "chef-powershell"
 
 # 10-6-2021 - temporarily commenting out powershell_exec until it is moved to its own gem
 
@@ -37,7 +38,7 @@ module Win32
       include Win32::Certstore::Mixin::String
       include Win32::Certstore::Mixin::Unicode
       include Win32::Certstore::Mixin::Helper
-      # include Chef::Mixin::PowershellExec
+      include Chef_PowerShell::ChefPowerShell::PowerShellExec
 
       # Adding new certification in open certificate and return boolean
       # store_handler => Open certificate store handler
@@ -173,7 +174,7 @@ module Win32
       end
 
       # how can I find a cert if I don't have the thumbprint?
-      def cert_lookup_by_token(search_token, store_name: @store_name, store_location: @store_location)
+      def cert_lookup_by_token(search_token, store_name: @store_name, store_location: @store_location, timeout: -1)
         raise ArgumentError, "Invalid search token" if !search_token || search_token.strip.empty?
 
         converted_store = if store_location == CERT_SYSTEM_STORE_LOCAL_MACHINE || store_location == 131072
@@ -182,11 +183,11 @@ module Win32
                             "CurrentUser"
                           end
         powershell_cmd = <<~EOH
-            $result = Get-ChildItem -Path Cert:\\#{converted_store}\\#{store_name} | Where-Object { $_.FriendlyName -match "#{search_token.strip}" } | Select-Object Thumbprint
+            $result = Get-ChildItem -Path Cert:\\#{converted_store}\\#{store_name} | Where-Object { $_.Subject -match "#{search_token.strip}" } | Select-Object Thumbprint
             return $result[0].Thumbprint
         EOH
 
-        powershell_exec!(powershell_cmd).result
+        powershell_exec!(powershell_cmd, :powershell, timeout: timeout).result
 
       rescue Chef::PowerShell::CommandFailed
         raise ArgumentError, "Certificate not found while looking for certificate : #{search_token} in store : #{store_name} at this location : #{store_location}"
@@ -250,13 +251,13 @@ module Win32
       end
 
       # Get certificate pem
-      def get_cert_pem(thumbprint, store_name: @store_name, store_location: @store_location)
+      def get_cert_pem(thumbprint, store_name: @store_name, store_location: @store_location, timeout: -1)
         converted_store = if store_location == CERT_SYSTEM_STORE_LOCAL_MACHINE || store_location == 131072
                             "LocalMachine"
                           else
                             "CurrentUser"
                           end
-        get_data = powershell_exec!(cert_ps_cmd(thumbprint, store_location: converted_store, store_name: store_name))
+        get_data = powershell_exec!(cert_ps_cmd(thumbprint, store_location: converted_store, store_name: store_name), :powershell, timeout: timeout)
         get_data.result
       rescue Chef::PowerShell::CommandFailed
         raise ArgumentError, "PowerShell threw an error retreiving the certificate. You asked for a cert with this thumbprint : #{thumbprint}, located in this store : #{store_name}, at this location : #{store_location}"

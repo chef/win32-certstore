@@ -4,6 +4,7 @@ source "https://rubygems.org"
 gemspec
 
 gem "mixlib-shellout", "< 3.2.3"
+gem "chef-powershell", ">= 1.0.4"
 
 if Gem.ruby_version.to_s.start_with?("2.5")
   # 16.7.23 required ruby 2.6+
