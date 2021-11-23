@@ -264,7 +264,7 @@ module Win32
                           end
         get_data = powershell_exec!(cert_ps_cmd(thumbprint, store_location: converted_store, store_name: store_name), :powershell, timeout: timeout)
         get_data.result
-      rescue Chef::PowerShell::CommandFailed
+      rescue Chef_PowerShell::PowerShellExceptions::PowerShellCommandFailed
         raise ArgumentError, "PowerShell threw an error retreiving the certificate. You asked for a cert with this thumbprint : #{thumbprint}, located in this store : #{store_name}, at this location : #{store_location}"
       end
 
