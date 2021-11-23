@@ -19,9 +19,9 @@
 require "spec_helper"
 require "openssl" unless defined?(OpenSSL)
 
-CERT_SYSTEM_STORE_LOCAL_MACHINE = 0x00020000
-CERT_SYSTEM_STORE_CURRENT_USER = 0x00010000
-X509_ASN_ENCODING = 0x00000001
+# CERT_SYSTEM_STORE_LOCAL_MACHINE = 0x00020000
+# CERT_SYSTEM_STORE_CURRENT_USER = 0x00010000
+# X509_ASN_ENCODING = 0x00000001
 
 # Testing loading certs into LocalMachine - this is testing legacy usage
 RSpec.describe Win32::Certstore, :windows_only do
@@ -108,7 +108,6 @@ end
 
 # Now testing new code and what happens if you want to import something into CurrentUser - 1/29/2021
 # Defining the store constant here as the spec doesn't read from the values in the crypto.rb file.
-CERT_SYSTEM_STORE_CURRENT_USER = 0x00010000
 
 RSpec.describe Win32::Certstore, :windows_only do
   let(:store_location) { CERT_SYSTEM_STORE_CURRENT_USER }

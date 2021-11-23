@@ -43,7 +43,7 @@ module Win32
 
         # Validate thumbprint
         def validate_thumbprint(cert_thumbprint)
-          if cert_thumbprint.nil? || cert_thumbprint.strip.empty?
+          if cert_thumbprint.nil? || cert_thumbprint.empty? || cert_thumbprint.strip.empty?
             raise ArgumentError, "Invalid certificate thumbprint."
           end
         end

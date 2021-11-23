@@ -20,15 +20,12 @@ require_relative "mixin/string"
 require_relative "mixin/unicode"
 require "openssl" unless defined?(OpenSSL)
 require "json" unless defined?(JSON)
-require "chef-powershell"
 
-# 10-6-2021 - temporarily commenting out powershell_exec until it is moved to its own gem
-
-# begin
-#   require "chef/mixin/powershell_exec"
-# rescue LoadError
-#   puts "Not loading powershell_exec during testing"
-# end
+begin
+  require "chef-powershell"
+rescue LoadError
+  puts "Not loading powershell_exec during testing"
+end
 
 module Win32
   class Certstore
@@ -97,7 +94,8 @@ module Win32
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_get(certificate_thumbprint)
         validate_thumbprint(certificate_thumbprint)
-        cert_pem = get_cert_pem(certificate_thumbprint)
+        thumbprint = update_thumbprint(certificate_thumbprint)
+        cert_pem = get_cert_pem(thumbprint)
         cert_pem = format_pem(cert_pem)
         verify_certificate(cert_pem)
         cert_pem
@@ -126,10 +124,11 @@ module Win32
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_delete(store_handler, certificate_thumbprint)
         validate_thumbprint(certificate_thumbprint)
+        thumbprint = update_thumbprint(certificate_thumbprint)
 
         cert_delete_flag = false
         begin
-          cert_args = cert_find_args(store_handler, certificate_thumbprint)
+          cert_args = cert_find_args(store_handler, thumbprint)
           pcert_context = CertFindCertificateInStore(*cert_args)
           unless pcert_context.null?
             cert_delete_flag = CertDeleteCertificateFromStore(CertDuplicateCertificateContext(pcert_context)) || lookup_error
@@ -146,8 +145,9 @@ module Win32
       # certificate_thumbprint => thumbprint is a hash. which could be sha1 or md5.
       def cert_validate(certificate_thumbprint)
         validate_thumbprint(certificate_thumbprint)
+        thumbprint = update_thumbprint(certificate_thumbprint)
 
-        cert_pem = get_cert_pem(certificate_thumbprint)
+        cert_pem = get_cert_pem(thumbprint)
         cert_pem = format_pem(cert_pem)
         verify_certificate(cert_pem)
       end
@@ -189,7 +189,7 @@ module Win32
 
         powershell_exec!(powershell_cmd, :powershell, timeout: timeout).result
 
-      rescue Chef::PowerShell::CommandFailed
+      rescue Chef_PowerShell::PowerShellExceptions::PowerShellCommandFailed
         raise ArgumentError, "Certificate not found while looking for certificate : #{search_token} in store : #{store_name} at this location : #{store_location}"
       end
 
@@ -214,6 +214,11 @@ module Win32
       # Build arguments for CertAddCertificateContextToStore
       def add_certcontxt_args(certstore_handler, cert_context)
         [certstore_handler, cert_context, CERT_STORE_ADD_REPLACE_EXISTING, nil]
+      end
+
+      # Remove extra space and : from thumbprint
+      def update_thumbprint(certificate_thumbprint)
+        certificate_thumbprint.gsub(/[^A-Za-z0-9]/, "")
       end
 
       # Match certificate CN exist in cert_rdn

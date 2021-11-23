@@ -160,24 +160,20 @@ describe Win32::Certstore, :windows_only do
     context "When passing an invalid thumbprint with spaces to the CurrentUser store" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
-      before(:each) do
-        allow_any_instance_of(certbase).to receive(:cert_get).and_raise(ArgumentError, "Invalid certificate thumbprint.")
-      end
-      it "it raises ArgumentError" do
+      it "it does NOT raise an ArgumentError" do
         store = certstore.open(store_name, store_location: store_location)
-        expect { store.get(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+        cert_temp = OpenSSL::X509::Certificate.new(store.get(thumbprint))
+        expect(cert_temp).to be_an_instance_of(OpenSSL::X509::Certificate)
       end
     end
 
     context "When passing valid thumbprint with : to the CurrentUser store" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
-      before(:each) do
-        allow_any_instance_of(certbase).to receive(:cert_get).and_raise(ArgumentError, "Invalid certificate thumbprint.")
-      end
-      it "it raises ArgumentError" do
+      it "it does NOT raise an ArgumentError" do
         store = certstore.open(store_name, store_location: store_location)
-        expect { store.get(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+        cert_temp = OpenSSL::X509::Certificate.new(store.get(thumbprint))
+        expect(cert_temp).to be_an_instance_of(OpenSSL::X509::Certificate)
       end
     end
   end
