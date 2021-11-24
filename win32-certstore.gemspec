@@ -21,6 +21,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "mixlib-shellout"
   spec.add_dependency "ffi"
-  spec.add_dependency "chef-powershell"
+  spec.add_runtime_dependency "chef-powershell"
   spec.metadata["yard.run"] = "yri"
 end

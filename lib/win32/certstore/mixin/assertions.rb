@@ -37,7 +37,7 @@ module Win32
         # Validate certificate Object
         def validate_certificate_obj(cert_obj)
           unless cert_obj.class == OpenSSL::X509::Certificate
-            raise ArgumentError, "Invalid Certificate object."
+            raise ArgumentError, "Invalid Certificate object. This is not a properly formatted x509 object"
           end
         end
 

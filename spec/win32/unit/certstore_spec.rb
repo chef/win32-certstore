@@ -22,6 +22,7 @@
 
 require "spec_helper"
 require "openssl" unless defined?(OpenSSL)
+require "pry"
 
 CERT_SYSTEM_STORE_LOCAL_MACHINE = 0x00020000
 CERT_SYSTEM_STORE_CURRENT_USER = 0x00010000
@@ -157,21 +158,27 @@ describe Win32::Certstore, :windows_only do
       end
     end
 
-    context "When passing an invalid thumbprint with spaces to the CurrentUser store" do
+    context "When passing an valid thumbprint with spaces to the CurrentUser store" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
+      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
       it "it does NOT raise an ArgumentError" do
         store = certstore.open(store_name, store_location: store_location)
+        cert_blob = OpenSSL::X509::Certificate.new(File.read(cert_file_path))
+        store.add(cert_blob)
         cert_temp = OpenSSL::X509::Certificate.new(store.get(thumbprint))
         expect(cert_temp).to be_an_instance_of(OpenSSL::X509::Certificate)
       end
     end
 
-    context "When passing valid thumbprint with : to the CurrentUser store" do
+    context "When passing valid thumbprint with ':' to the CurrentUser store" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
+      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
       it "it does NOT raise an ArgumentError" do
         store = certstore.open(store_name, store_location: store_location)
+        cert_blob = OpenSSL::X509::Certificate.new(File.read(cert_file_path))
+        store.add(cert_blob)
         cert_temp = OpenSSL::X509::Certificate.new(store.get(thumbprint))
         expect(cert_temp).to be_an_instance_of(OpenSSL::X509::Certificate)
       end
@@ -236,16 +243,16 @@ describe Win32::Certstore, :windows_only do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
       let(:thumbprint2) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
-      before(:each) do
-        allow_any_instance_of(certbase).to receive(:cert_delete).and_raise(ArgumentError, "Invalid certificate thumbprint.")
+      before do
+        allow_any_instance_of(certbase).to receive(:cert_delete).and_return(true)
       end
-      it "returns ArgumentError when thumbprint has spaces" do
+      it "returns True when thumbprint has spaces" do
         store = certstore.open(store_name, store_location: store_location)
-        expect { store.delete(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+        expect(store.delete(thumbprint)).to eql(true)
       end
-      it "returns ArgumentError when thumbprint has colons" do
+      it "returns True when thumbprint has colons" do
         store = certstore.open(store_name, store_location: store_location)
-        expect { store.delete(thumbprint2) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+        expect(store.delete(thumbprint2)).to eql(true)
       end
     end
   end
@@ -384,26 +391,6 @@ describe Win32::Certstore, :windows_only do
       end
     end
   end
-
-  # describe "Perform more than one operations with single certstore object" do
-  #   context "Perform add and list with single certstore object" do
-  #     let(:store_name) { "root" }
-  #     let(:root_certificate_name) { "Microsoft Root Certificate Authority" }
-  #     let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
-  #     let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
-  #     it "returns Certificate added successfully listing certificates for the same" do
-  #       # allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(true)
-  #       # allow(certstore).to receive(:open).with(store_name, store_location: store_location).and_return(certstore_handler)
-  #       store = certstore.open(store_name, store_location: store_location)
-  #       expect(store.add(certificate_object)).to eql true
-  #       certificate_list = store.list
-  #       root_cert_list = store.search(root_certificate_name)
-  #       expect(certificate_list.size).to be >= 1
-  #       catcher = root_cert_list.to_s.split('"')[1]
-  #       expect(catcher).to eql(root_certificate_name)
-  #     end
-  #   end
-  # end
 
   private
 
@@ -645,15 +632,15 @@ describe Win32::Certstore, :windows_only do
       let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
       let(:thumbprint2) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
       before(:each) do
-        allow_any_instance_of(certbase).to receive(:cert_delete).and_raise(ArgumentError, "Invalid certificate thumbprint.")
+        allow_any_instance_of(certbase).to receive(:cert_delete).and_return(true)
       end
-      it "returns ArgumentError when thumbprint has spaces" do
+      it "returns True when thumbprint has spaces" do
         store = certstore.open(store_name, store_location: store_location)
-        expect { store.delete(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+        expect(store.delete(thumbprint)).to eql(true)
       end
-      it "returns ArgumentError when thumbprint has colons" do
+      it "returns True when thumbprint has colons" do
         store = certstore.open(store_name, store_location: store_location)
-        expect { store.delete(thumbprint2) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+        expect(store.delete(thumbprint2)).to eql(true)
       end
     end
 
@@ -749,24 +736,6 @@ describe Win32::Certstore, :windows_only do
       end
     end
   end
-
-  # describe "Perform more than one operations with single certstore object" do
-  #   context "Perform add and list with single certstore object" do
-  #     let(:store_name) { "root" }
-  #     let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
-  #     let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
-  #     let(:root_certificate_name) { "Microsoft Root Certificate Authority" }
-  #     it "returns Certificate added successfully listing certificates for the same" do
-  #       store = certstore.open(store_name, store_location: store_location)
-  #       expect(store.add(certificate_object)).to eql true
-  #       certificate_list = store.list
-  #       root_cert_list = store.search(root_certificate_name)
-  #       expect(certificate_list.size).to be >= 1
-  #       catcher = root_cert_list.to_s.split('"')[1]
-  #       expect(catcher).to eql(root_certificate_name)
-  #     end
-  #   end
-  # end
 
   private
 
