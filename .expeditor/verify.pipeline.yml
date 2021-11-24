@@ -43,6 +43,7 @@ steps:
 
 - label: "run specs :windows:"
   commands:
+    - Get-Childitem .expeditor
     - .expeditor/verify_win32certstore.ps1
   expeditor:
     executor:
