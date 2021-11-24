@@ -49,3 +49,4 @@ steps:
       docker:
         host_os: windows
         image: rubydistros/windows-2019:3.0
+        shell: [ "powershell", "-Command" ]
