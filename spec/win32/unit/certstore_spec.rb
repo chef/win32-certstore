@@ -750,23 +750,23 @@ describe Win32::Certstore, :windows_only do
     end
   end
 
-  describe "Perform more than one operations with single certstore object" do
-    context "Perform add and list with single certstore object" do
-      let(:store_name) { "root" }
-      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
-      let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
-      let(:root_certificate_name) { "Microsoft Root Certificate Authority" }
-      it "returns Certificate added successfully listing certificates for the same" do
-        store = certstore.open(store_name, store_location: store_location)
-        expect(store.add(certificate_object)).to eql true
-        certificate_list = store.list
-        root_cert_list = store.search(root_certificate_name)
-        expect(certificate_list.size).to be >= 1
-        catcher = root_cert_list.to_s.split('"')[1]
-        expect(catcher).to eql(root_certificate_name)
-      end
-    end
-  end
+  # describe "Perform more than one operations with single certstore object" do
+  #   context "Perform add and list with single certstore object" do
+  #     let(:store_name) { "root" }
+  #     let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
+  #     let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
+  #     let(:root_certificate_name) { "Microsoft Root Certificate Authority" }
+  #     it "returns Certificate added successfully listing certificates for the same" do
+  #       store = certstore.open(store_name, store_location: store_location)
+  #       expect(store.add(certificate_object)).to eql true
+  #       certificate_list = store.list
+  #       root_cert_list = store.search(root_certificate_name)
+  #       expect(certificate_list.size).to be >= 1
+  #       catcher = root_cert_list.to_s.split('"')[1]
+  #       expect(catcher).to eql(root_certificate_name)
+  #     end
+  #   end
+  # end
 
   private
 
