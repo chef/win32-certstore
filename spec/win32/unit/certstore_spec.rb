@@ -385,25 +385,25 @@ describe Win32::Certstore, :windows_only do
     end
   end
 
-  describe "Perform more than one operations with single certstore object" do
-    context "Perform add and list with single certstore object" do
-      let(:store_name) { "root" }
-      let(:root_certificate_name) { "Microsoft Root Certificate Authority" }
-      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
-      let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
-      it "returns Certificate added successfully listing certificates for the same" do
-        # allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(true)
-        # allow(certstore).to receive(:open).with(store_name, store_location: store_location).and_return(certstore_handler)
-        store = certstore.open(store_name, store_location: store_location)
-        expect(store.add(certificate_object)).to eql true
-        certificate_list = store.list
-        root_cert_list = store.search(root_certificate_name)
-        expect(certificate_list.size).to be >= 1
-        catcher = root_cert_list.to_s.split('"')[1]
-        expect(catcher).to eql(root_certificate_name)
-      end
-    end
-  end
+  # describe "Perform more than one operations with single certstore object" do
+  #   context "Perform add and list with single certstore object" do
+  #     let(:store_name) { "root" }
+  #     let(:root_certificate_name) { "Microsoft Root Certificate Authority" }
+  #     let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
+  #     let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
+  #     it "returns Certificate added successfully listing certificates for the same" do
+  #       # allow(certstore_handler).to receive(:CertAddEncodedCertificateToStore).and_return(true)
+  #       # allow(certstore).to receive(:open).with(store_name, store_location: store_location).and_return(certstore_handler)
+  #       store = certstore.open(store_name, store_location: store_location)
+  #       expect(store.add(certificate_object)).to eql true
+  #       certificate_list = store.list
+  #       root_cert_list = store.search(root_certificate_name)
+  #       expect(certificate_list.size).to be >= 1
+  #       catcher = root_cert_list.to_s.split('"')[1]
+  #       expect(catcher).to eql(root_certificate_name)
+  #     end
+  #   end
+  # end
 
   private
 
