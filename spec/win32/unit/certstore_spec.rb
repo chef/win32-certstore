@@ -158,29 +158,39 @@ describe Win32::Certstore, :windows_only do
       end
     end
 
-    context "When passing an valid thumbprint with spaces to the CurrentUser store" do
+    context "When passing valid thumbprint with spaces to the CurrentUser store" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
-      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
-      it "it does NOT raise an ArgumentError" do
-        store = certstore.open(store_name, store_location: store_location)
-        cert_blob = OpenSSL::X509::Certificate.new(File.read(cert_file_path))
-        store.add(cert_blob)
-        cert_temp = OpenSSL::X509::Certificate.new(store.get(thumbprint))
-        expect(cert_temp).to be_an_instance_of(OpenSSL::X509::Certificate)
+      let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
+      end
+      it "returns OpenSSL::X509::Certificate Object" do
+        store = certstore.open(store_name)
+        cert_obj = store.get(thumbprint)
+        # the cert_obj returned to us ends up being a raw, unformatted cert. Converting the returned object to ensure it IS a correctly formatted cert vs nonsense
+        cert_obj = OpenSSL::X509::Certificate.new(cert_obj)
+        expect(cert_obj).to be_an_instance_of(OpenSSL::X509::Certificate)
+        expect(cert_obj.not_before.to_s).to eql("1998-09-01 12:00:00 UTC")
+        expect(cert_obj.not_after.to_s).to eql("2028-01-28 12:00:00 UTC")
       end
     end
 
-    context "When passing valid thumbprint with ':' to the CurrentUser store" do
+    context "When passing valid thumbprint with colons to the CurrentUser store" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
-      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
-      it "it does NOT raise an ArgumentError" do
-        store = certstore.open(store_name, store_location: store_location)
-        cert_blob = OpenSSL::X509::Certificate.new(File.read(cert_file_path))
-        store.add(cert_blob)
-        cert_temp = OpenSSL::X509::Certificate.new(store.get(thumbprint))
-        expect(cert_temp).to be_an_instance_of(OpenSSL::X509::Certificate)
+      let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
+      end
+      it "returns OpenSSL::X509::Certificate Object" do
+        store = certstore.open(store_name)
+        cert_obj = store.get(thumbprint)
+        # the cert_obj returned to us ends up being a raw, unformatted cert. Converting the returned object to ensure it IS a correctly formatted cert vs nonsense
+        cert_obj = OpenSSL::X509::Certificate.new(cert_obj)
+        expect(cert_obj).to be_an_instance_of(OpenSSL::X509::Certificate)
+        expect(cert_obj.not_before.to_s).to eql("1998-09-01 12:00:00 UTC")
+        expect(cert_obj.not_after.to_s).to eql("2028-01-28 12:00:00 UTC")
       end
     end
   end
@@ -547,27 +557,32 @@ describe Win32::Certstore, :windows_only do
       end
     end
 
+    # here
     context "When passing an invalid thumbprint with spaces to the LocalMachine store" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1 bc 96 8b d4 f4 9d 62 2a a8 9a 81 f2 15 01 52 a4 1d 82 9c" }
+      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
+      let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
       before(:each) do
-        allow_any_instance_of(certbase).to receive(:cert_get).and_raise(ArgumentError, "Invalid certificate thumbprint.")
+        allow_any_instance_of(certbase).to receive(:cert_get).and_return(certificate_object)
       end
       it "it raises ArgumentErrore" do
         store = certstore.open(store_name, store_location: store_location)
-        expect { store.get(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+        expect(store.get(thumbprint)).to be_an_instance_of(OpenSSL::X509::Certificate)
       end
     end
 
     context "When passing valid thumbprint with : to the LocalMachine store" do
       let(:store_name) { "root" }
       let(:thumbprint) { "b1:bc:96:8b:d4:f4:9d:62:2a:a8:9a:81:f2:15:01:52:a4:1d:82:9c" }
+      let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
+      let(:certificate_object) { OpenSSL::X509::Certificate.new(File.read cert_file_path) }
       before(:each) do
-        allow_any_instance_of(certbase).to receive(:cert_get).and_raise(ArgumentError, "Invalid certificate thumbprint.")
+        allow_any_instance_of(certbase).to receive(:cert_get).and_return(certificate_object)
       end
       it "it raises ArgumentError" do
         store = certstore.open(store_name, store_location: store_location)
-        expect { store.get(thumbprint) }.to raise_error(ArgumentError, "Invalid certificate thumbprint.")
+        expect(store.get(thumbprint)).to be_an_instance_of(OpenSSL::X509::Certificate)
       end
     end
   end
