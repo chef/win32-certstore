@@ -472,7 +472,7 @@ describe Win32::Certstore, :windows_only do
   end
 
   describe "#cert_add" do
-    context "When passing certificate path instead of certificate object to the CurrentUser store" do
+    context "When passing certificate path instead of certificate object to the LocalMachine store" do
       let(:store_name) { "root" }
       let(:cert_file_path) { '.\spec\win32\assets\GlobalSignRootCA.pem' }
       it "it raises ArgumentError - Invalid Certificate object" do
@@ -481,7 +481,7 @@ describe Win32::Certstore, :windows_only do
       end
     end
 
-    context "When passing invalid certificate object to the CurrentUser Store" do
+    context "When passing invalid certificate object to the LocalMachine Store" do
       let(:store_name) { "my" }
       let(:cert_file_path) { '.\spec\win32\assets\notes.txt' }
       it "it raises ArgumentError - Invalid Certificate object" do
