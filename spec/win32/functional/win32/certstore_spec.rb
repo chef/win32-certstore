@@ -40,9 +40,6 @@ RSpec.describe Win32::Certstore, :windows_only do
   describe "#get" do
     before { add_cert }
     let(:cert_pem) { File.read('.\spec\win32\assets\GlobalSignRootCA.pem') }
-    before(:each) do
-      allow_any_instance_of(certbase).to receive(:get_cert_pem).and_return(cert_pem)
-    end
     # passing valid thumbprint
     it "returns the certificate_object if found" do
       thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829c"
@@ -52,12 +49,8 @@ RSpec.describe Win32::Certstore, :windows_only do
 
     # passing invalid thumbprint
     it "returns raises an Arugment error" do
-      thumbprint = "b1bc968bd4f49d622aa89a81f2150152a41d829cab"
-      # cert_obj = @store.get(thumbprint)
-      # expect(cert_obj).to raise_error(ArgumentError)
-      # expect { @store.get(thumbprint) }.to raise_error(ArgumentError)
-      expect(@store).to receive(:cert_get).with(thumbprint).and_return("foo")
-      @store.get!(thumbprint)
+      thumbprint14 = "b1bc968bd4f49d622aa89a81f2150"
+      expect { @store.get(thumbprint14) }.to raise_error(ArgumentError)
     end
   end
 

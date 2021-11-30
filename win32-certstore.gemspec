@@ -19,7 +19,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rspec", "~> 3.0"
 
-  # spec.add_dependency "mixlib-shellout"
   spec.add_dependency "ffi"
   spec.add_runtime_dependency "chef-powershell"
   spec.metadata["yard.run"] = "yri"
