@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.6.6 -->
-## [v0.6.6](https://github.com/chef/win32-certstore/tree/v0.6.6) (2021-11-30)
+<!-- latest_release 0.6.7 -->
+## [v0.6.7](https://github.com/chef/win32-certstore/tree/v0.6.7) (2021-12-07)
 
 #### Merged Pull Requests
-- Refactor code and update specs [#86](https://github.com/chef/win32-certstore/pull/86) ([johnmccrae](https://github.com/johnmccrae))
+- Refactored cert_get to return x509 object [#87](https://github.com/chef/win32-certstore/pull/87) ([johnmccrae](https://github.com/johnmccrae))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.6.2 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Refactored cert_get to return x509 object [#87](https://github.com/chef/win32-certstore/pull/87) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.7 -->
 - Refactor code and update specs [#86](https://github.com/chef/win32-certstore/pull/86) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.6 -->
 - don&#39;t raise error in get if certificate is empty [#84](https://github.com/chef/win32-certstore/pull/84) ([rishichawda](https://github.com/rishichawda)) <!-- 0.6.5 -->
 - Replace deprecated --without flag with bundle config [#82](https://github.com/chef/win32-certstore/pull/82) ([jayashrig158](https://github.com/jayashrig158)) <!-- 0.6.4 -->
