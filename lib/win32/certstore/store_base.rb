@@ -98,7 +98,7 @@ module Win32
         cert_pem = get_cert_pem(thumbprint)
         cert_pem = format_pem(cert_pem)
         verify_certificate(cert_pem)
-        cert_pem
+        build_openssl_obj(cert_pem)
       end
 
       # Listing certificate of open certstore and return list in json
