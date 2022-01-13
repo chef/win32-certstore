@@ -35,7 +35,7 @@ module Win32
       include Win32::Certstore::Mixin::String
       include Win32::Certstore::Mixin::Unicode
       include Win32::Certstore::Mixin::Helper
-      include Chef_PowerShell::ChefPowerShell::PowerShellExec
+      include ChefPowerShell::ChefPowerShellModule::PowerShellExec
 
       # Adding new certification in open certificate and return boolean
       # store_handler => Open certificate store handler
@@ -173,7 +173,7 @@ module Win32
         certificate_list
       end
 
-      # how can I find a cert if I don't have the thumbprint?
+      # how can I find a cert if I don't have the thumbprint? This should be replaced by a call to CertFindCertificateInStore
       def cert_lookup_by_token(search_token, store_name: @store_name, store_location: @store_location, timeout: -1)
         raise ArgumentError, "Invalid search token" if !search_token || search_token.strip.empty?
 
@@ -189,7 +189,7 @@ module Win32
 
         powershell_exec!(powershell_cmd, :powershell, timeout: timeout).result
 
-      rescue Chef_PowerShell::PowerShellExceptions::PowerShellCommandFailed
+      rescue ChefPowerShell::PowerShellExceptions::PowerShellCommandFailed
         raise ArgumentError, "Certificate not found while looking for certificate : #{search_token} in store : #{store_name} at this location : #{store_location}"
       end
 
@@ -255,7 +255,7 @@ module Win32
         FFI::MemoryPointer.from_string(cert_obj.to_der)
       end
 
-      # Get certificate pem
+      # Get certificate pem.
       def get_cert_pem(thumbprint, store_name: @store_name, store_location: @store_location, timeout: -1)
         converted_store = if store_location == CERT_SYSTEM_STORE_LOCAL_MACHINE || store_location == 131072
                             "LocalMachine"
@@ -264,7 +264,7 @@ module Win32
                           end
         get_data = powershell_exec!(cert_ps_cmd(thumbprint, store_location: converted_store, store_name: store_name), :powershell, timeout: timeout)
         get_data.result
-      rescue Chef_PowerShell::PowerShellExceptions::PowerShellCommandFailed
+      rescue ChefPowerShell::PowerShellExceptions::PowerShellCommandFailed
         raise ArgumentError, "PowerShell threw an error retreiving the certificate. You asked for a cert with this thumbprint : #{thumbprint}, located in this store : #{store_name}, at this location : #{store_location}"
       end
 
