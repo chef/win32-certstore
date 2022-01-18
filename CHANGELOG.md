@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.6.8 -->
-## [v0.6.8](https://github.com/chef/win32-certstore/tree/v0.6.8) (2022-01-13)
+<!-- latest_release 0.6.9 -->
+## [v0.6.9](https://github.com/chef/win32-certstore/tree/v0.6.9) (2022-01-18)
 
 #### Merged Pull Requests
-- Updated the references to the ChefPowerShell gem which had its classe… [#88](https://github.com/chef/win32-certstore/pull/88) ([johnmccrae](https://github.com/johnmccrae))
+- Updated the gem to reflect an update to the chef-powershell gem [#89](https://github.com/chef/win32-certstore/pull/89) ([johnmccrae](https://github.com/johnmccrae))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.6.2 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Updated the gem to reflect an update to the chef-powershell gem [#89](https://github.com/chef/win32-certstore/pull/89) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.9 -->
 - Updated the references to the ChefPowerShell gem which had its classe… [#88](https://github.com/chef/win32-certstore/pull/88) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.8 -->
 - Refactored cert_get to return x509 object [#87](https://github.com/chef/win32-certstore/pull/87) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.7 -->
 - Refactor code and update specs [#86](https://github.com/chef/win32-certstore/pull/86) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.6 -->
