@@ -41,6 +41,14 @@ steps:
       docker:
         image: ruby:3.0-buster
 
+- label: run-specs-ruby-3.1
+  command:
+    - .expeditor/run_linux_tests.sh rspec
+  expeditor:
+    executor:
+      docker:
+        image: ruby:3.1-buster
+
 - label: "run specs :windows:"
   commands:
     # - Get-Childitem .expeditor
