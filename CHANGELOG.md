@@ -1,32 +1,29 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.6.10 -->
-## [v0.6.10](https://github.com/chef/win32-certstore/tree/v0.6.10) (2022-02-28)
-
-#### Merged Pull Requests
-- Add ruby 3.1 test [#90](https://github.com/chef/win32-certstore/pull/90) ([skeshari12](https://github.com/skeshari12))
+<!-- latest_release -->
 <!-- latest_release -->
 
-<!-- release_rollup since=0.6.2 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Add ruby 3.1 test [#90](https://github.com/chef/win32-certstore/pull/90) ([skeshari12](https://github.com/skeshari12)) <!-- 0.6.10 -->
-- Updated the gem to reflect an update to the chef-powershell gem [#89](https://github.com/chef/win32-certstore/pull/89) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.9 -->
-- Updated the references to the ChefPowerShell gem which had its classe… [#88](https://github.com/chef/win32-certstore/pull/88) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.8 -->
-- Refactored cert_get to return x509 object [#87](https://github.com/chef/win32-certstore/pull/87) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.7 -->
-- Refactor code and update specs [#86](https://github.com/chef/win32-certstore/pull/86) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.6 -->
-- don&#39;t raise error in get if certificate is empty [#84](https://github.com/chef/win32-certstore/pull/84) ([rishichawda](https://github.com/rishichawda)) <!-- 0.6.5 -->
-- Replace deprecated --without flag with bundle config [#82](https://github.com/chef/win32-certstore/pull/82) ([jayashrig158](https://github.com/jayashrig158)) <!-- 0.6.4 -->
-- Upgrade to GitHub-native Dependabot [#80](https://github.com/chef/win32-certstore/pull/80) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot])) <!-- 0.6.3 -->
+<!-- release_rollup -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v0.6.10](https://github.com/chef/win32-certstore/tree/v0.6.10) (2022-05-04)
+
+#### Merged Pull Requests
+- Upgrade to GitHub-native Dependabot [#80](https://github.com/chef/win32-certstore/pull/80) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- Replace deprecated --without flag with bundle config [#82](https://github.com/chef/win32-certstore/pull/82) ([jayashrig158](https://github.com/jayashrig158))
+- don&#39;t raise error in get if certificate is empty [#84](https://github.com/chef/win32-certstore/pull/84) ([rishichawda](https://github.com/rishichawda))
+- Refactor code and update specs [#86](https://github.com/chef/win32-certstore/pull/86) ([johnmccrae](https://github.com/johnmccrae))
+- Refactored cert_get to return x509 object [#87](https://github.com/chef/win32-certstore/pull/87) ([johnmccrae](https://github.com/johnmccrae))
+- Updated the references to the ChefPowerShell gem which had its classe… [#88](https://github.com/chef/win32-certstore/pull/88) ([johnmccrae](https://github.com/johnmccrae))
+- Updated the gem to reflect an update to the chef-powershell gem [#89](https://github.com/chef/win32-certstore/pull/89) ([johnmccrae](https://github.com/johnmccrae))
+- Add ruby 3.1 test [#90](https://github.com/chef/win32-certstore/pull/90) ([skeshari12](https://github.com/skeshari12))
+<!-- latest_stable_release -->
+
 ## [v0.6.2](https://github.com/chef/win32-certstore/tree/v0.6.2) (2021-04-15)
 
 #### Merged Pull Requests
 - Updated Certstore to correctly understand CurrentUser vs LocalMachine stores [#79](https://github.com/chef/win32-certstore/pull/79) ([johnmccrae](https://github.com/johnmccrae))
-<!-- latest_stable_release -->
 
 ## [v0.6.1](https://github.com/chef/win32-certstore/tree/v0.6.1) (2021-04-15)
 
