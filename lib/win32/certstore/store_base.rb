@@ -190,7 +190,7 @@ module Win32
         powershell_exec!(powershell_cmd, :powershell, timeout: timeout).result
 
       rescue ChefPowerShell::PowerShellExceptions::PowerShellCommandFailed
-        raise ArgumentError, "Certificate not found while looking for certificate : #{search_token} in store : #{store_name} at this location : #{store_location}"
+        return "Certificate not found"
       end
 
       # To close and destroy pointer of open certificate store handler
