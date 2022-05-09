@@ -1,9 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release -->
+<!-- latest_release 0.6.11 -->
+## [v0.6.11](https://github.com/chef/win32-certstore/tree/v0.6.11) (2022-05-09)
+
+#### Merged Pull Requests
+- Reverting the error handling for a missing item on cert_lookup [#93](https://github.com/chef/win32-certstore/pull/93) ([johnmccrae](https://github.com/johnmccrae))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=0.6.10 -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- Reverting the error handling for a missing item on cert_lookup [#93](https://github.com/chef/win32-certstore/pull/93) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.11 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
