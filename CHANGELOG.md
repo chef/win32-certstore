@@ -1,20 +1,18 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.6.11 -->
+<!-- latest_release -->
+<!-- latest_release -->
+
+<!-- release_rollup -->
+<!-- release_rollup -->
+
+<!-- latest_stable_release -->
 ## [v0.6.11](https://github.com/chef/win32-certstore/tree/v0.6.11) (2022-05-09)
 
 #### Merged Pull Requests
 - Reverting the error handling for a missing item on cert_lookup [#93](https://github.com/chef/win32-certstore/pull/93) ([johnmccrae](https://github.com/johnmccrae))
-<!-- latest_release -->
-
-<!-- release_rollup since=0.6.10 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Reverting the error handling for a missing item on cert_lookup [#93](https://github.com/chef/win32-certstore/pull/93) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.11 -->
-<!-- release_rollup -->
-
 <!-- latest_stable_release -->
+
 ## [v0.6.10](https://github.com/chef/win32-certstore/tree/v0.6.10) (2022-05-04)
 
 #### Merged Pull Requests
@@ -26,7 +24,6 @@
 - Updated the references to the ChefPowerShell gem which had its classe… [#88](https://github.com/chef/win32-certstore/pull/88) ([johnmccrae](https://github.com/johnmccrae))
 - Updated the gem to reflect an update to the chef-powershell gem [#89](https://github.com/chef/win32-certstore/pull/89) ([johnmccrae](https://github.com/johnmccrae))
 - Add ruby 3.1 test [#90](https://github.com/chef/win32-certstore/pull/90) ([skeshari12](https://github.com/skeshari12))
-<!-- latest_stable_release -->
 
 ## [v0.6.2](https://github.com/chef/win32-certstore/tree/v0.6.2) (2021-04-15)
 
