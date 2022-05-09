@@ -267,6 +267,16 @@ describe Win32::Certstore, :windows_only do
     end
   end
 
+  describe "#cert_lookup_by_token" do
+    context "when searching for a certificate that does not exist" do
+      let(:store_name) { "root" }
+      it "returns a message of Certificate not found" do
+        store = certstore.open(store_name, store_location: store_location)
+        expect(store.cert_lookup_by_token("nunya")).to eql("Certificate not found")
+      end
+    end
+  end
+
   describe "#cert_validate" do
     context "When passing empty certificate store name to the CurrentUser store" do
       let(:store_name) { "" }
