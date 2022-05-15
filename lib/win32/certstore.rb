@@ -84,7 +84,7 @@ module Win32
     def get!(certificate_thumbprint)
       cert_pem = cert_get(certificate_thumbprint)
 
-      raise ArgumentError, "Unable to retrieve the certificate" if cert_pem.empty?
+      raise ArgumentError, "Unable to retrieve the certificate" if cert_pem.empty? || cert_pem == "Certificate Not Found"
 
       cert_pem
     end
@@ -118,13 +118,7 @@ module Win32
     # @param request[thumbprint<string>] of certificate
     # @return [true, false] only true or false
     def valid?(certificate_thumbprint)
-      cert_validate(certificate_thumbprint).yield_self do |x|
-        if x.is_a?(TrueClass) || x.is_a?(FalseClass)
-          x
-        else
-          false
-        end
-      end
+      cert_validate(certificate_thumbprint)
     end
 
     # To close and destroy pointer of open certificate store handler

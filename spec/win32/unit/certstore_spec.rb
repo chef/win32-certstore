@@ -270,9 +270,20 @@ describe Win32::Certstore, :windows_only do
   describe "#cert_lookup_by_token" do
     context "when searching for a certificate that does not exist" do
       let(:store_name) { "root" }
-      it "returns a message of Certificate not found" do
+      it "returns a message of Certificate Not Found" do
         store = certstore.open(store_name, store_location: store_location)
-        expect(store.cert_lookup_by_token("nunya")).to eql("Certificate not found")
+        expect(store.cert_lookup_by_token("nunya")).to eql("Certificate Not Found")
+      end
+    end
+
+    context "when searching for a certificate that does exist" do
+      before(:each) do
+        allow_any_instance_of(certbase).to receive(:cert_lookup_by_token).and_return("506285bbf4f30446d93e3120e2bffa71b7b9acf2")
+      end
+      let(:store_name) { "root" }
+      it "returns a message of Certificate Not Found" do
+        store = certstore.open(store_name, store_location: store_location)
+        expect(store.cert_lookup_by_token("BillG")).to eql("506285bbf4f30446d93e3120e2bffa71b7b9acf2")
       end
     end
   end
