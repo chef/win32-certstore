@@ -26,6 +26,10 @@ module Win32
           <<-EOH
             $cert = Get-ChildItem Cert:\\#{store_location}\\#{store_name} -Recurse | Where-Object { $_.Thumbprint -eq "#{thumbprint}" }
 
+            if ([string]::IsNullOrEmpty($cert)){
+              return "Certificate Not Found"
+            }
+
             $certdata = [System.Convert]::ToBase64String($cert.RawData, 'InsertLineBreaks')
             $content = $null
             if($null -ne $cert)
