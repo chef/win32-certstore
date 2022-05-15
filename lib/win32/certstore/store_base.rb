@@ -146,10 +146,11 @@ module Win32
       def cert_validate(certificate_thumbprint)
         validate_thumbprint(certificate_thumbprint)
         thumbprint = update_thumbprint(certificate_thumbprint)
-
         cert_pem = get_cert_pem(thumbprint)
+        return cert_pem  if cert_pem == "Certificate Not Found"
         cert_pem = format_pem(cert_pem)
-        verify_certificate(cert_pem)
+        result = verify_certificate(cert_pem)
+        result == false ? "Certificate Has Expired" : result
       end
 
       # Search certificate from open certificate store and return list
@@ -184,13 +185,16 @@ module Win32
                           end
         powershell_cmd = <<~EOH
             $result = Get-ChildItem -Path Cert:\\#{converted_store}\\#{store_name} | Where-Object { $_.Subject -match "#{search_token.strip}" } | Select-Object Thumbprint
+            if ([string]::IsNullOrEmpty($result)){
+              return "Certificate Not Found"
+            }
             return $result[0].Thumbprint
         EOH
 
         powershell_exec!(powershell_cmd, :powershell, timeout: timeout).result
 
       rescue ChefPowerShell::PowerShellExceptions::PowerShellCommandFailed
-        return "Certificate not found"
+        raise ArgumentError, "PowerShell threw an error retreiving the certificate. You asked for a cert with this Search Token : #{search_token}, located in this store : #{store_name}, at this location : #{store_location}"
       end
 
       # To close and destroy pointer of open certificate store handler
