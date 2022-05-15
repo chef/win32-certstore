@@ -1,9 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release -->
+<!-- latest_release 0.6.13 -->
+## [v0.6.13](https://github.com/chef/win32-certstore/tree/v0.6.13) (2022-05-15)
+
+#### Merged Pull Requests
+- refactoring to correct for not finding certs correctly in some cases. [#95](https://github.com/chef/win32-certstore/pull/95) ([johnmccrae](https://github.com/johnmccrae))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=0.6.12 -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- refactoring to correct for not finding certs correctly in some cases. [#95](https://github.com/chef/win32-certstore/pull/95) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.13 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
