@@ -24,7 +24,7 @@ module Win32
         def cert_ps_cmd(thumbprint, store_location: "LocalMachine", store_name: "My")
           # the PowerShell block below uses a "Here-String" - it is explicitly formatted against the left margin.
           <<-EOH
-            $cert = Get-ChildItem Cert:\\#{store_location}\\#{store_name} -Recurse | Where-Object { $_.Thumbprint -eq "#{thumbprint}" }
+            $cert = Get-ChildItem Cert:\\#{store_location}\\#{store_name} -Recurse -Force | Where-Object { $_.Thumbprint -eq "#{thumbprint}" }
 
             if ([string]::IsNullOrEmpty($cert)){
               return "Certificate Not Found"
