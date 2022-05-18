@@ -96,6 +96,7 @@ module Win32
         validate_thumbprint(certificate_thumbprint)
         thumbprint = update_thumbprint(certificate_thumbprint)
         cert_pem = get_cert_pem(thumbprint)
+        return cert_pem  if cert_pem == "Certificate Not Found"
         cert_pem = format_pem(cert_pem)
         verify_certificate(cert_pem)
         build_openssl_obj(cert_pem)
