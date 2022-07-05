@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "Ruby library for accessing the certificate stores on Windows."
   spec.homepage      = "https://github.com/chef/win32-certstore"
 
-  spec.required_ruby_version = ">= 2.5"
+  spec.required_ruby_version = ">= 2.7"
 
   spec.files         = Dir["LICENSE", "lib/**/*"]
   spec.require_paths = ["lib"]
