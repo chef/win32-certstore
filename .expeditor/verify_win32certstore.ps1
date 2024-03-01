@@ -26,6 +26,7 @@ Write-Output "`r"
 Write-Output "--- :building_construction: Correcting a gem build problem, moving header files around"
 $filename = "ansidecl.h"
 $locale = Get-ChildItem -path c:\opscode -Include $filename -Recurse -ErrorAction Ignore
+if ($locale -is [Array]) { $locale = $locale[0] }
 Write-Output "Copying ansidecl.h to the correct folder"
 $parent_folder = $locale.Directory.Parent.FullName
 $child_folder = $parent_folder + "\x86_64-w64-mingw32\include"
@@ -33,7 +34,7 @@ Copy-Item $locale.FullName -Destination $child_folder -ErrorAction Continue
 Write-Output "`r"
 
 Write-Output "--- :bank: Installing Gems for the Chef-PowerShell Gem"
-gem install bundler:2.2.29
+gem install bundler
 gem install libyajl2-gem
 gem install chef-powershell
 if (-not $?) { throw "unable to install this build"}
