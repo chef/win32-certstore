@@ -1,25 +1,22 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.6.16 -->
-## [v0.6.16](https://github.com/chef/win32-certstore/tree/v0.6.16) (2024-03-02)
-
-#### Merged Pull Requests
-- Updated dependencies to get ready for new Ohai for Chef-17 [#99](https://github.com/chef/win32-certstore/pull/99) ([johnmccrae](https://github.com/johnmccrae))
+<!-- latest_release -->
 <!-- latest_release -->
 
-<!-- release_rollup since=0.6.15 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Updated dependencies to get ready for new Ohai for Chef-17 [#99](https://github.com/chef/win32-certstore/pull/99) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.16 -->
+<!-- release_rollup -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v0.6.16](https://github.com/chef/win32-certstore/tree/v0.6.16) (2024-03-04)
+
+#### Merged Pull Requests
+- Updated dependencies to get ready for new Ohai for Chef-17 [#99](https://github.com/chef/win32-certstore/pull/99) ([johnmccrae](https://github.com/johnmccrae))
+<!-- latest_stable_release -->
+
 ## [v0.6.15](https://github.com/chef/win32-certstore/tree/v0.6.15) (2022-05-18)
 
 #### Merged Pull Requests
 - Redirect for when the cert is not found. [#97](https://github.com/chef/win32-certstore/pull/97) ([johnmccrae](https://github.com/johnmccrae))
-<!-- latest_stable_release -->
 
 ## [v0.6.14](https://github.com/chef/win32-certstore/tree/v0.6.14) (2022-05-18)
 
