@@ -11,15 +11,15 @@ Gem::Specification.new do |spec|
   spec.summary       = "Ruby library for accessing the certificate stores on Windows."
   spec.homepage      = "https://github.com/chef/win32-certstore"
 
-  spec.required_ruby_version = ">= 2.5"
+  spec.required_ruby_version = ">= 3.1"
 
   spec.files         = Dir["LICENSE", "lib/**/*"]
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler"
-  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "rspec", "~> 3.13"
 
-  spec.add_dependency "ffi"
+  spec.add_dependency "ffi", ">= 1.15.5", "< 1.17.0"
   spec.add_runtime_dependency "chef-powershell"
   spec.metadata["yard.run"] = "yri"
 end
