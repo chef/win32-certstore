@@ -26,7 +26,7 @@ steps:
     executor:
       docker:
         host_os: windows
-        image: rubydistros/windows-2022:3.2
+        image: rubydistros/windows-2019:3.2
         shell: [ "powershell", "-Command" ]
 
 - label: "run-specs-ruby-3.4-windows"
@@ -36,5 +36,5 @@ steps:
     executor:
       docker:
         host_os: windows
-        image: rubydistros/windows-2025:3.4
+        image: rubydistros/windows-2019:3.4
         shell: [ "powershell", "-Command" ]
