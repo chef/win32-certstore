@@ -10,8 +10,6 @@ end
 
 group(:development, :test) do
   gem "rake"
-  # for testing new chefstyle rules
-  gem "chefstyle", git: "https://github.com/chef/chefstyle.git", branch: "main"
 end
 
 group :debug do
