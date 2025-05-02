@@ -9,16 +9,6 @@ expeditor:
 
 steps:
 
-- label: "run-specs-ruby-3.0-windows"
-  commands:
-    - .expeditor/verify_win32certstore.ps1
-  expeditor:
-    executor:
-      docker:
-        host_os: windows
-        image: rubydistros/windows-2019:3.0
-        shell: [ "powershell", "-Command" ]
-
 - label: "run-specs-ruby-3.1-windows"
   commands:
     - .expeditor/verify_win32certstore.ps1
@@ -27,4 +17,24 @@ steps:
       docker:
         host_os: windows
         image: rubydistros/windows-2019:3.1
+        shell: [ "powershell", "-Command" ]
+
+- label: "run-specs-ruby-3.2-windows"
+  commands:
+    - .expeditor/verify_win32certstore.ps1
+  expeditor:
+    executor:
+      docker:
+        host_os: windows
+        image: rubydistros/windows-2022:3.2
+        shell: [ "powershell", "-Command" ]
+
+- label: "run-specs-ruby-3.4-windows"
+  commands:
+    - .expeditor/verify_win32certstore.ps1
+  expeditor:
+    executor:
+      docker:
+        host_os: windows
+        image: rubydistros/windows-2025:3.4
         shell: [ "powershell", "-Command" ]
