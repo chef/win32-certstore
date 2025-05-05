@@ -18,8 +18,9 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rspec", "~> 3.13"
+  spec.add_development_dependency "cookstyle", "~> 8.1"
 
-  spec.add_dependency "ffi", ">= 1.15.5", "< 1.17.0"
-  spec.add_runtime_dependency "chef-powershell"
+  spec.add_dependency "ffi", ">= 1.15.5", "~> 1.17"
+  spec.add_dependency "chef-powershell"
   spec.metadata["yard.run"] = "yri"
 end
