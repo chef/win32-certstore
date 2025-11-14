@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.6.18 -->
-## [v0.6.18](https://github.com/chef/win32-certstore/tree/v0.6.18) (2025-05-05)
+<!-- latest_release 0.6.19 -->
+## [v0.6.19](https://github.com/chef/win32-certstore/tree/v0.6.19) (2025-11-14)
 
 #### Merged Pull Requests
-- Updating Ruby support and Cookstyle support [#102](https://github.com/chef/win32-certstore/pull/102) ([johnmccrae](https://github.com/johnmccrae))
+- set up ai assisted development workflow [#107](https://github.com/chef/win32-certstore/pull/107) ([rishichawda](https://github.com/rishichawda))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.6.16 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- set up ai assisted development workflow [#107](https://github.com/chef/win32-certstore/pull/107) ([rishichawda](https://github.com/rishichawda)) <!-- 0.6.19 -->
 - Updating Ruby support and Cookstyle support [#102](https://github.com/chef/win32-certstore/pull/102) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.18 -->
 - Updating dependencies [#100](https://github.com/chef/win32-certstore/pull/100) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.17 -->
 <!-- release_rollup -->
