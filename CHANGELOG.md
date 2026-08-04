@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.6.19 -->
-## [v0.6.19](https://github.com/chef/win32-certstore/tree/v0.6.19) (2025-11-14)
+<!-- latest_release 0.6.20 -->
+## [v0.6.20](https://github.com/chef/win32-certstore/tree/v0.6.20) (2026-08-04)
 
 #### Merged Pull Requests
-- set up ai assisted development workflow [#107](https://github.com/chef/win32-certstore/pull/107) ([rishichawda](https://github.com/rishichawda))
+- Migrate Windows CI runners from 2019 to 2022/2025 [#113](https://github.com/chef/win32-certstore/pull/113) ([tpowell-progress](https://github.com/tpowell-progress))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.6.16 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Migrate Windows CI runners from 2019 to 2022/2025 [#113](https://github.com/chef/win32-certstore/pull/113) ([tpowell-progress](https://github.com/tpowell-progress)) <!-- 0.6.20 -->
 - set up ai assisted development workflow [#107](https://github.com/chef/win32-certstore/pull/107) ([rishichawda](https://github.com/rishichawda)) <!-- 0.6.19 -->
 - Updating Ruby support and Cookstyle support [#102](https://github.com/chef/win32-certstore/pull/102) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.18 -->
 - Updating dependencies [#100](https://github.com/chef/win32-certstore/pull/100) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.17 -->
