@@ -210,7 +210,8 @@ module Win32
 
       # Build arguments for CertAddEncodedCertificateToStore
       def cert_add_args(store_handler, certificate_obj)
-        [store_handler, X509_ASN_ENCODING, der_cert(certificate_obj), certificate_obj.to_s.bytesize, 2, nil]
+        der = certificate_obj.to_der
+        [store_handler, X509_ASN_ENCODING, FFI::MemoryPointer.from_string(der), der.bytesize, 2, nil]
       end
 
       # Build arguments for CertFindCertificateInStore
@@ -255,11 +256,6 @@ module Win32
         raise ArgumentError, "Certificate not found" if cert_pem.empty?
 
         valid_duration?(build_openssl_obj(cert_pem))
-      end
-
-      # Convert OpenSSL::X509::Certificate object in .der formate
-      def der_cert(cert_obj)
-        FFI::MemoryPointer.from_string(cert_obj.to_der)
       end
 
       # Get certificate pem.

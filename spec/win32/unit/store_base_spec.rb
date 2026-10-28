@@ -75,4 +75,16 @@ describe Win32::Certstore, :windows_only do
       end
     end
   end
+
+  describe "#cert_add_args" do
+    let(:cert) { OpenSSL::X509::Certificate.new(File.read('.\spec\win32\assets\GlobalSignRootCA.pem')) }
+
+    it "passes the DER byte length, not the PEM length" do
+      _handle, _encoding, buffer, length, = subject.send(:cert_add_args, mem_pointer, cert)
+
+      expect(length).to eq(cert.to_der.bytesize)
+      expect(length).to be < cert.to_s.bytesize
+      expect(buffer.read_bytes(length)).to eq(cert.to_der)
+    end
+  end
 end
