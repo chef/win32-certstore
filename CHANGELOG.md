@@ -1,16 +1,17 @@
 # win32-certstore Change Log
 
-<!-- latest_release 0.6.21 -->
-## [v0.6.21](https://github.com/chef/win32-certstore/tree/v0.6.21) (2026-10-28)
+<!-- latest_release 0.6.22 -->
+## [v0.6.22](https://github.com/chef/win32-certstore/tree/v0.6.22) (2026-10-28)
 
 #### Merged Pull Requests
-- docs: add red-green TDD workflow guidance to Copilot instructions [#115](https://github.com/chef/win32-certstore/pull/115) ([tpowell-progress](https://github.com/tpowell-progress))
+- CHEF-37760: Pass DER byte length to CertAddEncodedCertificateToStore [#116](https://github.com/chef/win32-certstore/pull/116) ([johnmccrae](https://github.com/johnmccrae))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.6.16 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- CHEF-37760: Pass DER byte length to CertAddEncodedCertificateToStore [#116](https://github.com/chef/win32-certstore/pull/116) ([johnmccrae](https://github.com/johnmccrae)) <!-- 0.6.22 -->
 - docs: add red-green TDD workflow guidance to Copilot instructions [#115](https://github.com/chef/win32-certstore/pull/115) ([tpowell-progress](https://github.com/tpowell-progress)) <!-- 0.6.21 -->
 - Migrate Windows CI runners from 2019 to 2022/2025 [#113](https://github.com/chef/win32-certstore/pull/113) ([tpowell-progress](https://github.com/tpowell-progress)) <!-- 0.6.20 -->
 - set up ai assisted development workflow [#107](https://github.com/chef/win32-certstore/pull/107) ([rishichawda](https://github.com/rishichawda)) <!-- 0.6.19 -->
